@@ -1,6 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_mainActivity"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"/>
+
+    <RadioGroup
+        android:id="@+id/rg_mainActivity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rb_mainActivity_mainFragment"
+            style="@style/RadioButtonStyle"
+            android:text="1" />
+
+        <RadioButton
+            android:id="@+id/rb_mainActivity_flowFragment"
+            style="@style/RadioButtonStyle"
+            android:text="2" />
+
+        <RadioButton
+            android:id="@+id/rb_mainActivity_postFragment"
+            style="@style/RadioButtonStyle"
+
+            android:text="3" />
+
+        <RadioButton
+            android:id="@+id/rb_mainActivity_favoriteFragment"
+            style="@style/RadioButtonStyle"
+            android:text="4" />
+
+        <RadioButton
+            android:id="@+id/rb_mainActivity_userFragment"
+            style="@style/RadioButtonStyle"
+            android:text="5" />
+    </RadioGroup>
 
 </LinearLayout>
