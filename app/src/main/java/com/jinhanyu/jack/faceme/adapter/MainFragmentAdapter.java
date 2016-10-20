@@ -33,9 +33,9 @@ import cn.bmob.v3.listener.UpdateListener;
  * Created by anzhuo on 2016/10/18.
  */
 public class MainFragmentAdapter extends CommonAdapter<Status> implements View.OnClickListener{
-
+    User me;
     private Status status;
-    User me = BmobUser.getCurrentUser(User.class);
+//    User me = BmobUser.getCurrentUser(User.class);
 
     public MainFragmentAdapter(List<Status> data, Context context) {
         super(data, context);
@@ -43,6 +43,8 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
+        me=new User();
+        me.setObjectId("XQm2333J");
         final ViewHolder viewHolder;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.main_fragment_list_item, null);
@@ -83,6 +85,10 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
                                     }
                                 }
                             });
+                            br.setObjects(null);
+                            br.remove(me);
+                            status.setLikes(br);
+                            status.update();
                         } else {
                             br.add(status);
                             me.setLikes(br);
@@ -95,6 +101,10 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
 
                                 }
                             });
+                            br.setObjects(null);
+                            br.add(me);
+                            status.setLikes(br);
+                            status.update();
                         }
                     }
                 });
@@ -129,6 +139,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
             case R.id.iv_status_comment|R.id.tv_status_commentNum:
                 Intent intent=new Intent(context, CommentActivity.class);
                 intent.putExtra("statusId",status.getObjectId());
+                intent.putExtra("authorId",status.getAuthor().getObjectId());
                 context.startActivity(intent);
                 break;
             case R.id.iv_status_share:
@@ -136,6 +147,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
             case R.id.tv_status_favoriteNum:
                 Intent intent2=new Intent(context, LikesActivity.class);
                 intent2.putExtra("statusId",status.getObjectId());
+                intent2.putExtra("authorId",status.getAuthor().getObjectId());
                 context.startActivity(intent2);
                 break;
 

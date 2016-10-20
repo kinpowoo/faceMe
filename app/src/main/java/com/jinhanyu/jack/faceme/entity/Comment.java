@@ -1,11 +1,15 @@
 package com.jinhanyu.jack.faceme.entity;
 
+import com.jinhanyu.jack.faceme.Utils;
+
+import java.util.Collection;
+
 import cn.bmob.v3.BmobObject;
 
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class Comment extends BmobObject{
+public class Comment extends BmobObject implements Comparable<Comment>{
  private User toUser;
     private User commentor;
     private Status toStatus;
@@ -45,4 +49,8 @@ public class Comment extends BmobObject{
     }
 
 
+    @Override
+    public int compareTo(Comment o) {
+        return (int)(Utils.parseDate(this.getCreatedAt()).getTime()-Utils.parseDate(o.getCreatedAt()).getTime())/1000;
+    }
 }
