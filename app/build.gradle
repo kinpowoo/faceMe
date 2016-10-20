@@ -23,10 +23,16 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.0'
-
-    //下拉刷新
-    compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'com.facebook.fresco:fresco:0.14.1'
-    compile 'com.android.support:recyclerview-v7:24.2.0'
-    compile files('libs/MobCommons-2016.0830.1940.jar')
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
+    compile 'cn.bmob.android:bmob-sdk:3.5.0'
+    //bmob-push：Bmob的推送包
+    compile 'cn.bmob.android:bmob-push:0.8'
+
+    //bmob-im：Bmob的即时通讯包，注意每个版本的im依赖特定版本的bmob-sdk，具体的依赖关系可查看下面注释[2]
+    compile 'cn.bmob.android:bmob-im:2.0.5@aar'
+    compile 'cn.bmob.android:bmob-sdk:3.4.7-aar'
+
+    //bmob-sms ：Bmob单独为短信服务提供的包
+    compile 'cn.bmob.android:bmob-sms:1.0.1'
 }

@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
+import cn.bmob.v3.Bmob;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -16,7 +17,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Bmob.initialize(getApplicationContext(),"5d2d5b54dd7f058e10d6a2792f7f1eb8");
         Fresco.initialize(getApplicationContext());
         ShareSDK.initSDK(this);
         oks = new OnekeyShare();

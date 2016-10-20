@@ -1,6 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@color/SlateGray"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <RelativeLayout
+        android:background="@color/GhostWhite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentLeft="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:layout_centerInParent="true"
+            android:text="评论"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_marginTop="1dp"
+        android:background="@color/White"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="18dp"
+            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/sdv_comment_userPortrait"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            fresco:roundAsCircle="true" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_comment_username"
+            android:text="xiaoer"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
+            />
+            <TextView
+                android:id="@+id/tv_comment_text"
+                android:text="555555555555555555"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+    <ListView
+        android:background="@color/White"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+    <LinearLayout
+        android:background="@color/White"
+        android:padding="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_comment_rePost"
+            android:src="@drawable/repost"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+       <EditText
+           android:id="@+id/et_comment_content"
+           android:layout_width="0dp"
+           android:layout_height="43dp"
+           android:paddingLeft="10dp"
+           android:layout_weight="1"
+           android:background="@null"
+           android:hint="ddd"
+           />
+       <ImageView
+           android:id="@+id/iv_comment_send"
+           android:src="@drawable/send"
+           android:padding="5dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

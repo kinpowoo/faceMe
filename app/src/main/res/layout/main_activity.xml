@@ -9,12 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.3dp"
-        android:background="@color/LightSlateGray" />
+        android:orientation="vertical"/>
 
     <RadioGroup
         android:id="@+id/rg_mainActivity"
@@ -25,44 +20,32 @@
         <RadioButton
             android:id="@+id/rb_mainActivity_mainFragment"
             style="@style/RadioButtonStyle"
-            android:checked="true"
-            android:drawableTop="@drawable/main_item"
-            android:text="动态"
-            android:textColor="@drawable/test_color" />
+            android:drawableTop="@drawable/home_button"
+             />
 
         <RadioButton
             android:id="@+id/rb_mainActivity_flowFragment"
             style="@style/RadioButtonStyle"
-            android:drawableTop="@drawable/message_item"
-            android:text="消息"
-            android:textColor="@drawable/test_color" />
+            android:drawableTop="@drawable/flow_button"
+            />
 
-        <ImageButton
+        <RadioButton
             android:id="@+id/rb_mainActivity_postFragment"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/radoibutton_shape"
-            android:src="@mipmap/radiobutton"
-            android:text="3" />
+            style="@style/RadioButtonStyle"
+            android:drawableTop="@drawable/camera_light"
+             />
 
         <RadioButton
             android:id="@+id/rb_mainActivity_favoriteFragment"
             style="@style/RadioButtonStyle"
-            android:drawableTop="@drawable/tdq_item"
-            android:text="图钉墙"
-            android:textColor="@drawable/test_color" />
+            android:drawableTop="@drawable/favorite_button"
+             />
 
         <RadioButton
             android:id="@+id/rb_mainActivity_userFragment"
             style="@style/RadioButtonStyle"
-            android:drawableTop="@drawable/my_item"
-            android:text="我"
-            android:textColor="@drawable/test_color" />
+            android:drawableTop="@drawable/user_button"
+             />
     </RadioGroup>
 
 </LinearLayout>
