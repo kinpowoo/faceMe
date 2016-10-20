@@ -23,6 +23,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.0'
+
+    //下拉刷新
+    compile 'in.srain.cube:ultra-ptr:1.0.11'
     compile 'com.facebook.fresco:fresco:0.14.1'
     compile 'com.android.support:recyclerview-v7:24.2.0'
     compile files('libs/MobCommons-2016.0830.1940.jar')

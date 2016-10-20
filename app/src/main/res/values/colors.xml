@@ -132,7 +132,7 @@
     <color name="SlateGray">#708090</color>
     <color name="Snow">#FFFAFA</color>
     <color name="SpringGreen">#00FF7F</color>
-    <color name="SteelBlue">#4682B4</color>
+    <color name="SteelBlue">#075977</color>
     <color name="Tan">#D2B48C</color>
     <color name="Teal">#008080</color>
     <color name="Thistle">#D8BFD8</color>
@@ -145,4 +145,8 @@
     <color name="WhiteSmoke">#F5F5F5</color>
     <color name="Yellow">#FFFF00</color>
     <color name="YellowGreen">#9ACD32</color>
+    <color name="Text_bg">#78000000</color>
+    <color name="black">#202020</color>
+    <color name="test_color_a">#56abe4</color>
+    <color name="test_color_b">#8a8a8a</color>
 </resources>

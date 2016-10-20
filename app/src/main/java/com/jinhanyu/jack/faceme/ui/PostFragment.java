@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import com.jinhanyu.jack.faceme.R;
 
 /**
- * Created by anzhuo on 2016/10/18.
+ * Created by anzhuo on 2016/10/18.陈礼
  */
 public class PostFragment extends Fragment {
     @Override
