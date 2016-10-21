@@ -3,23 +3,21 @@ package com.jinhanyu.jack.faceme.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
-import com.jinhanyu.jack.faceme.entity.Comment;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 import com.jinhanyu.jack.faceme.ui.CommentActivity;
 import com.jinhanyu.jack.faceme.ui.LikesActivity;
+
+import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.BmobUser;
@@ -79,7 +77,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
-                                        viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
+                                        viewHolder.favoriteIcon.setImageResource(R.drawable.back);
                                     }
                                 }
                             });
@@ -90,7 +88,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
                                 @Override
                                 public void done(BmobException e) {
                                     if(e==null){
-                                        viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_dark);
+                                        viewHolder.favoriteIcon.setImageResource(R.drawable.back);
                                     }
 
                                 }

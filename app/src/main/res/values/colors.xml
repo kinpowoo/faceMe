@@ -118,7 +118,7 @@
     <color name="PowderBlue">#B0E0E6</color>
     <color name="Purple">#800080</color>
     <color name="Red">#FF0000</color>
-    <color name="RosyBrown">#BC8F8F</color>
+    <color name="RosyBrown">#c1a8a8</color>
     <color name="RoyalBlue">#4169E1</color>
     <color name="SaddleBrown">#8B4513</color>
     <color name="Salmon">#FA8072</color>
@@ -126,7 +126,7 @@
     <color name="SeaGreen">#2E8B57</color>
     <color name="SeaShell">#FFF5EE</color>
     <color name="Sienna">#A0522D</color>
-    <color name="Silver">#C0C0C0</color>
+    <color name="Silver">#d7d7d7</color>
     <color name="SkyBlue">#87CEEB</color>
     <color name="SlateBlue">#6A5ACD</color>
     <color name="SlateGray">#708090</color>
@@ -147,6 +147,8 @@
     <color name="YellowGreen">#9ACD32</color>
     <color name="Text_bg">#78000000</color>
     <color name="black">#202020</color>
-    <color name="test_color_a">#56abe4</color>
+    <color name="test_color_a">#00a6ff</color>
     <color name="test_color_b">#8a8a8a</color>
+    <color name="location_shape">#cfcfcf</color>
+
 </resources>

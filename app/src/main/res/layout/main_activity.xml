@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"/>
+        android:orientation="vertical" />
 
     <RadioGroup
         android:id="@+id/rg_mainActivity"
@@ -20,32 +20,27 @@
         <RadioButton
             android:id="@+id/rb_mainActivity_mainFragment"
             style="@style/RadioButtonStyle"
-            android:drawableTop="@drawable/home_button"
-             />
+            android:drawableTop="@drawable/home_button" />
 
         <RadioButton
             android:id="@+id/rb_mainActivity_flowFragment"
             style="@style/RadioButtonStyle"
-            android:drawableTop="@drawable/flow_button"
-            />
+            android:drawableTop="@drawable/flow_button" />
 
         <RadioButton
             android:id="@+id/rb_mainActivity_postFragment"
             style="@style/RadioButtonStyle"
-            android:drawableTop="@drawable/camera_light"
-             />
+            android:drawableTop="@drawable/camera_light" />
 
         <RadioButton
             android:id="@+id/rb_mainActivity_favoriteFragment"
             style="@style/RadioButtonStyle"
-            android:drawableTop="@drawable/favorite_button"
-             />
+            android:drawableTop="@drawable/favorite_button" />
 
         <RadioButton
             android:id="@+id/rb_mainActivity_userFragment"
             style="@style/RadioButtonStyle"
-            android:drawableTop="@drawable/user_button"
-             />
+            android:drawableTop="@drawable/user_button" />
     </RadioGroup>
 
 </LinearLayout>

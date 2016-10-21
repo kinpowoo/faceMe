@@ -40,7 +40,6 @@
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_status_favorite"
-            android:src="@drawable/favorite_light"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
