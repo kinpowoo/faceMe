@@ -1,10 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/SlateGray"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
+        android:background="@color/SlateGray"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:padding="8dp"
+            android:background="@color/White"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/iv_single_status_back"
+                android:src="@drawable/back"
+                android:layout_marginLeft="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:text="动态"
+                android:textSize="24dp"
+                android:textStyle="bold"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/iv_single_status_refresh"
+                android:src="@drawable/refresh"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_marginTop="1dp"
         android:background="@color/White"
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -13,25 +49,34 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="18dp"
             xmlns:fresco="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/sdv_status_userPortrait"
+            android:id="@+id/sdv_single_status_userPortrait"
             android:layout_width="60dp"
             android:layout_height="60dp"
             fresco:roundAsCircle="true" />
         <TextView
-            android:id="@+id/tv_status_username"
+            android:id="@+id/tv_single_status_username"
             android:text="xiaoer"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
+            android:layout_toRightOf="@+id/sdv_single_status_userPortrait"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             />
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/iv_single_status_option"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/option"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
     <com.facebook.drawee.view.SimpleDraweeView
         android:background="@color/White"
-        android:id="@+id/iv_status_photo"
+        android:id="@+id/iv_single_status_photo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         />
     <LinearLayout
         android:background="@color/White"
@@ -39,25 +84,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:id="@+id/iv_status_favorite"
+            android:id="@+id/iv_single_status_favorite"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <ImageView
-            android:id="@+id/iv_status_comment"
+            android:id="@+id/iv_single_status_comment"
             android:src="@drawable/comment"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <ImageView
-            android:id="@+id/iv_status_share"
+            android:id="@+id/iv_single_status_share"
             android:src="@drawable/share"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <TextView
-        android:id="@+id/tv_status_favoriteNum"
+        android:id="@+id/tv_single_status_favoriteNum"
         android:background="@color/White"
         android:layout_marginTop="1dp"
         android:paddingTop="10dp"
@@ -78,19 +123,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/tv_status_textBy"
+            android:id="@+id/tv_single_status_textBy"
             android:textSize="19dp"
             android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
-            android:id="@+id/tv_status_text"
+            android:id="@+id/tv_single_status_text"
             android:textSize="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
     <TextView
-        android:id="@+id/tv_status_commentNum"
+        android:id="@+id/tv_single_status_commentNum"
         android:background="@color/White"
         android:textColor="@color/SlateGray"
         android:text="查看全部2条评论"
@@ -100,11 +145,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <TextView
-        android:id="@+id/tv_status_postTime"
+        android:id="@+id/tv_single_status_postTime"
         android:background="@color/White"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    </LinearLayout>
+</ScrollView>
 </LinearLayout>

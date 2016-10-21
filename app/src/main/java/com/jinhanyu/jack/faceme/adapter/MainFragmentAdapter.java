@@ -3,6 +3,7 @@ package com.jinhanyu.jack.faceme.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 import com.jinhanyu.jack.faceme.ui.CommentActivity;
 import com.jinhanyu.jack.faceme.ui.LikesActivity;
+import com.jinhanyu.jack.faceme.ui.UserProfileActivity;
 
 import java.util.List;
 
@@ -75,32 +77,36 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
                         if (list.contains(status)) {
                             br.remove(status);
                             me.setLikes(br);
+                            me.increment("likesNum",-1);
                             me.update(new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
                                     if (e == null) {
-                                        viewHolder.favoriteIcon.setImageResource(R.drawable.back);
+                                        viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
                                     }
                                 }
                             });
                             br.setObjects(null);
                             br.remove(me);
                             status.setLikes(br);
+                            status.increment("likesNum",-1);
                             status.update();
                         } else {
                             br.add(status);
                             me.setLikes(br);
+                            me.increment("likesNum");
                             me.update(me.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
                                     if(e==null){
-                                        viewHolder.favoriteIcon.setImageResource(R.drawable.back);
+                                        viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_dark);
                                     }
 
                                 }
                             });
                             br.setObjects(null);
                             br.add(me);
+                            status.increment("likesNum");
                             status.setLikes(br);
                             status.update();
                         }
@@ -109,25 +115,20 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
             }
         });
         viewHolder.favoriteNum.setOnClickListener(this);
-        BmobQuery<User> query=new BmobQuery<>();
-        query.addWhereRelatedTo("likes",new BmobPointer(status));
-        query.findObjects(new FindListener<User>() {
-            @Override
-            public void done(List<User> list, BmobException e) {
-            if(e==null&&list.size()>0){
-                viewHolder.favoriteNum.setText(list.size()+" 个赞");
-            }
-            }
-        });
+        viewHolder.favoriteNum.setText(status.getLikesNum()+" 个赞");
         viewHolder.userPortrait.setImageURI(Uri.parse(status.getAuthor().getPortrait()));
         viewHolder.username.setText(status.getAuthor().getUsername());
         viewHolder.postPhoto.setImageURI(Uri.parse(status.getPhoto()));
-        viewHolder.commentIcon.setOnClickListener(this);
-        viewHolder.commentNum.setOnClickListener(this);
-        viewHolder.favoriteNum.setOnClickListener(this);
         viewHolder.textBy.setText(status.getAuthor().getUsername());
         viewHolder.text.setText(status.getText());
         viewHolder.postTime.setText(Utils.calculTime(status.getCreatedAt()));
+
+        viewHolder.commentIcon.setOnClickListener(this);
+        viewHolder.commentNum.setOnClickListener(this);
+        viewHolder.favoriteNum.setOnClickListener(this);
+        viewHolder.shareIcon.setOnClickListener(this);
+        viewHolder.username.setOnClickListener(this);
+        viewHolder.userPortrait.setOnClickListener(this);
         return view;
     }
 
@@ -137,18 +138,23 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
             case R.id.iv_status_comment|R.id.tv_status_commentNum:
                 Intent intent=new Intent(context, CommentActivity.class);
                 intent.putExtra("statusId",status.getObjectId());
-                intent.putExtra("authorId",status.getAuthor().getObjectId());
                 context.startActivity(intent);
                 break;
             case R.id.iv_status_share:
                 break;
             case R.id.tv_status_favoriteNum:
                 Intent intent2=new Intent(context, LikesActivity.class);
-                intent2.putExtra("statusId",status.getObjectId());
-                intent2.putExtra("authorId",status.getAuthor().getObjectId());
+                Bundle bundle=new Bundle();
+                bundle.putString("type","status");
+                bundle.putString("statusId",status.getObjectId());
+                intent2.putExtras(bundle);
                 context.startActivity(intent2);
                 break;
-
+            case R.id.sdv_status_userPortrait|R.id.tv_status_username:
+                Intent intent1=new Intent(context, UserProfileActivity.class);
+                intent1.putExtra("userId",status.getAuthor().getObjectId());
+                context.startActivity(intent1);
+                break;
         }
     }
 }

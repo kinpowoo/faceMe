@@ -20,9 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.LoginActivity">
-
-        </activity>
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -30,6 +27,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.UserProfileActivity"/>
+        <activity android:name=".ui.SingleStatusActivity"/>
+
+    <activity android:name=".ui.LoginActivity">
+    </activity>
+
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"

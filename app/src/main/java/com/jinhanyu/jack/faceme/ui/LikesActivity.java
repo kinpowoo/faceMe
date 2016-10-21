@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,10 +15,17 @@ import com.jinhanyu.jack.faceme.ClearEditText;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.adapter.LikesAdapter;
+import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobPointer;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 
 /**
  * Created by jianbo on 2016/10/19.
@@ -28,6 +36,9 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
     private LikesAdapter adapter;
     private ClearEditText search;
     private ImageView back;
+    private String type;
+    private Bundle bundle;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,21 +52,82 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
 
         back.setOnClickListener(this);
         search.addTextChangedListener(this);
+
+        bundle=getIntent().getExtras();
+        type=bundle.getString("type");
+        switch (type){
+            case "followingNum":
+                String userId=bundle.getString("userId");
+                BmobQuery<User> query=new BmobQuery<>();
+                query.getObject(userId, new QueryListener<User>() {
+                    @Override
+                    public void done(User user, BmobException e) {
+                   if(e==null){
+                    BmobQuery<User> query1=new BmobQuery<User>();
+                     query1.addWhereRelatedTo("following",new BmobPointer(user));
+                       query1.findObjects(new FindListener<User>() {
+                           @Override
+                           public void done(List<User> data, BmobException e) {
+                          if(e==null){
+                              list.addAll(data);
+                              adapter.notifyDataSetChanged();
+                          }
+                           }
+                       });
+                   }
+                    }
+                });
+                break;
+            case "followersNum":
+                String userId2=bundle.getString("userId");
+                BmobQuery<User> query1=new BmobQuery<>();
+                query1.getObject(userId2, new QueryListener<User>() {
+                    @Override
+                    public void done(User user, BmobException e) {
+                        if(e==null){
+                            BmobQuery<User> query1=new BmobQuery<>();
+                            query1.addWhereRelatedTo("followers",new BmobPointer(user));
+                            query1.findObjects(new FindListener<User>() {
+                                @Override
+                                public void done(List<User> data, BmobException e) {
+                                    if(e==null){
+                                        list.addAll(data);
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+                break;
+            case "status":
+              String statusId=bundle.getString("statusId");
+                if(statusId!=null){
+                    BmobQuery<Status> query2=new BmobQuery<>();
+                    query2.getObject(statusId, new QueryListener<Status>() {
+                        @Override
+                        public void done(Status status, BmobException e) {
+                            if(e==null){
+                                loadUser(status);
+                            }
+                        }
+                    });
+                }
+                break;
+        }
     }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+         filterList(s.toString());
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-
     }
 
     @Override
@@ -65,5 +137,35 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
                 finish();
                 break;
         }
+    }
+
+    public void filterList(String s){
+      List<User> changedList=new ArrayList<>();
+        if(TextUtils.isEmpty(s)){
+            changedList=list;
+        }else {
+            changedList.clear();
+            for(User user: list){
+                if(user.getUsername().contains(s)||s.indexOf(user.getUsername())!=-1){
+                    changedList.add(user);
+                }
+            }
+        }
+        adapter.refreshDataSource(changedList);
+    }
+
+    public void loadUser(Status status){
+        BmobQuery<User> query=new BmobQuery<>();
+        query.addWhereRelatedTo("likes",new BmobPointer(status));
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> data, BmobException e) {
+                if(e==null){
+                    list.addAll(data);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
     }
 }

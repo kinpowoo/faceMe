@@ -46,7 +46,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     private ListView listView;
     private CommentAdapter adapter;
     private List<Comment> list;
-    private String authorId,statusId;
+    private String statusId;
     private Status status;
 
     @Override
@@ -64,24 +64,22 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         list=new ArrayList<>();
         adapter=new CommentAdapter(list,this);
         listView.setAdapter(adapter);
-        List viewList=new ArrayList();
-        viewList.add(back);
-        viewList.add(send);
-        viewList.add(atPeople);
-        Utils.setClickListener(viewList,this);
 
+        back.setOnClickListener(this);
+        atPeople.setOnClickListener(this);
+        send.setOnClickListener(this);
 
-        authorId=getIntent().getStringExtra("authorId");
         statusId=getIntent().getStringExtra("statusId");
-
-        BmobQuery<Status> query=new BmobQuery<>();
-        query.include("author");
-        query.getObject(statusId, new QueryListener<Status>() {
-            @Override
-            public void done(Status st, BmobException e) {
-              status=st;
-            }
-        });
+        if(statusId!=null) {
+            BmobQuery<Status> query = new BmobQuery<>();
+            query.include("author");
+            query.getObject(statusId, new QueryListener<Status>() {
+                @Override
+                public void done(Status st, BmobException e) {
+                    status = st;
+                }
+            });
+        }
         username.setText(status.getAuthor().getUsername());
         userPortrait.setImageURI(Uri.parse(status.getAuthor().getPortrait()));
         statusText.setText(status.getText());
@@ -124,6 +122,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
             BmobRelation relation=new BmobRelation();
             relation.add(com);
             status.setComments(relation);
+            status.increment("commentsNum");
             status.update(new UpdateListener() {
                 @Override
                 public void done(BmobException e) {
@@ -142,10 +141,12 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
        query.findObjects(new FindListener<Comment>() {
            @Override
            public void done(List<Comment> data, BmobException e) {
-               list.addAll(data);
+               if(e==null){
+                   list.addAll(data);
+                   Collections.sort(list);
+                   adapter.notifyDataSetChanged();
+               }
            }
        });
-       Collections.sort(list);
-       adapter.notifyDataSetChanged();
    }
 }

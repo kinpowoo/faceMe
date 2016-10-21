@@ -35,7 +35,10 @@ public class LikesAdapter extends CommonAdapter<User> implements View.OnClickLis
     public LikesAdapter(List<User> data, Context context) {
         super(data, context);
     }
-
+    public void refreshDataSource(List<User> newData){
+        data=newData;
+        notifyDataSetChanged();
+    }
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         final ViewHolder3 viewHold;
@@ -54,6 +57,7 @@ public class LikesAdapter extends CommonAdapter<User> implements View.OnClickLis
         viewHold.username.setText(user.getUsername());
         viewHold.nickname.setText(user.getNickname());
         viewHold.userPortrait.setImageURI(Uri.parse(user.getPortrait()));
+
         viewHold.userPortrait.setOnClickListener(this);
         viewHold.username.setOnClickListener(this);
         viewHold.nickname.setOnClickListener(this);
@@ -86,6 +90,12 @@ public class LikesAdapter extends CommonAdapter<User> implements View.OnClickLis
                             }
                         }
                     });
+                    relation.setObjects(null);
+                    relation.remove(Utils.getCurrentUser());
+                    user.setFollowers(relation);
+                    user.increment("followersNum",-1);
+                    user.update();
+
                 } else {
                     relation.add(user);
                     Utils.getCurrentUser().setFollowers(relation);
@@ -99,6 +109,12 @@ public class LikesAdapter extends CommonAdapter<User> implements View.OnClickLis
                             }
                         }
                     });
+
+                    relation.setObjects(null);
+                    relation.add(Utils.getCurrentUser());
+                    user.increment("followersNum");
+                    user.setFollowers(relation);
+                    user.update();
                 }
             }
         });

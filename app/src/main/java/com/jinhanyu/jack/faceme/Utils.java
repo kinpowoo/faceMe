@@ -28,6 +28,9 @@ import cn.bmob.v3.listener.FindListener;
  */
 public class Utils {
  private static User currentUser= BmobUser.getCurrentUser(User.class);
+    private static List<Status> statusList;
+    private static List<User> followingList;
+
     public static String calculTime(String time){
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date= null;
@@ -64,12 +67,6 @@ public class Utils {
         return date;
     }
 
-    public static void setClickListener(List<View> param,View.OnClickListener listener){
-        for (View v: param) {
-            v.setOnClickListener(listener);
-        }
-    }
-
     public static User getCurrentUser(){
         return currentUser;
     }
@@ -92,5 +89,35 @@ public class Utils {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
+
+    public static List<Status> getCurrentUserLikes(){
+        BmobQuery<Status> query=new BmobQuery<>();
+        query.addWhereRelatedTo("likes",new BmobPointer(currentUser));
+        query.include("author");
+        query.findObjects(new FindListener<Status>() {
+            @Override
+            public void done(List<Status> list, BmobException e) {
+                  if(e==null){
+                      statusList=list;
+                  }
+            }
+        });
+        return statusList;
+    }
+
+    public static List<User> getCurrentUserFollowing(){
+        BmobQuery<User> query=new BmobQuery<>();
+        query.addWhereRelatedTo("following",new BmobPointer(currentUser));
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                if(e==null){
+                    followingList=list;
+                }
+            }
+        });
+        return followingList;
+    }
+
 
 }

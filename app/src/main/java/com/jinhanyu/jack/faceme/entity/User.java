@@ -13,8 +13,18 @@ public class User extends BmobUser {
     private BmobRelation following;
     private BmobRelation followers;
     private BmobRelation statuses;
-    private Integer likesNum,followingNum,followersNum;
+    private Integer likesNum;
+    private Integer followingNum;
+    private Integer followersNum;
+    private Integer statusesNum;
 
+    public Integer getStatusesNum() {
+        return statusesNum;
+    }
+
+    public void setStatusesNum(Integer statusesNum) {
+        this.statusesNum = statusesNum;
+    }
     public Integer getLikesNum() {
         return likesNum;
     }
