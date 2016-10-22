@@ -21,14 +21,19 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".ui.MainActivity">
+
+        </activity>
+        <activity android:name=".ui.UserProfileActivity"/>
+        <activity android:name=".ui.SingleStatusActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.UserProfileActivity"/>
-        <activity android:name=".ui.SingleStatusActivity"/>
-
+        <activity android:name=".ui.CommentActivity"/>
+        <activity android:name=".ui.LikesActivity"/>
+        <activity android:name=".ui.EditStatusActivity"/>
+        <activity android:name=".ui.EditProfileActivity"/>
     <activity android:name=".ui.LoginActivity">
     </activity>
 

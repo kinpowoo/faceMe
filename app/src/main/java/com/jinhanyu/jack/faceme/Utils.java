@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.sip.SipAudioCall;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -71,7 +72,7 @@ public class Utils {
         return currentUser;
     }
 
-
+   //动态计算嵌套在scrollview里的listview的高度
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         if(listView == null) return;
         ListAdapter listAdapter = listView.getAdapter();
@@ -90,6 +91,7 @@ public class Utils {
         listView.setLayoutParams(params);
     }
 
+    //得到当前用户的收藏列表
     public static List<Status> getCurrentUserLikes(){
         BmobQuery<Status> query=new BmobQuery<>();
         query.addWhereRelatedTo("likes",new BmobPointer(currentUser));
@@ -105,6 +107,8 @@ public class Utils {
         return statusList;
     }
 
+
+    //得到当前用户的关注列表
     public static List<User> getCurrentUserFollowing(){
         BmobQuery<User> query=new BmobQuery<>();
         query.addWhereRelatedTo("following",new BmobPointer(currentUser));
@@ -118,6 +122,4 @@ public class Utils {
         });
         return followingList;
     }
-
-
 }

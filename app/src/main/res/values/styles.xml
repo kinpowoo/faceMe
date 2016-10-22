@@ -16,4 +16,8 @@
      <item name="android:gravity">center_horizontal</item>
      <item name="android:drawablePadding">-5dp</item>
  </style>
+    <style name="PopupWindow_menu">
+        <item name="android:windowEnterAnimation">@anim/popupwindow_out</item>
+        <item name="android:windowExitAnimation">@anim/popupwindow_fade</item>
+    </style>
 </resources>

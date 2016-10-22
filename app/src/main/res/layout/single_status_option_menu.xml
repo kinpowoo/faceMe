@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_marginLeft="30dp"
+    android:layout_marginRight="30dp"
+    android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<TextView
+    android:id="@+id/tv_single_status_option_menu_delete"
+    android:text="删除"
+    android:textSize="20dp"
+    android:textColor="@color/Red"
+    android:background="@drawable/menu_top_item"
+    android:gravity="center"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+    <LinearLayout
+        android:background="@color/Gray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/tv_single_status_option_menu_edit"
+        android:text="编辑"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        android:background="@color/WhiteSmoke"
+        android:textColor="@color/Blue"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:padding="12dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_single_status_option_menu_share"
+        android:text="分享"
+        android:background="@drawable/menu_bottom_item"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:textColor="@color/Blue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+    <TextView
+        android:id="@+id/tv_single_status_option_menu_cancel"
+        android:text="取消"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/cancel_button"
+        android:gravity="center"
+        android:textColor="@color/Blue"
+        android:textSize="22dp"
+        android:textStyle="bold"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

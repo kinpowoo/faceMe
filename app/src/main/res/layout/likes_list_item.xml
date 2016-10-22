@@ -10,7 +10,6 @@
      android:padding="5dp"
      android:layout_marginLeft="7dp"
      android:layout_marginTop="5dp"
-     android:src=""
      android:layout_width="50dp"
      android:layout_height="50dp"
      fresco:roundAsCircle="true"

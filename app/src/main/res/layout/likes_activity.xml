@@ -45,12 +45,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
+
                 android:background="@drawable/search_rect"
                 android:drawableLeft="@drawable/search_small" />
 
             <ListView
                 android:id="@+id/lv_likes"
-
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>

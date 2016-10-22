@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -44,6 +45,7 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.likes_activity);
         listView= (ListView) findViewById(R.id.lv_likes);
+        Utils.setListViewHeightBasedOnChildren(listView);
         search= (ClearEditText) findViewById(R.id.cet_likes_search);
         back= (ImageView) findViewById(R.id.iv_likes_back);
         Utils.setListViewHeightBasedOnChildren(listView);

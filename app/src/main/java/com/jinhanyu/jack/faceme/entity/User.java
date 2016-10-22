@@ -17,6 +17,15 @@ public class User extends BmobUser {
     private Integer followingNum;
     private Integer followersNum;
     private Integer statusesNum;
+    private String gender;
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public Integer getStatusesNum() {
         return statusesNum;
