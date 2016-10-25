@@ -15,8 +15,8 @@ import java.util.List;
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class FavoriteFragmentAdapter extends CommonAdapter<SingleFavoriteItem> {
-    public FavoriteFragmentAdapter(List<SingleFavoriteItem> data, Context context) {
+public class FlowFragmentAdapter extends CommonAdapter<SingleFavoriteItem> {
+    public FlowFragmentAdapter(List<SingleFavoriteItem> data, Context context) {
         super(data, context);
     }
 
@@ -25,7 +25,7 @@ public class FavoriteFragmentAdapter extends CommonAdapter<SingleFavoriteItem> {
          ViewHolder viewHolder;
         if (convertView==null){
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.favorite_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.fiow_item, null);
             viewHolder.picture = (SimpleDraweeView) convertView.findViewById(R.id.picture);
             viewHolder.picture_test = (TextView) convertView.findViewById(R.id.picture_text);
             convertView.setTag(viewHolder);
