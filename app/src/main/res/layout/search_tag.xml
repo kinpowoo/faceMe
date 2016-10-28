@@ -28,6 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/test_color_b"
+        android:clickable="false"
         android:padding="8dp">
 
         <EditText
@@ -48,7 +49,6 @@
             android:text="搜索"
             android:textColor="@color/DodgerBlue"
             android:textSize="18sp" />
-
     </LinearLayout>
 
     <TextView
@@ -58,19 +58,16 @@
         android:text="最近所搜"
         android:textColor="@color/black"
         android:textSize="17sp" />
-
     <GridView
         android:id="@+id/searchTag_gv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:focusable="true"
-        android:fastScrollEnabled="true"
         android:horizontalSpacing="5dp"
+        android:focusable="true"
         android:numColumns="4"
         android:scrollbars="none"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp"/>
-
 </LinearLayout>

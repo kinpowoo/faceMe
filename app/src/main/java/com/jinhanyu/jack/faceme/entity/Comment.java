@@ -12,7 +12,7 @@ public class Comment extends BmobObject implements Comparable<Comment>{
     private User commentor;
     private Status toStatus;
     private String text;
-    private String serch;
+
 
 
     public User getToUser() {
@@ -47,13 +47,7 @@ public class Comment extends BmobObject implements Comparable<Comment>{
         this.text = text;
     }
 
-    public String getSerch() {
-        return serch;
-    }
 
-    public void setSerch(String serch) {
-        this.serch = serch;
-    }
 
     @Override
     public int compareTo(Comment o) {

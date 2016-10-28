@@ -13,7 +13,7 @@ import com.jinhanyu.jack.faceme.entity.SingleFavoriteItem;
 import java.util.List;
 
 /**
- * Created by anzhuo on 2016/10/18.
+ * Created by anzhuo on 2016/10/18.陈礼
  */
 public class FlowFragmentAdapter extends CommonAdapter<SingleFavoriteItem> {
     public FlowFragmentAdapter(List<SingleFavoriteItem> data, Context context) {

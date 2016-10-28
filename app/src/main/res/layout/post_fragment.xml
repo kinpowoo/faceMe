@@ -49,6 +49,12 @@
         android:padding="5dp"
         android:textColor="@color/black" />
 
+    <ImageView
+        android:id="@+id/surfaceview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

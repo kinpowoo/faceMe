@@ -7,16 +7,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.jinhanyu.jack.faceme.R;
-import com.jinhanyu.jack.faceme.entity.FlowSearchItem;
 
 import java.util.List;
 
 /**
- * Created by anzhuo on 2016/10/24.
+ * Created by anzhuo on 2016/10/28.
  */
-public class FlowAdapter extends CommonAdapter<FlowSearchItem>{
+public class TagAdapter extends CommonAdapter<String> {
 
-    public FlowAdapter(List<FlowSearchItem> data, Context context) {
+    public TagAdapter(List<String> data, Context context) {
         super(data, context);
     }
 
@@ -31,11 +30,12 @@ public class FlowAdapter extends CommonAdapter<FlowSearchItem>{
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-            FlowSearchItem flowSearchItem = data.get(position);
-            viewHolder.title.setText(flowSearchItem.getSerch());
+        String tag = data.get(position);
+        viewHolder.title.setText(tag);
         return convertView;
     }
     class ViewHolder{
         TextView title;
     }
 }
+
