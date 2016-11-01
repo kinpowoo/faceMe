@@ -1,110 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@color/SlateGray"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/SlateGray"
+    android:orientation="vertical">
+
     <LinearLayout
-        android:background="@color/White"
-        android:orientation="horizontal"
+        android:paddingTop="5dp"
+        android:paddingBottom="8dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="18dp"
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:layout_height="wrap_content"
+        android:background="@color/White"
+        android:orientation="horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/sdv_status_userPortrait"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="5dp"
             fresco:roundAsCircle="true" />
+
         <TextView
             android:id="@+id/tv_status_username"
-            android:text="xiaoer"
-            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:text="xiaoer" />
+    </LinearLayout>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_status_photo"
+        android:layout_width="400dp"
+        android:layout_height="500dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:background="@color/White" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/White"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/iv_status_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp" />
+
+        <ImageView
+            android:id="@+id/iv_status_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            />
-    </LinearLayout>
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:background="@color/White"
-        android:id="@+id/iv_status_photo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-    <LinearLayout
-        android:background="@color/White"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/iv_status_favorite"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:id="@+id/iv_status_comment"
-            android:src="@drawable/comment"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:src="@drawable/comment" />
+
         <ImageView
             android:id="@+id/iv_status_share"
-            android:src="@drawable/share"
-            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/share" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/tv_status_favoriteNum"
-        android:background="@color/White"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:paddingTop="10dp"
+        android:background="@color/White"
+        android:drawableLeft="@drawable/favorite_small"
+        android:drawablePadding="8dp"
         android:paddingBottom="10dp"
         android:paddingLeft="24dp"
-        android:drawablePadding="8dp"
-        android:text="81个赞"
-        android:drawableLeft="@drawable/favorite_small"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <LinearLayout
-        android:background="@color/White"
-        android:paddingLeft="20dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="20dp"
-        android:orientation="horizontal"
+        android:text="81个赞" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/White"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp">
+
         <TextView
             android:id="@+id/tv_status_textBy"
-            android:textSize="19dp"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="19dp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/tv_status_text"
-            android:textSize="20dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="20dp" />
     </LinearLayout>
+
     <TextView
         android:id="@+id/tv_status_commentNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/White"
-        android:textColor="@color/SlateGray"
-        android:text="查看全部2条评论"
+        android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:text="查看全部2条评论"
+        android:textColor="@color/SlateGray" />
+
     <TextView
         android:id="@+id/tv_status_postTime"
-        android:background="@color/White"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/White"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="10dp" />
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.jinhanyu.jack.faceme.ui;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -69,12 +68,12 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
     }
 
     public void fillData(){
-        userPortrait.setImageURI(Uri.parse(me.getPortrait()));
+        userPortrait.setImageURI(me.getPortrait().getUrl());
         username.setText(me.getUsername());
         nickname.setText(me.getNickname());
-        statusNum.setText(me.getStatusesNum()+"");
-        followersNum.setText(me.getFollowersNum()+"");
-        followingNum.setText(me.getFollowingNum()+"");
+//        statusNum.setText(me.getStatusesNum()+"");
+//        followersNum.setText(me.getFollowersNum()+"");
+//        followingNum.setText(me.getFollowingNum()+"");
         gridView.setAdapter(adapter);
 
         loadStatus();
@@ -104,6 +103,8 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
                 startActivity(intent2);
                 break;
             case R.id.btn_userFragment_editProfile:
+                Intent intent1=new Intent(getActivity(),EditProfileActivity.class);
+                startActivity(intent1);
                 break;
 
         }

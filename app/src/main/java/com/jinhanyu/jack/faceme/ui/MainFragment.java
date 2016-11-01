@@ -2,6 +2,7 @@ package com.jinhanyu.jack.faceme.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,9 @@ import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -66,39 +65,34 @@ public class MainFragment extends Fragment {
     }
 
     public void loadData(){
-        final BmobQuery<Status> query=new BmobQuery<>();
-        User me=new User();
-        me.setObjectId("XQm2333J");
-        query.addWhereRelatedTo("statuses",new BmobPointer(me));
-        query.include("author");
-        query.findObjects(new FindListener<Status>() {
+        //子查询(主查询)
+        BmobQuery<User> innerQuery = new BmobQuery<>();
+        //子查询之一： 查询朋友
+        BmobQuery<User> followingQuery = new BmobQuery<>();
+        followingQuery.addWhereRelatedTo("following", new BmobPointer(User.getCurrentUser(User.class)));
+        //子查询之二： 查询自己
+        BmobQuery<User> selfQuery = new BmobQuery<>();
+        selfQuery.addWhereEqualTo("objectId", User.getCurrentUser(User.class).getObjectId());
+        //合并子查询
+        List<BmobQuery<User>> addonQueries = new ArrayList<>();
+        addonQueries.add(selfQuery);
+        addonQueries.add(followingQuery);
+        //添加到主查询中
+        innerQuery.or(addonQueries);
+
+        //最终查询
+        BmobQuery<Status> statusQuery = new BmobQuery<>();
+        statusQuery.addWhereMatchesQuery("author", "_User", innerQuery);
+        statusQuery.order("-createDate");
+        statusQuery.include("author");
+        statusQuery.findObjects(new FindListener<Status>() {
             @Override
             public void done(List<Status> data, BmobException e) {
-            list.addAll(data);
+                Log.i("statuses",data.size()+"");
+                list.clear();
+                list.addAll(data);
+                adapter.notifyDataSetChanged();
             }
         });
-
-        BmobQuery<User> query1=new BmobQuery<>();
-        query1.addWhereRelatedTo("following",new BmobPointer(me));
-        query1.findObjects(new FindListener<User>() {
-            @Override
-            public void done(List<User> followings, BmobException e) {
-            for (User user : followings){
-                    BmobQuery<Status> query3=new BmobQuery<>();
-                    query3.include("author");
-                    query3.addWhereRelatedTo("statuses",new BmobPointer(user));
-                    query3.findObjects(new FindListener<Status>() {
-                        @Override
-                        public void done(List<Status> data2, BmobException e) {
-                              list.addAll(data2);
-                        }
-                    });
-
-                }
-            }
-        });
-
-        Collections.sort(list);
-        adapter.notifyDataSetChanged();
     }
 }

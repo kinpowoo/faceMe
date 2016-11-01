@@ -115,7 +115,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:id="@+id/btn_userProfile_isFollowing"
-                android:text="Follwing"
+                android:text="关注"
                 android:textStyle="bold"
                 android:background="@drawable/edit_profile_button"
                 android:layout_width="match_parent"

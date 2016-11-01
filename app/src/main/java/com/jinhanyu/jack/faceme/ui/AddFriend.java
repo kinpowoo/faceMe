@@ -89,7 +89,7 @@ public class AddFriend extends Activity implements View.OnClickListener {
                 startActivity(new Intent(AddFriend.this,DyqActivity.class).putExtra("icon","我的粉丝"));
                 break;
             case R.id.add_friend://添加好友
-                startActivity(new Intent(AddFriend.this,null));
+                startActivity(new Intent(AddFriend.this,AddFriendNum.class));
                 break;
             case R.id.interest_recommend://兴趣推荐
                 startActivity(new Intent(AddFriend.this,DyqActivity.class).putExtra("icon","兴趣推荐"));

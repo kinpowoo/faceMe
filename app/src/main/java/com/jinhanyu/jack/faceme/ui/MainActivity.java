@@ -1,10 +1,14 @@
 package com.jinhanyu.jack.faceme.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 
 import com.jinhanyu.jack.faceme.R;
@@ -19,12 +23,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private RadioButton rb_mainActivity_mainFragment;
     private RadioButton rb_mainActivity_flowFragment;
-    private RadioButton rb_mainActivity_postFragment;
+    private Button rb_mainActivity_postFragment;
     private RadioButton rb_mainActivity_favoriteFragment;
     private RadioButton rb_mainActivity_userFragment;
     private MainFragment mainFragment;
     private FlowFragment flowFragment;
-    private PostFragment postFragment;
     private FavoriteFragment favoriteFragment;
     private UserFragment userFragment;
 
@@ -35,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         rb_mainActivity_mainFragment = (RadioButton) findViewById(R.id.rb_mainActivity_mainFragment);
         rb_mainActivity_flowFragment = (RadioButton) findViewById(R.id.rb_mainActivity_flowFragment);
-        rb_mainActivity_postFragment = (RadioButton) findViewById(R.id.rb_mainActivity_postFragment);
+        rb_mainActivity_postFragment = (Button) findViewById(R.id.rb_mainActivity_postFragment);
         rb_mainActivity_favoriteFragment = (RadioButton) findViewById(R.id.rb_mainActivity_favoriteFragment);
         rb_mainActivity_userFragment = (RadioButton) findViewById(R.id.rb_mainActivity_userFragment);
 
@@ -70,14 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case 2:
-                if (postFragment == null) {
-                    postFragment = new PostFragment();
-                    transaction.add(R.id.ll_mainActivity, postFragment);
-                } else {
-                    transaction.show(postFragment);
-                }
-                break;
-            case 3:
                 if (favoriteFragment == null) {
                     favoriteFragment = new FavoriteFragment();
                     transaction.add(R.id.ll_mainActivity, favoriteFragment);
@@ -85,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     transaction.show(favoriteFragment);
                 }
                 break;
-            case 4:
+            case 3:
                 if (userFragment == null) {
                     userFragment = new UserFragment();
                     transaction.add(R.id.ll_mainActivity, userFragment);
@@ -103,9 +98,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         if (flowFragment != null) {
             transaction.hide(flowFragment);
-        }
-        if (postFragment != null) {
-            transaction.hide(postFragment);
         }
         if (favoriteFragment != null) {
             transaction.hide(favoriteFragment);
@@ -125,14 +117,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ShowFragment(1);
                 break;
             case R.id.rb_mainActivity_postFragment:
-                ShowFragment(2);
+                gototakephoto();
                 break;
             case R.id.rb_mainActivity_favoriteFragment:
-                ShowFragment(3);
+                ShowFragment(2);
                 break;
             case R.id.rb_mainActivity_userFragment:
-                ShowFragment(4);
+                ShowFragment(3);
                 break;
+        }
+    }
+
+
+    //调用手机摄像头
+    public void gototakephoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, 1);
+    }
+
+    //重写onActivityResult方法
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && requestCode == Activity.RESULT_OK) {
+
         }
     }
 }

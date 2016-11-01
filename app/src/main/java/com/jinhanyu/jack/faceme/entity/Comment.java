@@ -8,19 +8,18 @@ import cn.bmob.v3.BmobObject;
  * Created by anzhuo on 2016/10/18.
  */
 public class Comment extends BmobObject implements Comparable<Comment>{
- private User toUser;
+    private User replyToUser;
     private User commentor;
     private Status toStatus;
     private String text;
 
 
-
-    public User getToUser() {
-        return toUser;
+    public User getReplyToUser() {
+        return replyToUser;
     }
 
-    public void setToUser(User toUser) {
-        this.toUser = toUser;
+    public void setReplyToUser(User replyToUser) {
+        this.replyToUser = replyToUser;
     }
 
     public User getCommentor() {

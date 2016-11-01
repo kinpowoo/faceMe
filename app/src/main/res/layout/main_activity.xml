@@ -15,6 +15,8 @@
         android:id="@+id/rg_mainActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:layout_marginBottom="-6dp"
         android:orientation="horizontal">
 
         <RadioButton
@@ -27,9 +29,10 @@
             style="@style/RadioButtonStyle"
             android:drawableTop="@drawable/flow_button" />
 
-        <RadioButton
+        <Button
             android:id="@+id/rb_mainActivity_postFragment"
             style="@style/RadioButtonStyle"
+            android:background="@null"
             android:drawableTop="@drawable/camera_light" />
 
         <RadioButton
