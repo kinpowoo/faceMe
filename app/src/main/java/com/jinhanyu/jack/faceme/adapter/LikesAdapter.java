@@ -2,7 +2,6 @@ package com.jinhanyu.jack.faceme.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +55,7 @@ public class LikesAdapter extends CommonAdapter<User> implements View.OnClickLis
         user = data.get(position);
         viewHold.username.setText(user.getUsername());
         viewHold.nickname.setText(user.getNickname());
-        viewHold.userPortrait.setImageURI(Uri.parse(user.getPortrait()));
+        viewHold.userPortrait.setImageURI(user.getPortrait().getUrl());
 
         viewHold.userPortrait.setOnClickListener(this);
         viewHold.username.setOnClickListener(this);
@@ -92,13 +91,13 @@ public class LikesAdapter extends CommonAdapter<User> implements View.OnClickLis
                     });
                     relation.setObjects(null);
                     relation.remove(Utils.getCurrentUser());
-                    user.setFollowers(relation);
+//                    user.setFollowers(relation);
                     user.increment("followersNum",-1);
                     user.update();
 
                 } else {
                     relation.add(user);
-                    Utils.getCurrentUser().setFollowers(relation);
+//                    Utils.getCurrentUser().setFollowers(relation);
                     Utils.getCurrentUser().increment("followingNum", -1);
                     Utils.getCurrentUser().update(new UpdateListener() {
                         @Override
@@ -113,7 +112,7 @@ public class LikesAdapter extends CommonAdapter<User> implements View.OnClickLis
                     relation.setObjects(null);
                     relation.add(Utils.getCurrentUser());
                     user.increment("followersNum");
-                    user.setFollowers(relation);
+//                    user.setFollowers(relation);
                     user.update();
                 }
             }
@@ -139,10 +138,10 @@ public class LikesAdapter extends CommonAdapter<User> implements View.OnClickLis
                 break;
         }
     }
-}
 
-class ViewHolder3 {
-    protected SimpleDraweeView userPortrait;
-    protected TextView username, nickname;
-    protected Button follow;
+    class ViewHolder3 {
+        protected SimpleDraweeView userPortrait;
+        protected TextView username, nickname;
+        protected Button follow;
+    }
 }

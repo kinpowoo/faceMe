@@ -8,9 +8,11 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!--保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:name=".MainApplication"
@@ -20,30 +22,43 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.MainActivity">
-
+        <activity android:name=".ui.MainActivity" android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity android:name=".ui.UserProfileActivity"/>
+        <activity android:name=".ui.UserProfileActivity" />
         <activity android:name=".ui.SingleStatusActivity">
 
         </activity>
-        <activity android:name=".ui.CommentActivity"/>
-        <activity android:name=".ui.LikesActivity"/>
-        <activity android:name=".ui.EditStatusActivity"/>
-        <activity android:name=".ui.EditProfileActivity"/>
-    <activity android:name=".ui.LoginActivity">
-    </activity>
+        <activity android:name=".ui.UserProfileActivity" />
+        <activity android:name=".ui.SearchPicture" />
+        <activity android:name=".ui.CommentActivity" />
+        <activity android:name=".ui.LikesActivity" />
+        <activity android:name=".ui.EditStatusActivity" />
+        <activity android:name=".ui.EditProfileActivity" />
+        <activity android:name=".ui.AddFriend" />
+        <activity android:name=".ui.NearbyActivity" />
+        <activity android:name=".ui.WonderfulActivities" />
+        <activity android:name=".ui.DyqActivity" />
+        <activity android:name=".ui.LoginActivity"></activity>
+        <activity android:name=".ui.SearchResultActivity"/>
+        <activity android:name=".ui.PostActivity"/>
+        <activity android:name=".ui.AddFriendNum"/>
+
 
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
 
             <intent-filter>
                 <data android:scheme="tencent100371282" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -58,10 +73,11 @@
         <!--微信分享回调 -->
         <activity
             android:name="cn.sharesdk.demo.wxapi.WXEntryActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
 
         <activity android:name=".TestActivity">
             <intent-filter>

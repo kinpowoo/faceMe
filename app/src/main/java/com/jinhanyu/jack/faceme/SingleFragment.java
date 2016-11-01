@@ -4,7 +4,7 @@ package com.jinhanyu.jack.faceme;
 import com.jinhanyu.jack.faceme.ui.FavoriteFragment;
 import com.jinhanyu.jack.faceme.ui.FlowFragment;
 import com.jinhanyu.jack.faceme.ui.MainFragment;
-import com.jinhanyu.jack.faceme.ui.PostFragment;
+import com.jinhanyu.jack.faceme.ui.PostActivity;
 import com.jinhanyu.jack.faceme.ui.UserFragment;
 
 /**
@@ -13,7 +13,7 @@ import com.jinhanyu.jack.faceme.ui.UserFragment;
 public class SingleFragment {
     private static MainFragment mainFragment;
     private static FlowFragment flowFragment;
-    private static PostFragment postFragment;
+    private static PostActivity postFragment;
     private static FavoriteFragment favoriteFragment;
     private static UserFragment userFragment;
 
@@ -31,9 +31,9 @@ public class SingleFragment {
         return flowFragment;
     }
 
-    public static PostFragment getPostFragment(){
+    public static PostActivity getPostFragment(){
         if(postFragment==null){
-            postFragment=new PostFragment();
+            postFragment=new PostActivity();
         }
         return postFragment;
     }

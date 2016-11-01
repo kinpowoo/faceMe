@@ -2,7 +2,6 @@ package com.jinhanyu.jack.faceme.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +35,7 @@ public class GridViewAdapter extends CommonAdapter<Status>{
             viewHold= (ViewHolder4) convertView.getTag();
         }
         status=data.get(position);
-        viewHold.statusPhoto.setImageURI(Uri.parse(status.getPhoto()));
+        viewHold.statusPhoto.setImageURI(status.getPhoto().getUrl());
         viewHold.statusPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +46,9 @@ public class GridViewAdapter extends CommonAdapter<Status>{
         });
         return convertView;
     }
+
+    class ViewHolder4{
+        protected SimpleDraweeView statusPhoto;
+    }
 }
-class ViewHolder4{
- protected SimpleDraweeView statusPhoto;
-}
+

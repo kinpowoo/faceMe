@@ -2,7 +2,6 @@ package com.jinhanyu.jack.faceme.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +11,15 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.entity.Comment;
-import com.jinhanyu.jack.faceme.ui.UserFragment;
+import com.jinhanyu.jack.faceme.ui.UserProfileActivity;
 
+import java.text.ParseException;
 import java.util.List;
 
 /**
  * Created by jianbo on 2016/10/20.
  */
-public class CommentAdapter extends CommonAdapter<Comment> implements View.OnClickListener {
-    private Comment comment;
+public class CommentAdapter extends CommonAdapter<Comment>{
 
     public CommentAdapter(List<Comment> data, Context context) {
         super(data, context);
@@ -40,34 +39,49 @@ public class CommentAdapter extends CommonAdapter<Comment> implements View.OnCli
         } else {
             viewHold = (ViewHolderForComment) view.getTag();
         }
-        comment = data.get(position);
-        viewHold.userPortrait.setImageURI(Uri.parse(comment.getCommentor().getPortrait()));
+       final Comment comment = data.get(position);
+        viewHold.userPortrait.setImageURI(comment.getCommentor().getPortrait().getUrl());
         viewHold.username.setText(comment.getCommentor().getUsername());
-        viewHold.postTime.setText(Utils.calculTime(comment.getCreatedAt()));
+        try {
+            viewHold.postTime.setText(Utils.calculTime(comment.getCreatedAt()));
+        } catch (ParseException e) {e.printStackTrace();
+
+        }
         viewHold.commentContent.setText(comment.getText());
 
-        viewHold.userPortrait.setOnClickListener(this);
-        viewHold.username.setOnClickListener(this);
-        viewHold.commentContent.setOnClickListener(this);
+
+        viewHold.userPortrait.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,UserProfileActivity.class);
+                intent.putExtra("userId", comment.getCommentor().getObjectId());
+                context.startActivity(intent);
+            }
+        });
+        viewHold.username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,UserProfileActivity.class);
+                intent.putExtra("userId", comment.getCommentor().getObjectId());
+                context.startActivity(intent);
+            }
+        });
+        viewHold.commentContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context,UserProfileActivity.class);
+                intent.putExtra("userId", comment.getCommentor().getObjectId());
+                context.startActivity(intent);
+            }
+        });
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sdv_comment_item_userPortrait
-                    | R.id.tv_comment_item_username
-                    | R.id.tv_comment_item_content:
-                Intent intent = new Intent(context, UserFragment.class);
-                intent.putExtra("commentorId", comment.getCommentor().getObjectId());
-                context.startActivity(intent);
-                break;
-        }
+
+    class ViewHolderForComment {
+        protected SimpleDraweeView userPortrait;
+        protected TextView username, commentContent, postTime;
+
     }
 }
 
-class ViewHolderForComment {
-    protected SimpleDraweeView userPortrait;
-    protected TextView username, commentContent, postTime;
-
-}

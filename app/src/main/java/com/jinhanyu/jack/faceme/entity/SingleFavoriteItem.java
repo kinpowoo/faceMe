@@ -1,7 +1,7 @@
 package com.jinhanyu.jack.faceme.entity;
 
 /**
- * Created by anzhuo on 2016/10/18.
+ * Created by anzhuo on 2016/10/18.陈礼
  */
 public class SingleFavoriteItem {
     private String picture_text;//图片类型

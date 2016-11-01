@@ -29,7 +29,7 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener{
     private ImageView cancel;
-    private TextView commit,changePortrait,gender,email,phone;
+    private TextView commit,changePortrait,gender,email,phone,username;
     private SimpleDraweeView userPortrait;
     private ClearEditText nickname;
     private Float alpha=1.0f;
@@ -57,12 +57,18 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.edit_profile_activity);
         cancel= (ImageView) findViewById(R.id.tv_edit_profile_cancel);
         commit= (TextView) findViewById(R.id.tv_edit_profile_commit);
+        username= (TextView) findViewById(R.id.tv_edit_profile_username);
         changePortrait= (TextView) findViewById(R.id.tv_edit_profile_changePortrait);
         nickname= (ClearEditText) findViewById(R.id.cet_edit_profile_nickname);
         email= (TextView) findViewById(R.id.tv_edit_profile_email);
         phone= (TextView) findViewById(R.id.tv_edit_profile_phone);
         gender= (TextView) findViewById(R.id.tv_edit_profile_gender);
         userPortrait= (SimpleDraweeView) findViewById(R.id.sdv_edit_profile_userPortrait);
+
+        userPortrait.setImageURI(currentUser.getPortrait().getUrl());
+        username.setText(currentUser.getUsername());
+        nickname.setText(currentUser.getNickname());
+        gender.setText(currentUser.getGender());
 
         cancel.setOnClickListener(this);
         commit.setOnClickListener(this);
@@ -95,7 +101,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             case R.id.tv_edit_profile_commit:
-             //   currentUser.setPortrait("");      这里没上传怎么得到url,待解决
+
+//                currentUser.setPortrait();   //   这里没上传怎么得到url,待解决
                 currentUser.setNickname(nickname.getText().toString());
                 currentUser.setGender(gender.getText().toString());
                 currentUser.setEmail(email.getText().toString());

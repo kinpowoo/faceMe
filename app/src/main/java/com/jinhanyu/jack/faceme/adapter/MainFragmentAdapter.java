@@ -2,8 +2,8 @@ package com.jinhanyu.jack.faceme.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
@@ -19,23 +20,21 @@ import com.jinhanyu.jack.faceme.ui.CommentActivity;
 import com.jinhanyu.jack.faceme.ui.LikesActivity;
 import com.jinhanyu.jack.faceme.ui.UserProfileActivity;
 
+import java.text.ParseException;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class MainFragmentAdapter extends CommonAdapter<Status> implements View.OnClickListener{
-    User me;
-    private Status status;
-//    User me = BmobUser.getCurrentUser(User.class);
+public class MainFragmentAdapter extends CommonAdapter<Status> {
+    User me = User.getCurrentUser(User.class);
 
     public MainFragmentAdapter(List<Status> data, Context context) {
         super(data, context);
@@ -43,8 +42,6 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        me=new User();
-        me.setObjectId("XQm2333J");
         final ViewHolder viewHolder;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.main_fragment_list_item, null);
@@ -64,104 +61,138 @@ public class MainFragmentAdapter extends CommonAdapter<Status> implements View.O
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
-        status = data.get(position);
+        final Status status = data.get(position);
+
+        if (status.isFavoritedByMe()) {
+            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
+        } else {
+            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
+        }
         viewHolder.favoriteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BmobQuery<Status> query = new BmobQuery<>();
-                query.addWhereRelatedTo("likes", new BmobPointer(me));
-                query.findObjects(new FindListener<Status>() {
-                    @Override
-                    public void done(List<Status> list, BmobException e) {
-                        BmobRelation br = new BmobRelation();
-                        if (list.contains(status)) {
-                            br.remove(status);
-                            me.setLikes(br);
-                            me.increment("likesNum",-1);
-                            me.update(new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                    if (e == null) {
-                                        viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
-                                    }
-                                }
-                            });
-                            br.setObjects(null);
-                            br.remove(me);
-                            status.setLikes(br);
-                            status.increment("likesNum",-1);
-                            status.update();
-                        } else {
-                            br.add(status);
-                            me.setLikes(br);
-                            me.increment("likesNum");
-                            me.update(me.getObjectId(), new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                    if(e==null){
-                                        viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_dark);
-                                    }
-
-                                }
-                            });
-                            br.setObjects(null);
-                            br.add(me);
-                            status.increment("likesNum");
-                            status.setLikes(br);
-                            status.update();
+                viewHolder.favoriteIcon.setEnabled(false);
+                if (status.isFavoritedByMe()) {
+                    //取消收藏
+                    BmobRelation relation = new BmobRelation();
+                    relation.remove(me);
+                    status.setLikes(relation);
+                    status.setFavoritedByMe(false);
+                    status.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            status.setFavoriteNum(status.getFavoriteNum()-1);
+                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
+                            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
+                            viewHolder.favoriteIcon.setEnabled(true);
                         }
-                    }
-                });
+                    });
+                } else {
+                    //添加收藏
+                    BmobRelation relation = new BmobRelation();
+                    relation.add(me);
+                    status.setLikes(relation);
+                    status.setFavoritedByMe(true);
+                    status.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            status.setFavoriteNum(status.getFavoriteNum()+1);
+                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
+                            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
+                            viewHolder.favoriteIcon.setEnabled(true);
+                        }
+                    });
+                }
             }
         });
-        viewHolder.favoriteNum.setOnClickListener(this);
-        viewHolder.favoriteNum.setText(status.getLikesNum()+" 个赞");
-        viewHolder.userPortrait.setImageURI(Uri.parse(status.getAuthor().getPortrait()));
+
+        if (status.getFavoriteNum() == -1) {
+
+            BmobQuery<User> userBmobQuery = new BmobQuery<>();
+            userBmobQuery.addWhereRelatedTo("likes", new BmobPointer(status));
+            userBmobQuery.count(User.class, new CountListener() {
+                @Override
+                public void done(Integer num, BmobException e) {
+                    Log.i("favoriteNum",num+"");
+                    status.setFavoriteNum(num);
+                    viewHolder.favoriteNum.setText(num + " 个赞");
+                }
+            });
+        } else {
+            viewHolder.favoriteNum.setText(status.getFavoriteNum()+ " 个赞");
+        }
+
+        viewHolder.postPhoto.setMaxWidth(ScreenUtils.getScreenWidth(context));
+        viewHolder.postPhoto.setMinimumWidth(ScreenUtils.getScreenWidth(context));
+        viewHolder.userPortrait.setImageURI(status.getAuthor().getPortrait().getUrl());
         viewHolder.username.setText(status.getAuthor().getUsername());
-        viewHolder.postPhoto.setImageURI(Uri.parse(status.getPhoto()));
+        viewHolder.postPhoto.setImageURI(status.getPhoto().getUrl());
         viewHolder.textBy.setText(status.getAuthor().getUsername());
         viewHolder.text.setText(status.getText());
-        viewHolder.postTime.setText(Utils.calculTime(status.getCreatedAt()));
+        try {
+            viewHolder.postTime.setText(Utils.calculTime(status.getCreatedAt()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        viewHolder.commentIcon.setOnClickListener(this);
-        viewHolder.commentNum.setOnClickListener(this);
-        viewHolder.favoriteNum.setOnClickListener(this);
-        viewHolder.shareIcon.setOnClickListener(this);
-        viewHolder.username.setOnClickListener(this);
-        viewHolder.userPortrait.setOnClickListener(this);
-        return view;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.iv_status_comment|R.id.tv_status_commentNum:
-                Intent intent=new Intent(context, CommentActivity.class);
-                intent.putExtra("statusId",status.getObjectId());
+        viewHolder.commentIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CommentActivity.class);
+                intent.putExtra("statusId", status.getObjectId());
                 context.startActivity(intent);
-                break;
-            case R.id.iv_status_share:
-                break;
-            case R.id.tv_status_favoriteNum:
-                Intent intent2=new Intent(context, LikesActivity.class);
-                Bundle bundle=new Bundle();
-                bundle.putString("type","status");
-                bundle.putString("statusId",status.getObjectId());
+            }
+        });
+        viewHolder.commentNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CommentActivity.class);
+                intent.putExtra("statusId", status.getObjectId());
+                context.startActivity(intent);
+            }
+        });
+        viewHolder.favoriteNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent2 = new Intent(context, LikesActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "status");
+                bundle.putString("statusId", status.getObjectId());
                 intent2.putExtras(bundle);
                 context.startActivity(intent2);
-                break;
-            case R.id.sdv_status_userPortrait|R.id.tv_status_username:
-                Intent intent1=new Intent(context, UserProfileActivity.class);
-                intent1.putExtra("userId",status.getAuthor().getObjectId());
+            }
+        });
+        viewHolder.shareIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        viewHolder.username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(context, UserProfileActivity.class);
+                intent1.putExtra("userId", status.getAuthor().getObjectId());
                 context.startActivity(intent1);
-                break;
-        }
+            }
+        });
+        viewHolder.userPortrait.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent1 = new Intent(context, UserProfileActivity.class);
+                intent1.putExtra("userId", status.getAuthor().getObjectId());
+                context.startActivity(intent1);
+            }
+        });
+        return view;
     }
+    class ViewHolder {
+        protected SimpleDraweeView userPortrait, postPhoto;
+        protected TextView username, favoriteNum, textBy, text, commentNum, postTime;
+        protected ImageView favoriteIcon, commentIcon, shareIcon;
+
+    }
+
 }
 
-class ViewHolder {
-    protected SimpleDraweeView userPortrait,postPhoto;
-    protected TextView username, favoriteNum, textBy, text, commentNum, postTime;
-    protected ImageView favoriteIcon, commentIcon, shareIcon;
 
-}

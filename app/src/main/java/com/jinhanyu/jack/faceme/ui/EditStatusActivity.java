@@ -1,6 +1,5 @@
 package com.jinhanyu.jack.faceme.ui;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -56,9 +55,9 @@ public class EditStatusActivity extends AppCompatActivity implements View.OnClic
     }
 
     public void fillData(Status status){
-        userPortrait.setImageURI(Uri.parse(status.getAuthor().getPortrait()));
+        userPortrait.setImageURI(status.getAuthor().getPortrait().getUrl());
         username.setText(status.getAuthor().getUsername());
-        statusPhoto.setImageURI(Uri.parse(status.getPhoto()));
+        statusPhoto.setImageURI(status.getPhoto().getUrl());
         statusText.setText(status.getText());
     }
 

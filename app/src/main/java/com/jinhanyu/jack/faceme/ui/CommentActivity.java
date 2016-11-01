@@ -1,7 +1,6 @@
 package com.jinhanyu.jack.faceme.ui;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
@@ -17,21 +15,16 @@ import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.adapter.CommentAdapter;
 import com.jinhanyu.jack.faceme.entity.Comment;
 import com.jinhanyu.jack.faceme.entity.Status;
-import com.jinhanyu.jack.faceme.entity.User;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobPointer;
-import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 import static com.jinhanyu.jack.faceme.R.id.et_comment_content;
 
@@ -65,6 +58,8 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         adapter=new CommentAdapter(list,this);
         listView.setAdapter(adapter);
 
+        userPortrait.setOnClickListener(this);
+        username.setOnClickListener(this);
         back.setOnClickListener(this);
         atPeople.setOnClickListener(this);
         send.setOnClickListener(this);
@@ -77,13 +72,14 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void done(Status st, BmobException e) {
                     status = st;
+                    loadComment(st);
+                    username.setText(status.getAuthor().getUsername());
+                    userPortrait.setImageURI(status.getAuthor().getPortrait().getUrl());
+                    statusText.setText(status.getText());
                 }
             });
         }
-        username.setText(status.getAuthor().getUsername());
-        userPortrait.setImageURI(Uri.parse(status.getAuthor().getPortrait()));
-        statusText.setText(status.getText());
-        loadComment();
+
     }
 
     @Override
@@ -96,9 +92,13 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                break;
            case R.id.iv_comment_send:
                addComment();
+               commentContent.setText("");
                break;
-
-
+           case R.id.sdv_comment_userPortrait|R.id.tv_comment_username:
+               Intent intent=new Intent(this,UserProfileActivity.class);
+               intent.putExtra("userId",status.getAuthor().getObjectId());
+               startActivity(intent);
+              break;
        }
     }
 
@@ -108,44 +108,41 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
            Comment com=new Comment();
             com.setCommentor(Utils.getCurrentUser());
             com.setText(comment);
-            com.setToUser(status.getAuthor());
+            com.setReplyToUser(status.getAuthor());
             com.setToStatus(status);
             com.save(new SaveListener<String>() {
               @Override
               public void done(String s, BmobException e) {
                   if(e==null){
-                      Toast.makeText(CommentActivity.this,s,Toast.LENGTH_LONG).show();
+//                      Toast.makeText(CommentActivity.this,s,Toast.LENGTH_LONG).show();
+                      loadComment(status);
                   }
               }
           });
 
-            BmobRelation relation=new BmobRelation();
-            relation.add(com);
-            status.setComments(relation);
-            status.increment("commentsNum");
-            status.update(new UpdateListener() {
-                @Override
-                public void done(BmobException e) {
-                   loadComment();
-                }
-            });
+//            status.update(new UpdateListener() {
+//                @Override
+//                public void done(BmobException e) {
+//
+//                }
+//            });
 
         }
     }
 
 
-   public void loadComment(){
-       BmobQuery<Comment> query=new BmobQuery<>();
-       query.addWhereRelatedTo("comments",new BmobPointer(status));
-       query.include("commentor");
-       query.findObjects(new FindListener<Comment>() {
+   public void loadComment(Status status){
+       BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
+       commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
+       commentBmobQuery.include("commentor,replyToUser");
+
+       commentBmobQuery.findObjects(new FindListener<Comment>() {
            @Override
            public void done(List<Comment> data, BmobException e) {
-               if(e==null){
-                   list.addAll(data);
-                   Collections.sort(list);
-                   adapter.notifyDataSetChanged();
-               }
+               list.clear();
+               list.addAll(data);
+               adapter.notifyDataSetChanged();
+
            }
        });
    }

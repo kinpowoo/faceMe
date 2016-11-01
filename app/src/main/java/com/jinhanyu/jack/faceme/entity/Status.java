@@ -2,7 +2,11 @@ package com.jinhanyu.jack.faceme.entity;
 
 import com.jinhanyu.jack.faceme.Utils;
 
+import java.util.List;
+
 import cn.bmob.v3.BmobObject;
+import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.datatype.BmobGeoPoint;
 import cn.bmob.v3.datatype.BmobRelation;
 
 /**
@@ -10,33 +14,44 @@ import cn.bmob.v3.datatype.BmobRelation;
  */
 public class Status extends BmobObject implements Comparable<Status>{
     private User author;
-    private String text,photo;
+    private String text;
+    private BmobFile photo;
     private BmobRelation likes;
-    private BmobRelation comments;
-    private Integer likesNum,commentsNum;
+    private List<String> tags;
+    private BmobGeoPoint location;
+    private boolean favoritedByMe;
+    private Integer favoriteNum=-1;
 
-    public Integer getLikesNum() {
-        return likesNum;
+    public Integer getFavoriteNum() {
+        return favoriteNum;
     }
 
-    public void setLikesNum(Integer likesNum) {
-        this.likesNum = likesNum;
+    public void setFavoriteNum(Integer favoriteNum) {
+        this.favoriteNum = favoriteNum;
     }
 
-    public Integer getCommentsNum() {
-        return commentsNum;
+    public boolean isFavoritedByMe() {
+        return favoritedByMe;
     }
 
-    public void setCommentsNum(Integer commentsNum) {
-        this.commentsNum = commentsNum;
+    public void setFavoritedByMe(boolean favoritedByMe) {
+        this.favoritedByMe = favoritedByMe;
     }
 
-    public BmobRelation getComments() {
-        return comments;
+    public BmobGeoPoint getLocation() {
+        return location;
     }
 
-    public void setComments(BmobRelation comments) {
-        this.comments = comments;
+    public void setLocation(BmobGeoPoint location) {
+        this.location = location;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 
     public User getAuthor() {
@@ -55,11 +70,11 @@ public class Status extends BmobObject implements Comparable<Status>{
         this.text = text;
     }
 
-    public String getPhoto() {
+    public BmobFile getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(BmobFile photo) {
         this.photo = photo;
     }
 

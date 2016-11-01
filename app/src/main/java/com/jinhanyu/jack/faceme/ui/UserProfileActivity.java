@@ -1,16 +1,13 @@
 package com.jinhanyu.jack.faceme.ui;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
-import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -47,8 +44,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private String userId;
     private User userIncoming;
     private User currentUser=Utils.getCurrentUser();
-    private List<User> followingList=Utils.getCurrentUserFollowing();
-
+    private boolean following=false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +66,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         option.setOnClickListener(this);
         followingNum.setOnClickListener(this);
         followersNum.setOnClickListener(this);
+        isFollowing.setOnClickListener(this);
 
         list=new ArrayList<>();
         adapter=new GridViewAdapter(list,this);
@@ -95,39 +92,52 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void fillData(User user){
-        userPortrait.setImageURI(Uri.parse(user.getPortrait()));
+        userPortrait.setImageURI(user.getPortrait().getUrl());
         username.setText(user.getUsername());
         nickname.setText(user.getNickname());
-        statusNum.setText(user.getStatusesNum()+"");
-        followersNum.setText(user.getFollowersNum()+"");
-        followingNum.setText(user.getFollowingNum()+"");
+//        statusNum.setText(user.getStatusesNum()+"");
+//        followersNum.setText(user.getFollowersNum()+"");
+//        followingNum.setText(user.getFollowingNum()+"");
         gridView.setAdapter(adapter);
 
         if(user==currentUser){
             isFollowing.setText("编辑个人主页");
         }else {
-            if (followingList != null) {
-                if (followingList.contains(userIncoming)) {
-                    isFollowing.setText("取消关注");
-                } else {
-                    isFollowing.setText("关注");
+           BmobQuery<User> query=new BmobQuery<>();
+            query.addWhereRelatedTo("following",new BmobPointer(currentUser));
+            query.findObjects(new FindListener<User>() {
+                @Override
+                public void done(List<User> list, BmobException e) {
+                  for(User user1:list){
+                      if(user1.getObjectId().equals(userIncoming.getObjectId())){
+                          isFollowing.setText("取消关注");
+                          following=true;
+                      }
+                  }
+
                 }
-            }
+            });
+
+//            if (followingList != null) {
+//                if (followingList.contains(userIncoming)) {
+//                    isFollowing.setText("取消关注");
+//                } else {
+//                    isFollowing.setText("关注");
+//                }
+//            }
         }
         loadStatus(user);
     }
 
     public void loadStatus(User user){
-        BmobQuery<Status> query=new BmobQuery<>();
-        query.addWhereRelatedTo("statuses",new BmobPointer(user));
-        query.include("author");
-        query.findObjects(new FindListener<Status>() {
+        BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
+        statusBmobQuery.addWhereEqualTo("author",new BmobPointer(user));
+        statusBmobQuery.findObjects(new FindListener<Status>() {
             @Override
             public void done(List<Status> data, BmobException e) {
-                if(e==null){
-                    list.addAll(data);
-                    adapter.notifyDataSetChanged();
-                }
+                 list.clear();
+                 list.addAll(data);
+                 adapter.notifyDataSetChanged();
             }
         });
     }
@@ -149,7 +159,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             case R.id.iv_userProfile_option:
-
 
 
                 break;
@@ -176,49 +185,46 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     intent1.putExtra("userId",currentUser.getObjectId());
                     startActivity(intent1);
                 }else {
-                    BmobRelation relation = new BmobRelation();
-                    if (followingList != null) {
-                        if (followingList.contains(userIncoming)) {
-                            relation.remove(userIncoming);
-                            currentUser.setFollowing(relation);
-                            currentUser.increment("followingNum",-1);
-                            currentUser.update(new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                 if(e==null){
-                                     isFollowing.setText("关注");
-                                 }
-                                }
-                            });
-
-                            relation.setObjects(null);
-                            relation.remove(currentUser);
-                            userIncoming.setFollowers(relation);
-                            userIncoming.increment("followerNum",-1);
-                            userIncoming.update();
-                        }else {
-                            relation.add(userIncoming);
-                            currentUser.setFollowing(relation);
-                            currentUser.increment("followingNum",1);
-                            currentUser.update(new UpdateListener() {
-                                @Override
-                                public void done(BmobException e) {
-                                    if(e==null){
-                                        isFollowing.setText("取消关注");
-                                    }
-                                }
-                            });
-
-                            relation.setObjects(null);
-                            relation.add(currentUser);
-                            userIncoming.setFollowers(relation);
-                            userIncoming.increment("followerNum",1);
-                            userIncoming.update();
-                        }
+                    if(following){
+                        BmobRelation relation = new BmobRelation();
+                        relation.remove(userIncoming);
+                        currentUser.setFollowing(relation);
+                        currentUser.update(currentUser.getObjectId(),new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                isFollowing.setText("关注");
+                                following=false;
+                            }
+                        });
+                    }else {
+                        BmobRelation relation = new BmobRelation();
+                        relation.add(userIncoming);
+                        currentUser.setFollowing(relation);
+                        currentUser.update(currentUser.getObjectId(),new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                isFollowing.setText("取消关注");
+                                following=true;
+                            }
+                        });
                     }
                 }
                 break;
-
         }
+    }
+
+    public static void getStatuses(User user){
+        BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
+        statusBmobQuery.addWhereEqualTo("author",new BmobPointer(user));
+        statusBmobQuery.findObjects(new FindListener<Status>() {
+            @Override
+            public void done(List<Status> list, BmobException e) {
+                for (Status status : list) {
+                    Log.i("text", status.getText());
+                    Log.i("tags", status.getTags().toString());
+                    Log.i("photo", status.getPhoto().getUrl());
+                }
+            }
+        });
     }
 }

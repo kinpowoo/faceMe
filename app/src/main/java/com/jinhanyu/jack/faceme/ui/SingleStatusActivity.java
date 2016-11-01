@@ -3,36 +3,29 @@ package com.jinhanyu.jack.faceme.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.view.*;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobRelation;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.QueryListener;
+import cn.bmob.v3.listener.UpdateListener;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
+import java.text.ParseException;
 import java.util.List;
-
-import cn.bmob.v3.BmobQuery;
-import cn.bmob.v3.datatype.BmobRelation;
-import cn.bmob.v3.exception.BmobException;
-import cn.bmob.v3.listener.DeleteBatchListener;
-import cn.bmob.v3.listener.QueryListener;
-import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by jianbo on 2016/10/21.
@@ -122,9 +115,9 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void fillData(Status st){
-        userPortrait.setImageURI(Uri.parse(st.getAuthor().getPortrait()));
+        userPortrait.setImageURI(st.getAuthor().getPortrait().getUrl());
         username.setText(st.getAuthor().getUsername());
-        statusPhoto.setImageURI(Uri.parse(st.getPhoto()));
+        statusPhoto.setImageURI(st.getPhoto().getUrl());
         statusList= Utils.getCurrentUserLikes();
         if(statusList!=null){
             if(statusList.contains(status)){
@@ -133,11 +126,15 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                 favoriteIcon.setImageResource(R.drawable.favorite_light);
             }
         }
-        favoriteNum.setText(st.getLikesNum()+"个赞");
+//        favoriteNum.setText(st.getLikesNum()+"个赞");
         textBy.setText(st.getAuthor().getUsername());
         text.setText(st.getText());
-        commentNum.setText("查看所有"+st.getCommentsNum()+"条评论");
-        postTime.setText(Utils.calculTime(st.getCreatedAt()));
+//        commentNum.setText("查看所有"+st.getCommentsNum()+"条评论");
+        try {
+            postTime.setText(Utils.calculTime(st.getCreatedAt()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -168,7 +165,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                     BmobRelation relation=new BmobRelation();
                     if(statusList.contains(status)){
                         relation.remove(status);
-                        currentUser.setLikes(relation);
+//                        currentUser.setLikes(relation);
                         currentUser.increment("likesNum",-1);
                         currentUser.update(new UpdateListener() {
                             @Override
@@ -186,7 +183,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                         status.update();
                     }else {
                         relation.add(status);
-                        currentUser.setLikes(relation);
+//                        currentUser.setLikes(relation);
                         currentUser.increment("likesNum",1);
                         currentUser.update(new UpdateListener() {
                             @Override
