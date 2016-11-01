@@ -37,7 +37,7 @@ public class FlowFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.favorite_fragment, null);
+        View view = inflater.inflate(R.layout.flow_fragment, null);
 
            //控件初始化
         gv = (GridView) view.findViewById(R.id.gv);
