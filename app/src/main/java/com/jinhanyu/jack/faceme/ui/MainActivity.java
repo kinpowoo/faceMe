@@ -1,17 +1,25 @@
 package com.jinhanyu.jack.faceme.ui;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.os.Environment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 
 import com.jinhanyu.jack.faceme.R;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 /**
@@ -30,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FlowFragment flowFragment;
     private FavoriteFragment favoriteFragment;
     private UserFragment userFragment;
+    private ImageView surfaceview;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_mainActivity_postFragment = (Button) findViewById(R.id.rb_mainActivity_postFragment);
         rb_mainActivity_favoriteFragment = (RadioButton) findViewById(R.id.rb_mainActivity_favoriteFragment);
         rb_mainActivity_userFragment = (RadioButton) findViewById(R.id.rb_mainActivity_userFragment);
-
+        surfaceview = (ImageView) findViewById(R.id.surfaceview);
 
         rb_mainActivity_mainFragment.setOnClickListener(this);
         rb_mainActivity_flowFragment.setOnClickListener(this);
@@ -131,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //调用手机摄像头
     public void gototakephoto() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         startActivityForResult(intent, 1);
     }
 
@@ -139,8 +149,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && requestCode == Activity.RESULT_OK) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            String sdStatus = Environment.getExternalStorageState();
+            if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+                return;
+            }
+            FileOutputStream b = null;
+            String str = null;
+            Date date = null;
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");//获取当前时间，进一步转化为字符串
+            date = new Date();
+            str = format.format(date);
+            File dir = new File( Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"myImage");
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            File file = new File(dir,str+".jpg");
 
+            try {
+                b = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100, b);// 把数据写入文件
+                startActivity(new Intent(this,PostActivity.class).putExtra("pic",file.getAbsolutePath()));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    b.flush();
+                    b.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
+
+
 }

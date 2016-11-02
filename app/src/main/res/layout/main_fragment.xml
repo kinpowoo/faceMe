@@ -20,22 +20,6 @@
             android:textStyle="italic|bold" />
     </RelativeLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/WhiteSmoke">
-
-        <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/sdv_mainFragment_addStatus"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginTop="10dp"
-            fresco:roundAsCircle="true" />
-
-
-    </FrameLayout>
 
     <in.srain.cube.views.ptr.PtrFrameLayout
         android:id="@+id/iv_mainFragment_ptrFrame"
