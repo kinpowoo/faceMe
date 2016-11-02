@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -16,6 +18,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.adapter.GridViewAdapter;
+import com.jinhanyu.jack.faceme.adapter.MainFragmentAdapter;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
@@ -34,11 +37,14 @@ import cn.bmob.v3.listener.FindListener;
 public class UserFragment extends Fragment implements View.OnClickListener,RadioGroup.OnCheckedChangeListener{
     private ImageView addFriend,settings;
     private TextView username,nickname,statusNum,followingNum,followersNum;
+    private LinearLayout followingParent,followerParent;
     private RadioGroup radioGroup;
     private Button editProfile;
     private SimpleDraweeView userPortrait;
     private GridView gridView;
+    private ListView listView;
     private GridViewAdapter adapter;
+    private MainFragmentAdapter listAdapter;
     private List<Status> list;
     private User me= Utils.getCurrentUser();
     @Override
@@ -51,20 +57,26 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
         statusNum= (TextView) view.findViewById(R.id.tv_userFragment_statusNUm);
         followersNum= (TextView) view.findViewById(R.id.tv_userFragment_followersNum);
         followingNum= (TextView) view.findViewById(R.id.tv_userFragment_followingNum);
+        followerParent= (LinearLayout) view.findViewById(R.id.ll_userFragment_followerNum);
+        followingParent= (LinearLayout) view.findViewById(R.id.ll_userFragment_followingNum);
         radioGroup= (RadioGroup) view.findViewById(R.id.rg_userFragment);
         editProfile= (Button) view.findViewById(R.id.btn_userFragment_editProfile);
         userPortrait= (SimpleDraweeView) view.findViewById(R.id.sdv_userFragment_userPortrait);
         gridView= (GridView) view.findViewById(R.id.gv_userFragment_photos);
+        listView= (ListView) view.findViewById(R.id.lv_userFragment_photos);
 
         addFriend.setOnClickListener(this);
         settings.setOnClickListener(this);
-        followingNum.setOnClickListener(this);
-        followersNum.setOnClickListener(this);
+        followingParent.setOnClickListener(this);
+        followerParent.setOnClickListener(this);
         editProfile.setOnClickListener(this);
+        radioGroup.setOnCheckedChangeListener(this);
 
         list=new ArrayList<>();
         adapter=new GridViewAdapter(list,getActivity());
         gridView.setAdapter(adapter);
+        listAdapter=new MainFragmentAdapter(list,getActivity());
+        listView.setAdapter(listAdapter);
         fillData();
         return view;
     }
@@ -102,14 +114,13 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
             statusBmobQuery.count(Status.class, new CountListener() {
                 @Override
                 public void done(Integer integer, BmobException e) {
-                    me.setStatusNum(integer);
                     statusNum.setText(integer+"");
                 }
             });
 
 
 
-        loadStatus();
+        loadStatus(1);
     }
 
     @Override
@@ -119,7 +130,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
                 break;
             case R.id.iv_userFragment_settings:
                 break;
-            case R.id.tv_userFragment_followersNum:
+            case R.id.ll_userFragment_followerNum:
                 Intent intent=new Intent(getActivity(),LikesActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putString("type","followersNum");
@@ -127,7 +138,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case R.id.tv_userFragment_followingNum:
+            case R.id.ll_userFragment_followingNum:
                 Intent intent2=new Intent(getActivity(),LikesActivity.class);
                 Bundle bundle2=new Bundle();
                 bundle2.putString("type","followingNum");
@@ -147,22 +158,34 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId){
             case R.id.rb_userFragment_gridView:
+                listView.setVisibility(View.GONE);
+                gridView.setVisibility(View.VISIBLE);
+                loadStatus(1);
                 break;
             case R.id.rb_userFragment_listView:
+                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.VISIBLE);
+                loadStatus(2);
                 break;
         }
     }
 
-    public void loadStatus(){
+    public void loadStatus(final int type){
         BmobQuery<Status> query=new BmobQuery<>();
-        query.addWhereRelatedTo("statuses",new BmobPointer(me));
+        query.addWhereEqualTo("author",new BmobPointer(me));
         query.include("author");
         query.findObjects(new FindListener<Status>() {
             @Override
             public void done(List<Status> data, BmobException e) {
               if(e==null){
+                  list.clear();
                   list.addAll(data);
-                  adapter.notifyDataSetChanged();
+                  if(type==1){
+                      adapter.notifyDataSetChanged();
+                  }else {
+                      listAdapter.notifyDataSetChanged();
+                  }
+
               }
             }
         });

@@ -122,15 +122,16 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                   if(e==null){
 //                      Toast.makeText(CommentActivity.this,s,Toast.LENGTH_LONG).show();
                       loadComment(status);
+                      status.increment("commentNum");
+                      status.update(status.getObjectId(), new UpdateListener() {
+                          @Override
+                          public void done(BmobException e) {
+                          }
+                      });
                   }
               }
           });
-            status.setCommentNum(status.getCommentNum()+1);
-            status.update(status.getObjectId(), new UpdateListener() {
-                @Override
-                public void done(BmobException e) {
-                }
-            });
+
         }
     }
 

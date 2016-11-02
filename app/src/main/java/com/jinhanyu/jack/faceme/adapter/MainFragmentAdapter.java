@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -37,9 +38,12 @@ import cn.bmob.v3.listener.UpdateListener;
  */
 public class MainFragmentAdapter extends CommonAdapter<Status> {
     User me = User.getCurrentUser(User.class);
+    LinearLayout.LayoutParams params;
 
     public MainFragmentAdapter(List<Status> data, Context context) {
         super(data, context);
+        int width= ScreenUtils.getScreenWidth(context);
+        params = new LinearLayout.LayoutParams(width,width);
     }
 
     @Override
@@ -130,8 +134,8 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             });
 
 
-        viewHolder.postPhoto.setMaxWidth(ScreenUtils.getScreenWidth(context));
-        viewHolder.postPhoto.setMinimumWidth(ScreenUtils.getScreenWidth(context));
+        viewHolder.postPhoto.setLayoutParams(params);
+        viewHolder.postPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
         viewHolder.userPortrait.setImageURI(status.getAuthor().getPortrait().getUrl());
         viewHolder.username.setText(status.getAuthor().getUsername());
         viewHolder.postPhoto.setImageURI(status.getPhoto().getUrl());

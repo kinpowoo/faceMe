@@ -73,7 +73,7 @@
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
-
+                    android:id="@+id/ll_userProfile_followingNum"
                     android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -85,14 +85,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                     <TextView
-
                         android:text="关注"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
                 </LinearLayout>
                 <LinearLayout
-
+                    android:id="@+id/ll_userProfile_followerNum"
                     android:orientation="vertical"
                     android:layout_width="0dp"
                     android:layout_weight="1"
@@ -132,6 +131,7 @@
         android:background="@color/White"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <RadioGroup
         android:id="@+id/rg_userProfile"
         android:orientation="horizontal"
@@ -145,6 +145,7 @@
             android:button="@null"
             android:background="@drawable/gridview_button"
             android:padding="5dp"
+            android:checked="true"
             android:layout_marginLeft="25dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -158,14 +159,15 @@
             android:layout_height="wrap_content" />
 
     </RadioGroup>
+
     <FrameLayout
-        android:layout_marginTop="4dp"
+        android:paddingTop="10dp"
         android:layout_width="match_parent"
         android:background="@color/WhiteSmoke"
         android:layout_height="match_parent">
+
         <GridView
             android:id="@+id/gv_userProfile_photos"
-            android:layout_marginTop="1dp"
             android:numColumns="3"
             android:verticalSpacing="2dp"
             android:horizontalSpacing="2dp"
@@ -173,5 +175,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </GridView>
+        <ListView
+            android:id="@+id/lv_userProfile_photos"
+            android:visibility="invisible"
+            android:dividerHeight="5dp"
+            android:divider="@color/LightYellow"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
     </FrameLayout>
 </LinearLayout>

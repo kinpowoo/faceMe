@@ -262,7 +262,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                 startActivity(intent5);
                 break;
             case R.id.iv_single_status_option:
-                if(status.getAuthor()==Utils.getCurrentUser()) {
+                if(status.getAuthor().getObjectId().equals(Utils.getCurrentUser().getObjectId())) {
                     if (popupWindow != null && popupWindow.isShowing()) {
                         return;
                     } else {
@@ -336,8 +336,6 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                     dialog.setPositiveButton("删除", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            status.getAuthor().increment("statusNum",-1);
-                            status.getAuthor().update();
                             status.delete(statusId, new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {

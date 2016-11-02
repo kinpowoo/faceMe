@@ -30,10 +30,10 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:background="@color/Bisque"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:background="@color/White"
         android:orientation="horizontal">
 
         <com.facebook.drawee.view.SimpleDraweeView xmlns:fresco="http://schemas.android.com/apk/res-auto"

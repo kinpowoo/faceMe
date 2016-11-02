@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.adapter.GridViewAdapter;
+import com.jinhanyu.jack.faceme.adapter.MainFragmentAdapter;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
@@ -39,10 +42,13 @@ import cn.bmob.v3.listener.UpdateListener;
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener{
     private ImageView back,option;
     private TextView username,nickname,statusNum,followingNum,followersNum;
+    private LinearLayout followingParent,followerParent;
     private RadioGroup radioGroup;
     private Button isFollowing;
     private SimpleDraweeView userPortrait;
     private GridView gridView;
+    private ListView listView;
+    private MainFragmentAdapter listAdapter;
     private GridViewAdapter adapter;
     private List<Status> list;
     private String userId;
@@ -62,20 +68,26 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         statusNum= (TextView)findViewById(R.id.tv_userProfile_statusNUm);
         followersNum= (TextView)findViewById(R.id.tv_userProfile_followersNum);
         followingNum= (TextView)findViewById(R.id.tv_userProfile_followingNum);
+        followerParent= (LinearLayout) findViewById(R.id.ll_userProfile_followerNum);
+        followingParent= (LinearLayout) findViewById(R.id.ll_userProfile_followingNum);
         radioGroup= (RadioGroup)findViewById(R.id.rg_userProfile);
         isFollowing= (Button)findViewById(R.id.btn_userProfile_isFollowing);
         userPortrait= (SimpleDraweeView)findViewById(R.id.sdv_userProfile_userPortrait);
         gridView= (GridView)findViewById(R.id.gv_userProfile_photos);
+        listView= (ListView) findViewById(R.id.lv_userProfile_photos);
 
         back.setOnClickListener(this);
         option.setOnClickListener(this);
-        followingNum.setOnClickListener(this);
-        followersNum.setOnClickListener(this);
+        followingParent.setOnClickListener(this);
+        followerParent.setOnClickListener(this);
         isFollowing.setOnClickListener(this);
+        radioGroup.setOnCheckedChangeListener(this);
 
         list=new ArrayList<>();
         adapter=new GridViewAdapter(list,this);
         gridView.setAdapter(adapter);
+        listAdapter=new MainFragmentAdapter(list,this);
+        listView.setAdapter(listAdapter);
 
         userId=getIntent().getStringExtra("userId");
         if(userId!=null){
@@ -134,7 +146,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             statusBmobQuery.count(Status.class, new CountListener() {
                 @Override
                 public void done(Integer integer, BmobException e) {
-                    user.setStatusNum(integer);
                     statusNum.setText(integer + "");
                 }
             });
@@ -166,18 +177,24 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         }
-        loadStatus(user);
+        loadStatus(user,1);
     }
 
-    public void loadStatus(User user){
+    public void loadStatus(User user, final int type){
         BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
         statusBmobQuery.addWhereEqualTo("author",new BmobPointer(user));
+        statusBmobQuery.include("author");
         statusBmobQuery.findObjects(new FindListener<Status>() {
             @Override
             public void done(List<Status> data, BmobException e) {
                  list.clear();
                  list.addAll(data);
-                 adapter.notifyDataSetChanged();
+                if(type==1){
+                    adapter.notifyDataSetChanged();
+                }else {
+                    listAdapter.notifyDataSetChanged();
+                }
+
             }
         });
     }
@@ -186,8 +203,14 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         switch (checkedId){
             case R.id.rb_userProfile_gridView:
+                listView.setVisibility(View.GONE);
+                gridView.setVisibility(View.VISIBLE);
+                loadStatus(userIncoming,1);
                 break;
             case R.id.rb_userProfile_listView:
+                gridView.setVisibility(View.GONE);
+                listView.setVisibility(View.VISIBLE);
+                loadStatus(userIncoming,2);
                 break;
         }
     }
@@ -226,7 +249,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
                 break;
 
-            case R.id.tv_userProfile_followersNum:
+            case R.id.ll_userProfile_followerNum:
                 Intent intent=new Intent(this,LikesActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putString("type","followersNum");
@@ -234,7 +257,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 intent.putExtras(bundle);
                 startActivity(intent);
                 break;
-            case R.id.tv_userProfile_followingNum:
+            case R.id.ll_userProfile_followingNum:
                 Intent intent2=new Intent(this,LikesActivity.class);
                 Bundle bundle2=new Bundle();
                 bundle2.putString("type","followingNum");

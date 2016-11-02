@@ -14,7 +14,6 @@ public class User extends BmobUser {
     private String gender;
     private Integer followingNum;
     private Integer followerNum;
-    private Integer statusNum;
     private boolean isFollowing;
 
     public boolean isFollowing() {
@@ -23,14 +22,6 @@ public class User extends BmobUser {
 
     public void setFollowing(boolean following) {
         isFollowing = following;
-    }
-
-    public Integer getStatusNum() {
-        return statusNum;
-    }
-
-    public void setStatusNum(Integer statusNum) {
-        this.statusNum = statusNum;
     }
 
     public Integer getFollowerNum() {
