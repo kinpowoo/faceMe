@@ -25,6 +25,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 
 /**
@@ -63,6 +64,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
 
         list=new ArrayList<>();
         adapter=new GridViewAdapter(list,getActivity());
+        gridView.setAdapter(adapter);
         fillData();
         return view;
     }
@@ -71,10 +73,41 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
         userPortrait.setImageURI(me.getPortrait().getUrl());
         username.setText(me.getUsername());
         nickname.setText(me.getNickname());
-//        statusNum.setText(me.getStatusesNum()+"");
-//        followersNum.setText(me.getFollowersNum()+"");
-//        followingNum.setText(me.getFollowingNum()+"");
-        gridView.setAdapter(adapter);
+
+            BmobQuery<User> followerQuery=new BmobQuery<>();
+            BmobQuery<User> innerQuery=new BmobQuery<>();
+            innerQuery.addWhereEqualTo("objectId",me.getObjectId());
+            followerQuery.addWhereMatchesQuery("following","_User",innerQuery);
+            followerQuery.count(User.class, new CountListener() {
+                @Override
+                public void done(Integer integer, BmobException e) {
+                    me.setFollowerNum(integer);
+                    followersNum.setText(integer+"");
+                }
+            });
+
+            BmobQuery<User> query=new BmobQuery<>();
+            query.addWhereRelatedTo("following",new BmobPointer(me));
+            query.count(User.class, new CountListener() {
+                @Override
+                public void done(Integer integer, BmobException e) {
+                    me.setFollowingNum(integer);
+                    followingNum.setText(integer+"");
+                }
+            });
+
+
+            BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
+            statusBmobQuery.addWhereEqualTo("author",new BmobPointer(me));
+            statusBmobQuery.count(Status.class, new CountListener() {
+                @Override
+                public void done(Integer integer, BmobException e) {
+                    me.setStatusNum(integer);
+                    statusNum.setText(integer+"");
+                }
+            });
+
+
 
         loadStatus();
     }
@@ -133,5 +166,11 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
               }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fillData();
     }
 }

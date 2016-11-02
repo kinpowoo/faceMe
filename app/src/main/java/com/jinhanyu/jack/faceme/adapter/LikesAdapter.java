@@ -2,9 +2,11 @@ package com.jinhanyu.jack.faceme.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,25 +23,45 @@ import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by jianbo on 2016/10/20.
  */
-public class LikesAdapter extends CommonAdapter<User> implements View.OnClickListener {
-    private User user;
-    private Boolean isFollowing = false;
-    private List<User> queryList;
-
+public class LikesAdapter extends BaseAdapter{
+    private List<User> data;
+    private Context context;
+    private User currentUser=Utils.getCurrentUser();
+    private boolean following=false;
+    private String currentUserId=Utils.getCurrentUser().getObjectId();
     public LikesAdapter(List<User> data, Context context) {
-        super(data, context);
+       this.data=data;
+        this.context=context;
     }
+
     public void refreshDataSource(List<User> newData){
         data=newData;
         notifyDataSetChanged();
     }
+
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public int getCount() {
+        return data==null?0:data.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return data.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(final int position, View view, ViewGroup parent) {
         final ViewHolder3 viewHold;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.likes_list_item, null);
@@ -52,92 +74,108 @@ public class LikesAdapter extends CommonAdapter<User> implements View.OnClickLis
         } else {
             viewHold = (ViewHolder3) view.getTag();
         }
-        user = data.get(position);
+        final User user = data.get(position);
         viewHold.username.setText(user.getUsername());
         viewHold.nickname.setText(user.getNickname());
         viewHold.userPortrait.setImageURI(user.getPortrait().getUrl());
 
-        viewHold.userPortrait.setOnClickListener(this);
-        viewHold.username.setOnClickListener(this);
-        viewHold.nickname.setOnClickListener(this);
-
-        BmobQuery<User> query = new BmobQuery<>();
-        query.addWhereRelatedTo("following", new BmobPointer(Utils.getCurrentUser()));
-        query.findObjects(new FindListener<User>() {
-            @Override
-            public void done(List<User> list, BmobException e) {
-                queryList = list;
-                if (list.contains(user)) {
-                    isFollowing = true;
-                }
-            }
-        });
-        viewHold.follow.setOnClickListener(new View.OnClickListener() {
+        viewHold.userPortrait.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BmobRelation relation = new BmobRelation();
-                if (queryList.contains(user)) {
-                    relation.remove(user);
-                    Utils.getCurrentUser().setFollowing(relation);
-                    Utils.getCurrentUser().increment("followingNum");
-                    Utils.getCurrentUser().update(new UpdateListener() {
-                        @Override
-                        public void done(BmobException e) {
-                            if (e == null) {
-                                viewHold.follow.setText("关注");
-                                isFollowing = false;
-                            }
-                        }
-                    });
-                    relation.setObjects(null);
-                    relation.remove(Utils.getCurrentUser());
-//                    user.setFollowers(relation);
-                    user.increment("followersNum",-1);
-                    user.update();
+                Intent intent = new Intent(context, UserProfileActivity.class);
+                intent.putExtra("userId",user.getObjectId());
+                context.startActivity(intent);
+            }
+        });
+        viewHold.username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserProfileActivity.class);
+                intent.putExtra("userId",user.getObjectId());
+                context.startActivity(intent);
+            }
+        });
+        viewHold.nickname.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserProfileActivity.class);
+                intent.putExtra("userId",user.getObjectId());
+                context.startActivity(intent);
+            }
+        });
 
-                } else {
-                    relation.add(user);
-//                    Utils.getCurrentUser().setFollowers(relation);
-                    Utils.getCurrentUser().increment("followingNum", -1);
-                    Utils.getCurrentUser().update(new UpdateListener() {
-                        @Override
-                        public void done(BmobException e) {
-                            if (e == null) {
-                                viewHold.follow.setText("取消关注");
-                                isFollowing = true;
-                            }
-                        }
-                    });
 
-                    relation.setObjects(null);
-                    relation.add(Utils.getCurrentUser());
-                    user.increment("followersNum");
-//                    user.setFollowers(relation);
-                    user.update();
+
+        BmobQuery<User> followerQuery=new BmobQuery<>();
+        BmobQuery<User> innerQuery=new BmobQuery<>();
+        innerQuery.addWhereEqualTo("objectId",user.getObjectId());
+        followerQuery.addWhereMatchesQuery("following","_User",innerQuery);
+        followerQuery.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+                for(User user1:list){
+                    Log.i("haha",list.get(position).getUsername());
+
+                    if(user1.getObjectId().equals(currentUserId)){
+                        following=true;
+                        user.setFollowing(true);
+                        viewHold.follow.setText("取消关注");
+                    }
+                }
+                if(following==false) {
+
+                    if(user.getObjectId().equals(currentUserId)){
+                        viewHold.follow.setText("不可选");
+                        viewHold.follow.setEnabled(false);
+                    }else {
+                        viewHold.follow.setText("关注");
+                    }
                 }
             }
         });
-        if (isFollowing) {
-            viewHold.follow.setText("取消关注");
-        } else {
-            viewHold.follow.setText("关注");
-        }
+
+
+            viewHold.follow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    viewHold.follow.setEnabled(false);
+                    if (following) {
+                        BmobRelation relation = new BmobRelation();
+                        relation.remove(user);
+                        currentUser.setFollowing(relation);
+                        currentUser.setFollowingNum(currentUser.getFollowingNum() - 1);
+                        currentUser.update(currentUserId, new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                    viewHold.follow.setText("关注");
+                                    user.setFollowing(false);
+                                    following = false;
+                                    viewHold.follow.setEnabled(true);
+                            }
+                        });
+                    } else {
+                        BmobRelation relation = new BmobRelation();
+                        relation.add(user);
+                        currentUser.setFollowing(relation);
+                        currentUser.setFollowingNum(currentUser.getFollowingNum() + 1);
+                        currentUser.update(currentUserId, new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                    viewHold.follow.setText("取消关注");
+                                    user.setFollowing(true);
+                                    following = true;
+                                    viewHold.follow.setEnabled(true);
+                            }
+                        });
+                    }
+                }
+            });
+
+
 
         return view;
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.sdv_likes_item_userPortrait
-                    | R.id.tv_likes_item_username
-                    | R.id.tv_likes_item_nickname:
-                Intent intent = new Intent(context, UserProfileActivity.class);
-                intent.putExtra("userId",user.getObjectId());
-                context.startActivity(intent);
-                break;
-        }
-    }
 
     class ViewHolder3 {
         protected SimpleDraweeView userPortrait;

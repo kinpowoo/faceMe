@@ -12,6 +12,7 @@
         android:orientation="vertical" />
 
     <RadioGroup
+        android:background="@color/WhiteSmoke"
         android:id="@+id/rg_mainActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -17,7 +17,6 @@ import java.util.List;
  * Created by jianbo on 2016/10/21.
  */
 public class GridViewAdapter extends CommonAdapter<Status>{
-    private Status status;
 
     public GridViewAdapter(List<Status> data, Context context) {
         super(data, context);
@@ -34,7 +33,7 @@ public class GridViewAdapter extends CommonAdapter<Status>{
         }else {
             viewHold= (ViewHolder4) convertView.getTag();
         }
-        status=data.get(position);
+        final Status status=data.get(position);
         viewHold.statusPhoto.setImageURI(status.getPhoto().getUrl());
         viewHold.statusPhoto.setOnClickListener(new View.OnClickListener() {
             @Override

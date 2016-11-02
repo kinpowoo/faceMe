@@ -19,8 +19,17 @@ public class Status extends BmobObject implements Comparable<Status>{
     private BmobRelation likes;
     private List<String> tags;
     private BmobGeoPoint location;
-    private boolean favoritedByMe;
-    private Integer favoriteNum=-1;
+    private boolean favoritedByMe=false;
+    private Integer favoriteNum;
+    private Integer commentNum;
+
+    public Integer getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
+    }
 
     public Integer getFavoriteNum() {
         return favoriteNum;

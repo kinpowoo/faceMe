@@ -13,6 +13,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.LogInListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -39,6 +40,19 @@ public class AllQueries {
         });
     }
 
+    public static void getFavoriteNum(Status status){
+        BmobQuery<User> userBmobQuery = new BmobQuery<>();
+        userBmobQuery.addWhereRelatedTo("likes", new BmobPointer(status));
+        userBmobQuery.count(User.class, new CountListener() {
+            @Override
+            public void done(Integer num, BmobException e) {
+                Log.i("favoriteNum",num+"");
+
+            }
+        });
+
+    }
+
     public static void followUser() {
         User user =new User();
         user.setObjectId("XQm2333J");
@@ -48,12 +62,11 @@ public class AllQueries {
         BmobRelation followings = new BmobRelation();
         followings.add(user);
         loginUser.setFollowing(followings);
-        loginUser.setGender("女");
         loginUser.update(loginUser.getObjectId(), new UpdateListener() {
             @Override
             public void done(BmobException e) {
                 if (e == null) {
-                    Log.i("bmob", "用户B和该帖子关联成功");
+                    Log.i("bmob", "关注用户成功");
 
                 } else {
                     Log.i("bmob", "失败：" + e.getMessage());
@@ -102,6 +115,26 @@ public class AllQueries {
     }
 
     /**
+     * 得到用户的粉丝列表
+     *
+     */
+    public static void getFollowerList(String userId){
+        BmobQuery<User> followerQuery=new BmobQuery<>();
+        BmobQuery<User> innerQuery=new BmobQuery<>();
+        innerQuery.addWhereEqualTo("objectId",userId);
+        followerQuery.addWhereMatchesQuery("following","_User",innerQuery);
+        followerQuery.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+               Log.i("follower",list.get(0).getUsername());
+            }
+        });
+
+
+    }
+
+
+    /**
      * 得到当前用户的朋友圈动态
      */
     public static void getFriendCircleStatuses() {
@@ -145,7 +178,6 @@ public class AllQueries {
         BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
         commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
         commentBmobQuery.include("commentor,replyToUser");
-
         commentBmobQuery.findObjects(new FindListener<Comment>() {
             @Override
             public void done(List<Comment> list, BmobException e) {

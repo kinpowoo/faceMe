@@ -25,6 +25,7 @@ import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.SaveListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 import static com.jinhanyu.jack.faceme.R.id.et_comment_content;
 
@@ -86,7 +87,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
        switch (v.getId()){
            case R.id.iv_comment_back:
-               finish();
+              finish();
            break;
            case R.id.iv_comment_atPeople:
                break;
@@ -94,11 +95,16 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                addComment();
                commentContent.setText("");
                break;
-           case R.id.sdv_comment_userPortrait|R.id.tv_comment_username:
+           case R.id.sdv_comment_userPortrait:
                Intent intent=new Intent(this,UserProfileActivity.class);
                intent.putExtra("userId",status.getAuthor().getObjectId());
                startActivity(intent);
               break;
+           case R.id.tv_comment_username:
+               Intent intent2=new Intent(this,UserProfileActivity.class);
+               intent2.putExtra("userId",status.getAuthor().getObjectId());
+               startActivity(intent2);
+               break;
        }
     }
 
@@ -119,14 +125,12 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                   }
               }
           });
-
-//            status.update(new UpdateListener() {
-//                @Override
-//                public void done(BmobException e) {
-//
-//                }
-//            });
-
+            status.setCommentNum(status.getCommentNum()+1);
+            status.update(status.getObjectId(), new UpdateListener() {
+                @Override
+                public void done(BmobException e) {
+                }
+            });
         }
     }
 

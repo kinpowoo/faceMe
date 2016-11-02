@@ -7,10 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jinhanyu.jack.faceme.ClearEditText;
 import com.jinhanyu.jack.faceme.R;
@@ -33,6 +35,7 @@ import cn.bmob.v3.listener.QueryListener;
  */
 public class LikesActivity extends AppCompatActivity implements TextWatcher,View.OnClickListener{
     private ListView listView;
+    private TextView title;
     private List<User> list;
     private LikesAdapter adapter;
     private ClearEditText search;
@@ -45,12 +48,12 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.likes_activity);
         listView= (ListView) findViewById(R.id.lv_likes);
-        Utils.setListViewHeightBasedOnChildren(listView);
+        title= (TextView) findViewById(R.id.tv_likes_title);
         search= (ClearEditText) findViewById(R.id.cet_likes_search);
         back= (ImageView) findViewById(R.id.iv_likes_back);
-        Utils.setListViewHeightBasedOnChildren(listView);
         list=new ArrayList<>();
-        adapter=new LikesAdapter(list,this);
+        adapter=new LikesAdapter(list,LikesActivity.this);
+        listView.setAdapter(adapter);
 
         back.setOnClickListener(this);
         search.addTextChangedListener(this);
@@ -59,50 +62,46 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
         type=bundle.getString("type");
         switch (type){
             case "followingNum":
-                String userId=bundle.getString("userId");
+                title.setText("关注列表");
+               String userId=bundle.getString("userId");
+
                 BmobQuery<User> query=new BmobQuery<>();
                 query.getObject(userId, new QueryListener<User>() {
                     @Override
                     public void done(User user, BmobException e) {
-                   if(e==null){
-                    BmobQuery<User> query1=new BmobQuery<User>();
-                     query1.addWhereRelatedTo("following",new BmobPointer(user));
-                       query1.findObjects(new FindListener<User>() {
-                           @Override
-                           public void done(List<User> data, BmobException e) {
-                          if(e==null){
-                              list.addAll(data);
-                              adapter.notifyDataSetChanged();
-                          }
-                           }
-                       });
-                   }
-                    }
-                });
-                break;
-            case "followersNum":
-                String userId2=bundle.getString("userId");
-                BmobQuery<User> query1=new BmobQuery<>();
-                query1.getObject(userId2, new QueryListener<User>() {
-                    @Override
-                    public void done(User user, BmobException e) {
                         if(e==null){
                             BmobQuery<User> query1=new BmobQuery<>();
-                            query1.addWhereRelatedTo("followers",new BmobPointer(user));
+                            query1.addWhereRelatedTo("following",new BmobPointer(user));
                             query1.findObjects(new FindListener<User>() {
                                 @Override
                                 public void done(List<User> data, BmobException e) {
-                                    if(e==null){
-                                        list.addAll(data);
-                                        adapter.notifyDataSetChanged();
-                                    }
+                                    list.addAll(data);
+                                    adapter.notifyDataSetChanged();
                                 }
                             });
                         }
                     }
                 });
                 break;
+            case "followersNum":
+                title.setText("粉丝列表");
+                String userId2=bundle.getString("userId");
+
+                BmobQuery<User> followerQuery=new BmobQuery<>();
+                BmobQuery<User> innerQuery=new BmobQuery<>();
+                innerQuery.addWhereEqualTo("objectId",userId2);
+                followerQuery.addWhereMatchesQuery("following","_User",innerQuery);
+                followerQuery.findObjects(new FindListener<User>() {
+                    @Override
+                    public void done(List<User> data, BmobException e) {
+                        list.clear();
+                        list.addAll(data);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                break;
             case "status":
+                title.setText("收藏列表");
               String statusId=bundle.getString("statusId");
                 if(statusId!=null){
                     BmobQuery<Status> query2=new BmobQuery<>();
@@ -110,13 +109,14 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
                         @Override
                         public void done(Status status, BmobException e) {
                             if(e==null){
-                                loadUser(status);
+                                loadFavorite(status);
                             }
                         }
                     });
                 }
                 break;
         }
+
     }
 
     @Override
@@ -156,18 +156,15 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
         adapter.refreshDataSource(changedList);
     }
 
-    public void loadUser(Status status){
-        BmobQuery<User> query=new BmobQuery<>();
-        query.addWhereRelatedTo("likes",new BmobPointer(status));
-        query.findObjects(new FindListener<User>() {
+    public void loadFavorite(Status status){
+        BmobQuery<User> statusQuery = new BmobQuery<>();
+        statusQuery.addWhereRelatedTo("likes",new BmobPointer(status));
+        statusQuery.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> data, BmobException e) {
-                if(e==null){
-                    list.addAll(data);
-                    adapter.notifyDataSetChanged();
-                }
+                list.addAll(data);
+                adapter.notifyDataSetChanged();
             }
         });
-
     }
 }

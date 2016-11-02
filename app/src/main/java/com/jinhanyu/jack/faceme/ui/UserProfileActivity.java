@@ -3,7 +3,10 @@ package com.jinhanyu.jack.faceme.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -25,6 +28,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
@@ -43,8 +47,9 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private List<Status> list;
     private String userId;
     private User userIncoming;
-    private User currentUser=Utils.getCurrentUser();
     private boolean following=false;
+    private User currentUser=Utils.getCurrentUser();
+    private PopupMenu optionMenu;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +75,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         list=new ArrayList<>();
         adapter=new GridViewAdapter(list,this);
+        gridView.setAdapter(adapter);
 
         userId=getIntent().getStringExtra("userId");
         if(userId!=null){
@@ -87,44 +93,78 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     }
                 }
             });
+        }else {
+            fillData(userIncoming);
         }
 
     }
 
-    public void fillData(User user){
+    public void fillData(final User user){
         userPortrait.setImageURI(user.getPortrait().getUrl());
         username.setText(user.getUsername());
         nickname.setText(user.getNickname());
-//        statusNum.setText(user.getStatusesNum()+"");
-//        followersNum.setText(user.getFollowersNum()+"");
-//        followingNum.setText(user.getFollowingNum()+"");
-        gridView.setAdapter(adapter);
 
-        if(user==currentUser){
-            isFollowing.setText("编辑个人主页");
-        }else {
-           BmobQuery<User> query=new BmobQuery<>();
-            query.addWhereRelatedTo("following",new BmobPointer(currentUser));
-            query.findObjects(new FindListener<User>() {
+
+            BmobQuery<User> followerQuery = new BmobQuery<>();
+            BmobQuery<User> innerQuery = new BmobQuery<>();
+            innerQuery.addWhereEqualTo("objectId", userId);
+            followerQuery.addWhereMatchesQuery("following", "_User", innerQuery);
+            followerQuery.count(User.class, new CountListener() {
                 @Override
-                public void done(List<User> list, BmobException e) {
-                  for(User user1:list){
-                      if(user1.getObjectId().equals(userIncoming.getObjectId())){
-                          isFollowing.setText("取消关注");
-                          following=true;
-                      }
-                  }
-
+                public void done(Integer integer, BmobException e) {
+                    user.setFollowerNum(integer);
+                    followersNum.setText(integer + "");
                 }
             });
 
-//            if (followingList != null) {
-//                if (followingList.contains(userIncoming)) {
-//                    isFollowing.setText("取消关注");
-//                } else {
-//                    isFollowing.setText("关注");
-//                }
-//            }
+
+            BmobQuery<User> query = new BmobQuery<>();
+            query.addWhereRelatedTo("following", new BmobPointer(user));
+            query.count(User.class, new CountListener() {
+                @Override
+                public void done(Integer integer, BmobException e) {
+                    user.setFollowingNum(integer);
+                    followingNum.setText(integer + "");
+                }
+            });
+
+
+            BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
+            statusBmobQuery.addWhereEqualTo("author", new BmobPointer(user));
+            statusBmobQuery.count(Status.class, new CountListener() {
+                @Override
+                public void done(Integer integer, BmobException e) {
+                    user.setStatusNum(integer);
+                    statusNum.setText(integer + "");
+                }
+            });
+
+
+        if(currentUser.getObjectId().equals(user.getObjectId())){
+            isFollowing.setText("编辑个人主页");
+        }else {
+            if (following) {
+                isFollowing.setText("取消关注");
+            } else {
+                BmobQuery<User> followingQuery = new BmobQuery<>();
+                followingQuery.addWhereRelatedTo("following", new BmobPointer(currentUser));
+                followingQuery.findObjects(new FindListener<User>() {
+                    @Override
+                    public void done(List<User> list, BmobException e) {
+                        for (User user1 : list) {
+                            if (user1.getObjectId().equals(userIncoming.getObjectId())) {
+                                userIncoming.setFollowing(true);
+                                userIncoming.update();
+                                following = true;
+                                isFollowing.setText("取消关注");
+                            }
+                        }
+                    }
+                });
+                if (userIncoming.isFollowing() == false) {
+                    isFollowing.setText("关注");
+                }
+            }
         }
         loadStatus(user);
     }
@@ -159,7 +199,30 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             case R.id.iv_userProfile_option:
-
+               if(optionMenu!=null){
+                   optionMenu.show();
+               }else {
+                   optionMenu=new PopupMenu(this,option, Gravity.BOTTOM);
+                   optionMenu.getMenuInflater().inflate(R.menu.option_menu,optionMenu.getMenu());
+                   optionMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                       @Override
+                       public void onDismiss(PopupMenu menu) {
+                           menu.dismiss();
+                       }
+                   });
+                   optionMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                       @Override
+                       public boolean onMenuItemClick(MenuItem item) {
+                           switch (item.getItemId()){
+                               case R.id.menu_item_option:
+                                   fillData(userIncoming);
+                                   break;
+                           }
+                           return false;
+                       }
+                   });
+                   optionMenu.show();
+               }
 
                 break;
 
@@ -180,7 +243,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 startActivity(intent2);
                 break;
             case R.id.btn_userProfile_isFollowing:
-                if(userIncoming==currentUser){
+                if(userIncoming.getObjectId().equals(currentUser.getObjectId())){
                     Intent intent1=new Intent(this,EditProfileActivity.class);
                     intent1.putExtra("userId",currentUser.getObjectId());
                     startActivity(intent1);
@@ -189,10 +252,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                         BmobRelation relation = new BmobRelation();
                         relation.remove(userIncoming);
                         currentUser.setFollowing(relation);
+                        currentUser.setFollowingNum(currentUser.getFollowingNum()-1);
                         currentUser.update(currentUser.getObjectId(),new UpdateListener() {
                             @Override
                             public void done(BmobException e) {
                                 isFollowing.setText("关注");
+                                userIncoming.setFollowing(false);
+                                userIncoming.update();
                                 following=false;
                             }
                         });
@@ -200,10 +266,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                         BmobRelation relation = new BmobRelation();
                         relation.add(userIncoming);
                         currentUser.setFollowing(relation);
+                        currentUser.setFollowingNum(currentUser.getFollowingNum()+1);
                         currentUser.update(currentUser.getObjectId(),new UpdateListener() {
                             @Override
                             public void done(BmobException e) {
                                 isFollowing.setText("取消关注");
+                                userIncoming.setFollowing(true);
+                                userIncoming.update();
                                 following=true;
                             }
                         });
@@ -226,5 +295,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(userIncoming!=null) {
+            fillData(userIncoming);
+        }
     }
 }

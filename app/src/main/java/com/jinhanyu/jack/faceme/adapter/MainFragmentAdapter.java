@@ -14,6 +14,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.Utils;
+import com.jinhanyu.jack.faceme.entity.Comment;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 import com.jinhanyu.jack.faceme.ui.CommentActivity;
@@ -28,6 +29,7 @@ import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CountListener;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -71,63 +73,69 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         viewHolder.favoriteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                BmobRelation relation = new BmobRelation();
                 viewHolder.favoriteIcon.setEnabled(false);
                 if (status.isFavoritedByMe()) {
                     //取消收藏
-                    BmobRelation relation = new BmobRelation();
                     relation.remove(me);
                     status.setLikes(relation);
                     status.setFavoritedByMe(false);
-                    status.update(new UpdateListener() {
+                    status.setFavoriteNum(status.getFavoriteNum()-1);
+                    status.update(status.getObjectId(),new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
-                            status.setFavoriteNum(status.getFavoriteNum()-1);
-                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
                             viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
                             viewHolder.favoriteIcon.setEnabled(true);
+                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
                         }
                     });
                 } else {
                     //添加收藏
-                    BmobRelation relation = new BmobRelation();
                     relation.add(me);
                     status.setLikes(relation);
                     status.setFavoritedByMe(true);
-                    status.update(new UpdateListener() {
+                    status.setFavoriteNum(status.getFavoriteNum()+1);
+                    status.update(status.getObjectId(),new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
-                            status.setFavoriteNum(status.getFavoriteNum()+1);
-                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
                             viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
                             viewHolder.favoriteIcon.setEnabled(true);
+                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
                         }
                     });
                 }
             }
         });
 
-        if (status.getFavoriteNum() == -1) {
-
             BmobQuery<User> userBmobQuery = new BmobQuery<>();
             userBmobQuery.addWhereRelatedTo("likes", new BmobPointer(status));
             userBmobQuery.count(User.class, new CountListener() {
                 @Override
                 public void done(Integer num, BmobException e) {
-                    Log.i("favoriteNum",num+"");
+                    Log.i("favoriteNum", num + "");
                     status.setFavoriteNum(num);
                     viewHolder.favoriteNum.setText(num + " 个赞");
                 }
             });
-        } else {
-            viewHolder.favoriteNum.setText(status.getFavoriteNum()+ " 个赞");
-        }
+
+
+            BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
+            commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
+            commentBmobQuery.count(Comment.class, new CountListener() {
+                @Override
+                public void done(Integer integer, BmobException e) {
+                    status.setCommentNum(integer);
+                    viewHolder.commentNum.setText(integer + " 条评论");
+                }
+            });
+
 
         viewHolder.postPhoto.setMaxWidth(ScreenUtils.getScreenWidth(context));
         viewHolder.postPhoto.setMinimumWidth(ScreenUtils.getScreenWidth(context));
         viewHolder.userPortrait.setImageURI(status.getAuthor().getPortrait().getUrl());
         viewHolder.username.setText(status.getAuthor().getUsername());
         viewHolder.postPhoto.setImageURI(status.getPhoto().getUrl());
-        viewHolder.textBy.setText(status.getAuthor().getUsername());
+        viewHolder.textBy.setText(status.getAuthor().getUsername()+": ");
         viewHolder.text.setText(status.getText());
         try {
             viewHolder.postTime.setText(Utils.calculTime(status.getCreatedAt()));

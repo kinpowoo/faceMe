@@ -89,4 +89,14 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
             e.printStackTrace();
         }
     }
+
+
+    public void testGetFollower(){
+        AllQueries.getFollowerList("XQm2333J");
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

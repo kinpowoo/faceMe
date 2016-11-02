@@ -9,18 +9,23 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.*;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.CountListener;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
+import com.jinhanyu.jack.faceme.entity.Comment;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
@@ -36,7 +41,6 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
     private TextView favoriteNum,textBy,text,commentNum,postTime,username;
     private String statusId;
     private Status status;
-    private List<Status> statusList;
     private View menuView;
     private TextView delete,edit,cancel,share;
     private User currentUser=Utils.getCurrentUser();
@@ -114,22 +118,61 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-    public void fillData(Status st){
+    public void fillData(final Status st){
         userPortrait.setImageURI(st.getAuthor().getPortrait().getUrl());
         username.setText(st.getAuthor().getUsername());
         statusPhoto.setImageURI(st.getPhoto().getUrl());
-        statusList= Utils.getCurrentUserLikes();
-        if(statusList!=null){
-            if(statusList.contains(status)){
-                favoriteIcon.setImageResource(R.drawable.favorite_red);
-            }else {
-                favoriteIcon.setImageResource(R.drawable.favorite_light);
+
+        BmobQuery<Status> statusQuery = new BmobQuery<>();
+        BmobQuery<User> innerQuery = new BmobQuery<>();
+        innerQuery.addWhereEqualTo("objectId",st.getObjectId());
+        statusQuery.addWhereMatchesQuery("likes", "_User", innerQuery);
+        statusQuery.findObjects(new FindListener<Status>() {
+            @Override
+            public void done(List<Status> list, BmobException e) {
+              for(Status status1:list){
+                  if(status1.getObjectId().equals(st.getObjectId())){
+                      st.setFavoritedByMe(true);
+                  }
+              }
             }
+        });
+
+        if(st.isFavoritedByMe()){
+            favoriteIcon.setImageResource(R.drawable.favorite_red);
+        }else {
+            favoriteIcon.setImageResource(R.drawable.favorite_light);
         }
-//        favoriteNum.setText(st.getLikesNum()+"个赞");
-        textBy.setText(st.getAuthor().getUsername());
+
+
+            BmobQuery<User> userBmobQuery = new BmobQuery<>();
+            userBmobQuery.addWhereRelatedTo("likes", new BmobPointer(st));
+            userBmobQuery.count(User.class, new CountListener() {
+                @Override
+                public void done(Integer num, BmobException e) {
+                    Log.i("favoriteNum",num+"");
+                    st.setFavoriteNum(num);
+                    favoriteNum.setText(num + " 个赞");
+                }
+            });
+
+
+            BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
+            commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(st));
+            commentBmobQuery.count(Comment.class, new CountListener() {
+                @Override
+                public void done(Integer integer, BmobException e) {
+                    st.setCommentNum(integer);
+                   commentNum.setText(integer+" 条评论");
+                }
+            });
+
+
+
+
+        textBy.setText(st.getAuthor().getUsername()+": ");
         text.setText(st.getText());
-//        commentNum.setText("查看所有"+st.getCommentsNum()+"条评论");
+
         try {
             postTime.setText(Utils.calculTime(st.getCreatedAt()));
         } catch (ParseException e) {
@@ -140,67 +183,67 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.iv_single_status_comment
-                    |R.id.tv_single_status_commentNum
-                    |R.id.tv_single_status_text:
+            case R.id.iv_single_status_comment:
                 Intent intent=new Intent(this, CommentActivity.class);
                 intent.putExtra("statusId",status.getObjectId());
                 startActivity(intent);
                 break;
+            case R.id.tv_single_status_commentNum:
+                Intent intent2=new Intent(this, CommentActivity.class);
+                intent2.putExtra("statusId",status.getObjectId());
+                startActivity(intent2);
+                break;
+            case R.id.tv_single_status_text:
+                Intent intent3=new Intent(this, CommentActivity.class);
+                intent3.putExtra("statusId",status.getObjectId());
+                startActivity(intent3);
+                break;
             case R.id.iv_single_status_share:
                 break;
             case R.id.tv_single_status_favoriteNum:
-                Intent intent2=new Intent(this, LikesActivity.class);
+                Intent intent4=new Intent(this, LikesActivity.class);
                 Bundle bundle=new Bundle();
                 bundle.putString("type","status");
                 bundle.putString("statusId",statusId);
-                intent2.putExtras(bundle);
-                startActivity(intent2);
+                intent4.putExtras(bundle);
+                startActivity(intent4);
                 break;
             case R.id.iv_single_status_back:
                 finish();
                 break;
             case R.id.iv_single_status_favorite:
-                if(statusList!=null){
-                    BmobRelation relation=new BmobRelation();
-                    if(statusList.contains(status)){
-                        relation.remove(status);
-//                        currentUser.setLikes(relation);
-                        currentUser.increment("likesNum",-1);
-                        currentUser.update(new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if(e==null){
-                                    favoriteIcon.setImageResource(R.drawable.favorite_light);
-                                }
-                            }
-                        });
-
-                        relation.setObjects(null);
-                        relation.remove(currentUser);
-                        status.setLikes(relation);
-                        status.increment("likesNum",-1);
-                        status.update();
-                    }else {
-                        relation.add(status);
-//                        currentUser.setLikes(relation);
-                        currentUser.increment("likesNum",1);
-                        currentUser.update(new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                if(e==null){
-                                    favoriteIcon.setImageResource(R.drawable.favorite_red);
-                                }
-                            }
-                        });
-
-                        relation.setObjects(null);
-                        relation.add(currentUser);
-                        status.setLikes(relation);
-                        status.increment("likesNum",1);
-                        status.update();
-                    }
+                BmobRelation relation = new BmobRelation();
+                favoriteIcon.setEnabled(false);
+                if (status.isFavoritedByMe()) {
+                    //取消收藏
+                    relation.remove(currentUser);
+                    status.setLikes(relation);
+                    status.setFavoritedByMe(false);
+                    status.setFavoriteNum(status.getFavoriteNum()-1);
+                    status.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            favoriteNum.setText(status.getFavoriteNum()+"个赞");
+                            favoriteIcon.setImageResource(R.drawable.favorite_light);
+                            favoriteIcon.setEnabled(true);
+                        }
+                    });
+                } else {
+                    //添加收藏
+                    relation.add(currentUser);
+                    status.setLikes(relation);
+                    status.setFavoritedByMe(true);
+                    status.setFavoriteNum(status.getFavoriteNum()+1);
+                    status.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            favoriteNum.setText(status.getFavoriteNum()+"个赞");
+                            favoriteIcon.setImageResource(R.drawable.favorite_red);
+                            favoriteIcon.setEnabled(true);
+                        }
+                    });
                 }
+
                 break;
             case R.id.sdv_single_status_userPortrait:
                 Intent intent1=new Intent(this,UserProfileActivity.class);
@@ -208,12 +251,12 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                 startActivity(intent1);
                 break;
             case R.id.tv_single_status_username:
-                Intent intent3=new Intent(this,UserProfileActivity.class);
-                intent3.putExtra("userId",status.getAuthor().getObjectId());
-                startActivity(intent3);
+                Intent intent5=new Intent(this,UserProfileActivity.class);
+                intent5.putExtra("userId",status.getAuthor().getObjectId());
+                startActivity(intent5);
                 break;
             case R.id.iv_single_status_option:
-//                if(status.getAuthor()==Utils.getCurrentUser()) {
+                if(status.getAuthor()==Utils.getCurrentUser()) {
                     if (popupWindow != null && popupWindow.isShowing()) {
                         return;
                     } else {
@@ -253,6 +296,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                                 }).start();
                             }
                         });
+                    }
 
                         new Thread(new Runnable() {
                             @Override
@@ -286,16 +330,12 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                     dialog.setPositiveButton("删除", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                          if(statusList.contains(status)){
-                             currentUser.increment("likesNum",-1);
-                             currentUser.update();
-                          }
+                            status.getAuthor().increment("statusNum",-1);
+                            status.getAuthor().update();
                             status.delete(statusId, new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
                                     if(e==null){
-                                    status.getAuthor().increment("statusesNum",-1);
-                                    status.getAuthor().update();
                                         finish();
                                     }
                                 }
@@ -315,9 +355,9 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                 popupWindow.dismiss();
                 break;
             case R.id.tv_single_status_option_menu_edit:
-                Intent intent4=new Intent(this,EditStatusActivity.class);
-                intent4.putExtra("statusId",status.getObjectId());
-                startActivity(intent4);
+                Intent intent6=new Intent(this,EditStatusActivity.class);
+                intent6.putExtra("statusId",status.getObjectId());
+                startActivity(intent6);
                 break;
         }
     }

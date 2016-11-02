@@ -33,7 +33,7 @@ public class MainFragment extends Fragment {
     private MainFragmentAdapter adapter;
     private PtrFrameLayout ptrFrameLayout;
     private Ptr_refresh ptr_refresh;
-//    private User me= BmobUser.getCurrentUser(User.class);
+  private User me= User.getCurrentUser(User.class);
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
@@ -69,10 +69,10 @@ public class MainFragment extends Fragment {
         BmobQuery<User> innerQuery = new BmobQuery<>();
         //子查询之一： 查询朋友
         BmobQuery<User> followingQuery = new BmobQuery<>();
-        followingQuery.addWhereRelatedTo("following", new BmobPointer(User.getCurrentUser(User.class)));
+        followingQuery.addWhereRelatedTo("following", new BmobPointer(me));
         //子查询之二： 查询自己
         BmobQuery<User> selfQuery = new BmobQuery<>();
-        selfQuery.addWhereEqualTo("objectId", User.getCurrentUser(User.class).getObjectId());
+        selfQuery.addWhereEqualTo("objectId",me.getObjectId());
         //合并子查询
         List<BmobQuery<User>> addonQueries = new ArrayList<>();
         addonQueries.add(selfQuery);
@@ -94,5 +94,11 @@ public class MainFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData();
     }
 }

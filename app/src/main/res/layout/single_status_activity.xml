@@ -43,6 +43,7 @@
         android:layout_marginTop="1dp"
         android:background="@color/White"
         android:orientation="horizontal"
+        android:paddingBottom="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.facebook.drawee.view.SimpleDraweeView
@@ -73,9 +74,12 @@
 
     </RelativeLayout>
     <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:background="@color/White"
         android:id="@+id/iv_single_status_photo"
-        android:layout_width="match_parent"
+        android:layout_width="450dp"
+        fresco:actualImageScaleType="focusCrop"
+        fresco:viewAspectRatio="1.33"
         android:layout_height="wrap_content"
         />
     <LinearLayout
@@ -109,7 +113,6 @@
         android:paddingBottom="10dp"
         android:paddingLeft="24dp"
         android:drawablePadding="8dp"
-        android:text="81个赞"
         android:drawableLeft="@drawable/favorite_small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

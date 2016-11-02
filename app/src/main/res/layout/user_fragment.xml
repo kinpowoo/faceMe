@@ -51,6 +51,7 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:padding="10dp"
                 android:orientation="horizontal"
@@ -63,7 +64,6 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/tv_userFragment_statusNUm"
-                    android:text="2"
                     android:textStyle="bold"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
@@ -81,7 +81,6 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/tv_userFragment_followingNum"
-                        android:text="2"
                         android:textStyle="bold"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
@@ -99,7 +98,6 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/tv_userFragment_followersNum"
-                        android:text="2"
                         android:textStyle="bold"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
@@ -112,6 +110,7 @@
                 </LinearLayout>
 
             </LinearLayout>
+
             <Button
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
@@ -132,7 +131,6 @@
         android:textStyle="bold"
         android:textSize="18dp"
         android:background="@color/White"
-        android:text="6666666666666"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <RadioGroup
@@ -176,9 +174,5 @@
                android:layout_width="match_parent"
                android:layout_height="match_parent">
            </GridView>
-           <ListView
-               android:visibility="invisible"
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"/>
        </FrameLayout>
 </LinearLayout>

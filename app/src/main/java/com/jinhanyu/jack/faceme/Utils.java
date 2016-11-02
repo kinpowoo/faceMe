@@ -23,7 +23,6 @@ import cn.bmob.v3.listener.FindListener;
  */
 public class Utils {
     private static User currentUser = User.getCurrentUser(User.class);
-    private static List<Status> statusList;
 
     public static String calculTime(String time) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -61,40 +60,6 @@ public class Utils {
         return currentUser;
     }
 
-   //动态计算嵌套在scrollview里的listview的高度
-    public static void setListViewHeightBasedOnChildren(ListView listView) {
-        if(listView == null) return;
-        ListAdapter listAdapter = listView.getAdapter();
-        if (listAdapter == null) {
-            // pre-condition
-            return;
-        }
-        int totalHeight = 0;
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            View listItem = listAdapter.getView(i, null, listView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
-        }
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-    }
 
-    //得到当前用户的收藏列表
-    public static List<Status> getCurrentUserLikes(){
-        BmobQuery<Status> query=new BmobQuery<>();
-        query.addWhereRelatedTo("likes",new BmobPointer(currentUser));
-        query.include("author");
-        query.findObjects(new FindListener<Status>() {
-            @Override
-            public void done(List<Status> list, BmobException e) {
-                  if(e==null){
-                      statusList=list;
-
-                  }
-            }
-        });
-        return statusList;
-    }
 
 }

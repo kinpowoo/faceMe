@@ -62,7 +62,6 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/tv_userProfile_statusNUm"
-                        android:text="2"
                         android:textStyle="bold"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
@@ -80,7 +79,6 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/tv_userProfile_followingNum"
-                        android:text="2"
                         android:textStyle="bold"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
@@ -98,7 +96,6 @@
                     android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/tv_userProfile_followersNum"
-                        android:text="2"
                         android:textStyle="bold"
                         android:layout_gravity="center"
                         android:layout_width="wrap_content"
@@ -115,7 +112,6 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:id="@+id/btn_userProfile_isFollowing"
-                android:text="关注"
                 android:textStyle="bold"
                 android:background="@drawable/edit_profile_button"
                 android:layout_width="match_parent"
@@ -131,7 +127,6 @@
         android:textStyle="bold"
         android:textSize="18dp"
         android:background="@color/White"
-        android:text="6666666666666"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <RadioGroup
@@ -161,9 +156,9 @@
 
     </RadioGroup>
     <FrameLayout
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="4dp"
         android:layout_width="match_parent"
-        android:background="@color/SlateGray"
+        android:background="@color/WhiteSmoke"
         android:layout_height="match_parent">
         <GridView
             android:id="@+id/gv_userProfile_photos"
@@ -175,9 +170,5 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </GridView>
-        <ListView
-            android:visibility="invisible"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
     </FrameLayout>
 </LinearLayout>
