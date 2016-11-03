@@ -1,16 +1,66 @@
 package com.jinhanyu.jack.faceme.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.entity.User;
+
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.LogInListener;
 
 /**
  * Created by anzhuo on 2016/10/18.
  */
 public class LoginActivity extends Activity {
+
+    EditText et_username;
+    EditText et_password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
+
+        et_password = (EditText) findViewById(R.id.et_password);
+        et_username = (EditText) findViewById(R.id.et_username);
+
+    }
+
+    public void login(View view) {
+        String username = et_username.getText().toString().trim();
+        String password = et_password.getText().toString().trim();
+        if(TextUtils.isEmpty(username)){
+            Toast.makeText(this, "请输入用户名", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(TextUtils.isEmpty(password)){
+            Toast.makeText(this, "请输入密码", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        User.loginByAccount(username, password, new LogInListener<User>(){
+            @Override
+            public void done(User user, BmobException e) {
+                 if(e == null){
+                      startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                      finish();
+                 }else{
+                     e.printStackTrace();
+                     Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                 }
+            }
+        });
+    }
+
+    public void forgetPassword(View view) {
+    }
+
+    public void register(View view) {
     }
 }

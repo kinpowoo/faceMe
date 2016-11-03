@@ -106,7 +106,7 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 		if ("Wechat".equals(name) || "WechatMoments".equals(name)
 				|| "WechatFavorite".equals(name) || "ShortMessage".equals(name)
 				|| "Email".equals(name) || "Qzone".equals(name)
-				|| "QQ".equals(name) || "Pinterest".equals(name)
+				|| "qq".equals(name) || "Pinterest".equals(name)
 				|| "Instagram".equals(name) || "Yixin".equals(name)
 				|| "YixinMoments".equals(name) || "QZone".equals(name)
 				|| "Mingdao".equals(name) || "Line".equals(name)

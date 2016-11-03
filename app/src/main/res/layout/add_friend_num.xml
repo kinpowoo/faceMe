@@ -43,6 +43,7 @@
         android:textSize="20sp"/>
 
         <EditText
+            android:id="@+id/et_FaceMe_Num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -51,6 +52,7 @@
             android:hint="请输入FaceMe账号"/>
 
        <ImageView
+           android:id="@+id/search"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_marginRight="10dp"
@@ -67,20 +69,24 @@
 
 
         <TextView
+            android:id="@+id/search_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="查找结果:"
+            android:visibility="invisible"
             android:layout_marginRight="10dp"
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/tv_FaceMe_Num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1457141030"
             android:textSize="18sp"
             android:layout_gravity="center"/>
 
         <ImageButton
+            android:id="@+id/add"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/af_button"

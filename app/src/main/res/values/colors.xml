@@ -150,5 +150,6 @@
     <color name="test_color_a">#00a6ff</color>
     <color name="test_color_b">#8a8a8a</color>
     <color name="location_shape">#cfcfcf</color>
+    <color name="register_activity_bg">#e7e7e7</color>
 
 </resources>

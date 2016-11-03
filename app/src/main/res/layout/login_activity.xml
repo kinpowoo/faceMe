@@ -27,6 +27,7 @@
             android:textSize="20sp" />
 
         <EditText
+            android:id="@+id/et_username"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_width="match_parent"
@@ -39,6 +40,7 @@
             android:textSize="15sp" />
 
         <EditText
+            android:id="@+id/et_password"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_width="match_parent"
@@ -52,6 +54,7 @@
             android:textSize="15sp" />
 
         <TextView
+            android:onClick="forgetPassword"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_width="wrap_content"
@@ -62,6 +65,7 @@
             android:textColor="@color/White" />
 
         <TextView
+            android:onClick="login"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_width="match_parent"
@@ -75,6 +79,7 @@
             android:textSize="15sp" />
 
         <TextView
+            android:onClick="register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -132,9 +137,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="腾讯微博"
+                android:text="人人网"
                 android:drawablePadding="10dp"
-                android:drawableLeft="@drawable/ssdk_oks_classic_tencentweibo"/>
+                android:drawableLeft="@drawable/ssdk_oks_classic_renren"/>
 
             <TextView
                 android:layout_marginLeft="3dp"
