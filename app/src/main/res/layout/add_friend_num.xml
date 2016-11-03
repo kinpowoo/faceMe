@@ -12,7 +12,7 @@
         android:padding="5dp">
 
         <ImageView
-            android:id="@+id/iv_back"
+            android:id="@+id/iv_addFriend_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/back" />
@@ -42,8 +42,8 @@
         android:textColor="@color/black"
         android:textSize="20sp"/>
 
-        <EditText
-            android:id="@+id/et_FaceMe_Num"
+        <com.jinhanyu.jack.faceme.ClearEditText
+            android:id="@+id/cet_addFriend_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
@@ -52,46 +52,12 @@
             android:hint="请输入FaceMe账号"/>
 
        <ImageView
-           android:id="@+id/search"
+           android:id="@+id/iv_addFriend_search"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_marginRight="10dp"
            android:layout_gravity="center_vertical"
            android:src="@drawable/search_light"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-
-        <TextView
-            android:id="@+id/search_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="查找结果:"
-            android:visibility="invisible"
-            android:layout_marginRight="10dp"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/tv_FaceMe_Num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_gravity="center"/>
-
-        <ImageButton
-            android:id="@+id/add"
-            android:visibility="invisible"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/af_button"
-            android:layout_marginLeft="10dp" />
-
 
     </LinearLayout>
 

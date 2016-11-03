@@ -127,6 +127,8 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.iv_userFragment_addContact:
+                Intent intent3=new Intent(getActivity(),AddFriendNum.class);
+                startActivity(intent3);
                 break;
             case R.id.iv_userFragment_settings:
                 break;

@@ -170,7 +170,6 @@
             android:id="@+id/gv_userProfile_photos"
             android:numColumns="3"
             android:verticalSpacing="2dp"
-            android:horizontalSpacing="2dp"
             android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent">

@@ -29,15 +29,13 @@ import cn.bmob.v3.listener.UpdateListener;
 /**
  * Created by jianbo on 2016/10/20.
  */
-public class LikesAdapter extends BaseAdapter{
-    private List<User> data;
-    private Context context;
+public class LikesAdapter extends CommonAdapter<User>{
     private User currentUser=Utils.getCurrentUser();
     private boolean following=false;
     private String currentUserId=Utils.getCurrentUser().getObjectId();
-    public LikesAdapter(List<User> data, Context context) {
-       this.data=data;
-        this.context=context;
+
+    public LikesAdapter(List data, Context context) {
+        super(data, context);
     }
 
     public void refreshDataSource(List<User> newData){
@@ -45,20 +43,6 @@ public class LikesAdapter extends BaseAdapter{
         notifyDataSetChanged();
     }
 
-    @Override
-    public int getCount() {
-        return data==null?0:data.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return data.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 
     @Override
     public View getView(final int position, View view, ViewGroup parent) {
@@ -107,23 +91,18 @@ public class LikesAdapter extends BaseAdapter{
 
 
         BmobQuery<User> followerQuery=new BmobQuery<>();
-        BmobQuery<User> innerQuery=new BmobQuery<>();
-        innerQuery.addWhereEqualTo("objectId",user.getObjectId());
-        followerQuery.addWhereMatchesQuery("following","_User",innerQuery);
+        followerQuery.addWhereRelatedTo("following",new BmobPointer(currentUser));
         followerQuery.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
                 for(User user1:list){
-                    Log.i("haha",list.get(position).getUsername());
-
-                    if(user1.getObjectId().equals(currentUserId)){
+                    if(user1.getObjectId().equals(user.getObjectId())){
                         following=true;
                         user.setFollowing(true);
                         viewHold.follow.setText("取消关注");
                     }
                 }
                 if(following==false) {
-
                     if(user.getObjectId().equals(currentUserId)){
                         viewHold.follow.setText("不可选");
                         viewHold.follow.setEnabled(false);
@@ -139,11 +118,11 @@ public class LikesAdapter extends BaseAdapter{
                 @Override
                 public void onClick(View v) {
                     viewHold.follow.setEnabled(false);
+                    BmobRelation relation = new BmobRelation();
                     if (following) {
-                        BmobRelation relation = new BmobRelation();
                         relation.remove(user);
                         currentUser.setFollowing(relation);
-                        currentUser.setFollowingNum(currentUser.getFollowingNum() - 1);
+                        currentUser.increment("followingNum",-1);
                         currentUser.update(currentUserId, new UpdateListener() {
                             @Override
                             public void done(BmobException e) {
@@ -154,10 +133,9 @@ public class LikesAdapter extends BaseAdapter{
                             }
                         });
                     } else {
-                        BmobRelation relation = new BmobRelation();
                         relation.add(user);
                         currentUser.setFollowing(relation);
-                        currentUser.setFollowingNum(currentUser.getFollowingNum() + 1);
+                        currentUser.increment("followingNum");
                         currentUser.update(currentUserId, new UpdateListener() {
                             @Override
                             public void done(BmobException e) {
@@ -170,7 +148,6 @@ public class LikesAdapter extends BaseAdapter{
                     }
                 }
             });
-
 
 
         return view;

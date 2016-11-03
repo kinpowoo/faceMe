@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,6 +18,8 @@ import com.jinhanyu.jack.faceme.entity.Comment;
 import com.jinhanyu.jack.faceme.entity.Status;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -64,6 +67,8 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         back.setOnClickListener(this);
         atPeople.setOnClickListener(this);
         send.setOnClickListener(this);
+
+
 
         statusId=getIntent().getStringExtra("statusId");
         if(statusId!=null) {
@@ -146,6 +151,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
            public void done(List<Comment> data, BmobException e) {
                list.clear();
                list.addAll(data);
+               Collections.sort(list);
                adapter.notifyDataSetChanged();
 
            }

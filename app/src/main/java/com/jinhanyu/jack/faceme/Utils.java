@@ -25,7 +25,7 @@ public class Utils {
             } else if (diff < 3600 * 24) {
                 return "发布于" + ((int)(diff / 3600)) + "小时前";
             } else if (diff < 3600 * 24 * 365) {
-                return "发布于" + date.getMonth() + 1 + "-" + date.getDate();
+                return "发布于" + (date.getMonth() + 1) + "-" + date.getDate();
             } else {
                 return "发布于" + date.getYear() + "-" + (date.getMonth() + 1)+ "-" + date.getDate();
             }

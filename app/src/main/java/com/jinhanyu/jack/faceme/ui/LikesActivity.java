@@ -1,6 +1,7 @@
 package com.jinhanyu.jack.faceme.ui;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jinhanyu.jack.faceme.ClearEditText;
 import com.jinhanyu.jack.faceme.R;
@@ -114,6 +116,22 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
                         }
                     });
                 }
+                break;
+            case "searchResult":
+                title.setText("查询结果");
+                String accountNum=bundle.getString("result");
+                BmobQuery<User> query3 = new BmobQuery<>();
+                query3.addWhereEqualTo("username", accountNum);
+                query3.findObjects(new FindListener<User>() {
+                    @Override
+                    public void done(List<User> data, BmobException e) {
+                        if (e == null) {
+                            list.clear();
+                            list.addAll(data);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                });
                 break;
         }
 

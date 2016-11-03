@@ -36,7 +36,9 @@
         <activity android:name=".ui.SingleStatusActivity">
 
         </activity>
-        <activity android:name=".ui.UserProfileActivity" />
+        <activity android:name=".ui.PhoneVerifyActivity"/>
+        <activity android:name=".ui.PhoneAuthCodeActivity"/>
+        <activity android:name=".ui.EmailVerfiyActivity"/>
         <activity android:name=".ui.SearchPicture" />
         <activity android:name=".ui.CommentActivity" />
         <activity android:name=".ui.LikesActivity" />

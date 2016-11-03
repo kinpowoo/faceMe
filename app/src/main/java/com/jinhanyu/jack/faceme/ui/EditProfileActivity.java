@@ -1,7 +1,10 @@
 package com.jinhanyu.jack.faceme.ui;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.ClearEditText;
@@ -20,8 +24,17 @@ import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.entity.User;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
+import cn.bmob.v3.listener.UploadFileListener;
 
 
 /**
@@ -39,6 +52,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private View photoSourceView;
     private TextView camera,photoLibrary,photoSourceCancel;
     private User currentUser= Utils.getCurrentUser();
+    private File file;
+    private final int REQUEST_CODE=2;
 
     private Handler mHandler=new Handler(){
         @Override
@@ -92,6 +107,17 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         camera.setOnClickListener(this);
         photoLibrary.setOnClickListener(this);
         photoSourceCancel.setOnClickListener(this);
+
+        fillData();
+    }
+
+    public void fillData(){
+        userPortrait.setImageURI(currentUser.getPortrait().getUrl());
+        username.setText(currentUser.getUsername());
+        nickname.setText(currentUser.getNickname());
+        email.setText(currentUser.getEmail());
+        phone.setText(currentUser.getMobilePhoneNumber());
+        gender.setText(currentUser.getGender());
     }
 
     @Override
@@ -101,20 +127,26 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             case R.id.tv_edit_profile_commit:
-
-//                currentUser.setPortrait();   //   这里没上传怎么得到url,待解决
-                currentUser.setNickname(nickname.getText().toString());
-                currentUser.setGender(gender.getText().toString());
-                currentUser.setEmail(email.getText().toString());
-                currentUser.setMobilePhoneNumber(phone.getText().toString());
-                currentUser.update(new UpdateListener() {
+                final BmobFile bmobFile=new BmobFile(file);
+                bmobFile.uploadblock(new UploadFileListener() {
                     @Override
                     public void done(BmobException e) {
-                    if(e==null){
-                        finish();
-                    }
+                        currentUser.setPortrait(bmobFile);
+                        currentUser.setNickname(nickname.getText().toString());
+                        currentUser.setGender(gender.getText().toString());
+                        currentUser.update(new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                if(e==null){
+                                    finish();
+                                }else {
+                                    Toast.makeText(EditProfileActivity.this,"更新失败，请重新提交",Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
                 });
+
                 break;
 
             case R.id.tv_edit_profile_changePortrait:
@@ -127,6 +159,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
 
             case R.id.tv_edit_profile_email:
+                Intent intent=new Intent(EditProfileActivity.this,EmailVerfiyActivity.class);
+                intent.putExtra("email",email.getText().toString());
+                startActivity(intent);
                 break;
             case R.id.tv_edit_profile_phone:
                 break;
@@ -150,6 +185,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 popupWindow.dismiss();
                 break;
             case R.id.tv_choose_photo_source_camera:
+                Intent intent2= new Intent("android.media.action.IMAGE_CAPTURE");
+                startActivityForResult(intent2, 1);
                 break;
             case R.id.tv_choose_photo_source_photoLibrary:
                 break;
@@ -227,5 +264,54 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         lp.alpha = bgAlpha; //0.0-1.0
         getWindow().setAttributes(lp);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            String sdStatus = Environment.getExternalStorageState();
+            if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+                return;
+            }
+            FileOutputStream b = null;
+            String str = null;
+            Date date = null;
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");//获取当前时间，进一步转化为字符串
+            date = new Date();
+            str = format.format(date);
+            File dir = new File( Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"myImage");
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            file= new File(dir,str+".jpg");
+
+            try {
+                b = new FileOutputStream(file);
+                bitmap.compress(Bitmap.CompressFormat.JPEG,100, b);// 把数据写入文件
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    b.flush();
+                    b.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fillData();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        fillData();
     }
 }

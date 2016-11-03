@@ -16,11 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.entity.Comment;
 import com.jinhanyu.jack.faceme.entity.Status;
@@ -52,6 +54,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
     private User currentUser=Utils.getCurrentUser();
     private PopupWindow popupWindow;
     private Float alpha=1.0f;
+
     private Handler mHandler=new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what){
@@ -68,6 +71,9 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_status_activity);
+        int width= ScreenUtils.getScreenWidth(this);
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(width,width);
+
         back= (ImageView) findViewById(R.id.iv_single_status_back);
         refresh= (ImageView) findViewById(R.id.iv_single_status_refresh);
         option= (ImageView) findViewById(R.id.iv_single_status_option);
@@ -76,6 +82,9 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         shareIcon= (ImageView) findViewById(R.id.iv_single_status_share);
         userPortrait= (SimpleDraweeView) findViewById(R.id.sdv_single_status_userPortrait);
         statusPhoto= (SimpleDraweeView) findViewById(R.id.iv_single_status_photo);
+        statusPhoto.setLayoutParams(params);
+        statusPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
+
         favoriteNum= (TextView) findViewById(R.id.tv_single_status_favoriteNum);
         textBy= (TextView) findViewById(R.id.tv_single_status_textBy);
         text= (TextView) findViewById(R.id.tv_single_status_text);
@@ -121,6 +130,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                 }
             });
         }
+
 
     }
 
