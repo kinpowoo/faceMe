@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 public class VerifyCodeView extends TextView{
 
-    private String randomCode = "";
+    private String randomCode;
 
     public VerifyCodeView(Context context) {
         this(context,null);
@@ -30,6 +30,7 @@ public class VerifyCodeView extends TextView{
 
 
     public void genRandomCode(){
+        randomCode = "";
         for (int i = 0; i < 4; i++) {
             randomCode+= (int)Math.floor(Math.random()*10);
         }

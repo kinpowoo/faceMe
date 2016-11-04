@@ -117,6 +117,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         nickname.setText(user.getNickname());
 
 
+                //关注数量
             BmobQuery<User> followerQuery = new BmobQuery<>();
             BmobQuery<User> innerQuery = new BmobQuery<>();
             innerQuery.addWhereEqualTo("objectId", userId);
@@ -129,7 +130,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                 }
             });
 
-
+                       //粉丝数量
             BmobQuery<User> query = new BmobQuery<>();
             query.addWhereRelatedTo("following", new BmobPointer(user));
             query.count(User.class, new CountListener() {

@@ -127,6 +127,7 @@ public class AllQueries {
             @Override
             public void done(List<User> list, BmobException e) {
                Log.i("follower",list.get(0).getUsername());
+
             }
         });
 

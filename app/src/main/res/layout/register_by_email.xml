@@ -19,8 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="注册"
-            android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:textSize="20sp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -35,23 +34,24 @@
             android:background="@color/White"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp">
+            android:paddingLeft="30dp">
            <LinearLayout
-               android:paddingTop="8dp"
-               android:paddingBottom="8dp"
+               android:paddingTop="15dp"
+               android:paddingBottom="15dp"
                android:layout_width="match_parent"
                android:layout_height="wrap_content">
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="邮箱注册"/>
+                   android:text="邮箱注册"
+                   android:textColor="@color/black"/>
 
                <EditText
+                   style="@style/MyEditText"
                    android:id="@+id/et_email"
                    android:textDirection="rtl"
                    android:hint="请输入你的常用邮箱地址"
                    android:layout_marginLeft="18dp"
-                   android:layout_marginRight="18dp"
                    android:layout_width="wrap_content"
                    android:layout_weight="1"
                    android:layout_height="wrap_content" />
@@ -59,24 +59,25 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/Gray"/>
+                android:background="@color/register_activity_bg"/>
 
             <LinearLayout
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="登录密码"/>
+                    android:text="登录密码"
+                    android:textColor="@color/black"/>
 
                 <EditText
+                    style="@style/MyEditText"
                     android:id="@+id/et_password"
                     android:textDirection="rtl"
                     android:hint="6-16位数字或字母"
                     android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:layout_height="wrap_content" />
@@ -84,23 +85,24 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/Gray"/>
+                android:background="@color/register_activity_bg"/>
 
             <LinearLayout
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="确认密码"/>
+                    android:text="确认密码"
+                    android:textColor="@color/black"/>
 
                 <EditText
+                    style="@style/MyEditText"
                     android:textDirection="rtl"
                     android:hint="请再次输入你的密码"
                     android:layout_marginLeft="18dp"
-                    android:layout_marginRight="18dp"
                     android:layout_width="wrap_content"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
@@ -109,19 +111,20 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/Gray"/>
-
+                android:background="@color/register_activity_bg"/>
             <LinearLayout
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="验证码"/>
+                    android:text="验证码"
+                    android:textColor="@color/black"/>
 
                 <EditText
+                    style="@style/MyEditText"
                     android:id="@+id/et_verify_code"
                     android:textDirection="rtl"
                     android:hint="请输入验证码"
@@ -140,6 +143,7 @@
         </LinearLayout>
 
         <TextView
+            android:clickable="true"
             android:onClick="refreshVerifyCode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -149,6 +153,7 @@
             android:textColor="@color/test_color_a"/>
 
         <TextView
+            android:clickable="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
@@ -179,6 +184,7 @@
                 android:text="已阅读并同意" />
 
             <TextView
+                android:clickable="true"
                 android:onClick="goToUserAgreement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
