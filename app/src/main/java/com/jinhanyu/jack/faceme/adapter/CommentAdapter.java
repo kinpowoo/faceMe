@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -40,11 +42,20 @@ public class CommentAdapter extends CommonAdapter<Comment>{
     private View itemView;
     private Animation animation;
     private int START_OFF=0;
-
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            View topLayer= (View) msg.obj;
+            int dis=msg.what;
+            topLayer.layout(START_OFF-dis,topLayer.getTop(),
+                    ScreenUtils.getScreenWidth(context)-dis,topLayer.getBottom());
+            itemView.invalidate();
+        }
+    };
     public CommentAdapter(List<Comment> data, Context context) {
         super(data, context);
         animation= AnimationUtils.loadAnimation(context, R.anim.push_out);
-
     }
 
     @Override
@@ -83,16 +94,34 @@ public class CommentAdapter extends CommonAdapter<Comment>{
                         holder.delete.setEnabled(false);
                         afterMoveX=event.getX();
                         int dis=(int)(downX-afterMoveX);
-                        if(dis>30){
-                            top.layout(START_OFF-160,top.getTop(),
+                        if(dis>150||dis<-30){
+                         if(dis>150){
+                             top.layout(START_OFF-160,top.getTop(),
                                     ScreenUtils.getScreenWidth(context)-160,top.getBottom());
                             holder.delete.setEnabled(true);
+                         }else {
+                             top.layout(START_OFF,top.getTop(),
+                                   ScreenUtils.getScreenWidth(context),top.getBottom());
+                             holder.delete.setEnabled(false);
+                         }
+
+                        }else {
+                            Message message=new Message();
+                            message.obj=top;
+                            message.what=dis;
+                            handler.sendMessage(message);
                         }
-                        if(dis<-30){
-                            top.layout(START_OFF,top.getTop(),
-                                    ScreenUtils.getScreenWidth(context),top.getBottom());
-                            holder.delete.setEnabled(false);
-                        }
+
+//                        if(dis>30){
+//                            top.layout(START_OFF-160,top.getTop(),
+//                                    ScreenUtils.getScreenWidth(context)-160,top.getBottom());
+//                            holder.delete.setEnabled(true);
+//                        }
+//                        if(dis<-30){
+//                            top.layout(START_OFF,top.getTop(),
+//                                    ScreenUtils.getScreenWidth(context),top.getBottom());
+//                            holder.delete.setEnabled(false);
+//                        }
                         return true;
                 }
                 return false;
