@@ -9,7 +9,13 @@ import android.widget.TextView;
 
 import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.entity.Status;
 
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
@@ -34,6 +40,18 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
         iv_ptrFrame = (PtrFrameLayout) findViewById(R.id.iv_ptrFrame);
         gv = (GridView) findViewById(R.id.gv);
         refresh = new Ptr_refresh(SearchResultActivity.this);
+
+        //加载图片
+            BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
+                  statusBmobQuery.findObjects(new FindListener<Status>() {
+                      @Override
+                      public void done(List<Status> list, BmobException e) {
+                             list.clear();
+
+                      }
+                  });
+
+
 
         //控件的监听
         iv_back.setOnClickListener(this);

@@ -15,6 +15,23 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <!--保持CPU 运转，屏幕和键盘灯有可能是关闭的,用于文件上传和下载 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!--用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <!--用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <!--这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+    <!--用于访问网络，网络定位需要上网-->
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <!--用于读取手机当前的状态-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+    <!--写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+
 
     <application
         android:name=".MainApplication"
@@ -26,16 +43,30 @@
         <!--高德地图 -->
         <meta-data android:name="com.amap.api.v2.apikey" android:value="e6f34afa50824eda807c6ff7e25282ac"/>
 
-        <activity android:name=".ui.MainActivity" android:launchMode="singleTask">
+        <!--导航页-->
+        <activity android:name=".ui.SplshActivity">
+        </activity>
+
+        <!--登录注册-->
+        <activity android:name=".ui.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.RegisterByPhoneActivity"/>
+        <activity android:name=".ui.RegisterByEmailActivity"/>
+        <activity android:name=".ui.UserAgreementActivity"/>
+
+        <!--主页面-->
+        <activity android:name=".ui.MainActivity" android:launchMode="singleTask">
+        </activity>
         <activity android:name=".ui.UserProfileActivity" />
         <activity android:name=".ui.SingleStatusActivity">
 
         </activity>
+
+        <!--  个人设置页面  -->
         <activity android:name=".ui.PhoneVerifyActivity"/>
         <activity android:name=".ui.PhoneAuthCodeActivity"/>
         <activity android:name=".ui.EmailVerfiyActivity"/>
@@ -48,14 +79,11 @@
         <activity android:name=".ui.NearbyActivity" />
         <activity android:name=".ui.WonderfulActivities" />
         <activity android:name=".ui.DyqActivity" />
-        <activity android:name=".ui.LoginActivity"></activity>
+
         <activity android:name=".ui.SearchResultActivity"/>
         <activity android:name=".ui.PostActivity"/>
         <activity android:name=".ui.AddFriendNum"/>
-        <activity android:name=".ui.SplshActivity">
 
-
-        </activity>
 
 
         <activity
@@ -64,7 +92,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize">
-
             <intent-filter>
                 <data android:scheme="tencent100371282" />
                 <action android:name="android.intent.action.VIEW" />
@@ -79,7 +106,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <!--微信分享回调 -->
         <activity
             android:name="cn.sharesdk.demo.wxapi.WXEntryActivity"
@@ -90,26 +116,9 @@
 
 
         <activity android:name=".TestActivity">
-
         </activity>
 
         <service android:name="com.amap.api.location.APSService"></service>
-        <!--用于进行网络定位-->
-        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-        <!--用于访问GPS定位-->
-        <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-        <!--获取运营商信息，用于支持提供运营商信息相关的接口-->
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-        <!--用于访问wifi网络信息，wifi信息会用于进行网络定位-->
-        <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-        <!--这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
-        <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-        <!--用于访问网络，网络定位需要上网-->
-        <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-        <!--用于读取手机当前的状态-->
-        <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-        <!--写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据-->
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
 
 
     </application>

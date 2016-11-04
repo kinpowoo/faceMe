@@ -35,25 +35,25 @@ public class LoginActivity extends Activity {
     public void login(View view) {
         String username = et_username.getText().toString().trim();
         String password = et_password.getText().toString().trim();
-        if(TextUtils.isEmpty(username)){
+        if (TextUtils.isEmpty(username)) {
             Toast.makeText(this, "请输入用户名", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(password)){
+        if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "请输入密码", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        User.loginByAccount(username, password, new LogInListener<User>(){
+        User.loginByAccount(username, password, new LogInListener<User>() {
             @Override
             public void done(User user, BmobException e) {
-                 if(e == null){
-                      startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                      finish();
-                 }else{
-                     e.printStackTrace();
-                     Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
-                 }
+                if (e == null) {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                } else {
+                    e.printStackTrace();
+                    Toast.makeText(LoginActivity.this, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -62,5 +62,6 @@ public class LoginActivity extends Activity {
     }
 
     public void register(View view) {
+          startActivity(new Intent(this,RegisterByPhoneActivity.class));
     }
 }

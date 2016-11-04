@@ -107,6 +107,8 @@ public class FlowFragment extends Fragment implements View.OnClickListener {
             singleFavoriteItem.setPicture("res://com.jinhanyu.jack.faceme/" + test2[i]);
             list.add(singleFavoriteItem);
         }
+
+          //点击不同图片——进行跳转
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
