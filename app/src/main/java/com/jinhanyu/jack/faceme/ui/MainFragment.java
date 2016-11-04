@@ -82,8 +82,8 @@ public class MainFragment extends Fragment {
 
         //最终查询
         BmobQuery<Status> statusQuery = new BmobQuery<>();
+        statusQuery.order("-createdAt");
         statusQuery.addWhereMatchesQuery("author", "_User", innerQuery);
-        statusQuery.order("createDate");
         statusQuery.include("author");
         statusQuery.findObjects(new FindListener<Status>() {
             @Override

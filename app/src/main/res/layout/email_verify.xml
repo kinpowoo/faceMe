@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/WhiteSmoke"
+    android:background="@color/register_activity_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -35,7 +35,7 @@
     <TextView
         android:background="@color/SlateGray"
         android:layout_width="match_parent"
-        android:layout_height="1dp" />
+        android:layout_height="0.1dp" />
     <LinearLayout
         android:background="@color/White"
         android:layout_marginTop="20dp"

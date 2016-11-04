@@ -34,14 +34,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="6dp"
-
                 android:background="@drawable/search_rect"
                 android:drawableLeft="@drawable/search_small" />
 
             <ListView
                 android:background="@color/White"
-                android:divider="@color/WhiteSmoke"
-                android:dividerHeight="5dp"
+                android:divider="@color/register_activity_bg"
+                android:dividerHeight="3dp"
                 android:id="@+id/lv_likes"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

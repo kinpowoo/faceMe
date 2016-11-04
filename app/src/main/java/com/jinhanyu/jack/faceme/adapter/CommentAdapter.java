@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,8 +37,8 @@ import cn.bmob.v3.listener.UpdateListener;
 public class CommentAdapter extends CommonAdapter<Comment>{
     private float downX;
     private float afterMoveX;
-    private ImageView deleteButton;
     private View itemView;
+    private ImageView deleteButton;
     private Animation animation;
     private int START_OFF=0;
     private Handler handler=new Handler(){
@@ -60,7 +59,6 @@ public class CommentAdapter extends CommonAdapter<Comment>{
 
     @Override
     public View getView(final int position, View view, ViewGroup parent) {
-
         final ViewHolderForComment viewHold;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.comment_list_item, null);
@@ -79,50 +77,61 @@ public class CommentAdapter extends CommonAdapter<Comment>{
         view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View v, MotionEvent event) {
-                switch (event.getAction()){
+                final ViewHolderForComment holder = (ViewHolderForComment) v.getTag();
+                RelativeLayout top = holder.topLayer;
+                switch (event.getAction()) {
+
                     case MotionEvent.ACTION_DOWN:
-                        Log.i("sha","down监听被触发");
-                        downX=event.getX();
-                        afterMoveX=event.getX();
+                        Log.i("sha", "down监听被触发");
+                        downX = event.getX();
+                        afterMoveX = event.getX();
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        final ViewHolderForComment holder = (ViewHolderForComment) v.getTag();
-                        RelativeLayout top=holder.topLayer;
-                        Log.i("sha","move监听被触发");
-                        deleteButton=holder.delete;
+
+                        Log.i("sha", "move监听被触发");
+                        deleteButton= holder.delete;
                         itemView = v; // 得到itemView，在上面加动画
                         holder.delete.setEnabled(false);
-                        afterMoveX=event.getX();
-                        int dis=(int)(downX-afterMoveX);
-                        if(dis>150||dis<-30){
-                         if(dis>150){
-                             top.layout(START_OFF-160,top.getTop(),
-                                    ScreenUtils.getScreenWidth(context)-160,top.getBottom());
-                            holder.delete.setEnabled(true);
-                         }else {
-                             top.layout(START_OFF,top.getTop(),
-                                   ScreenUtils.getScreenWidth(context),top.getBottom());
-                             holder.delete.setEnabled(false);
-                         }
 
-                        }else {
-                            Message message=new Message();
-                            message.obj=top;
-                            message.what=dis;
+                        afterMoveX = event.getX();
+                        int dis = (int) (downX - afterMoveX);
+                        if (dis > 130 || dis < -20) {
+                            if (dis > 130) {
+                                top.layout(START_OFF - 220, top.getTop(),
+                                        ScreenUtils.getScreenWidth(context) - 220, top.getBottom());
+                                holder.delete.setEnabled(true);
+                                holder.delete.setClickable(true);
+                            } else {
+                                top.layout(START_OFF, top.getTop(),
+                                        ScreenUtils.getScreenWidth(context), top.getBottom());
+                                holder.delete.setEnabled(false);
+                                holder.delete.setClickable(true);
+                            }
+
+                        } else {
+                            Message message = new Message();
+                            message.obj = top;
+                            message.what = dis;
                             handler.sendMessage(message);
                         }
 
-//                        if(dis>30){
-//                            top.layout(START_OFF-160,top.getTop(),
-//                                    ScreenUtils.getScreenWidth(context)-160,top.getBottom());
-//                            holder.delete.setEnabled(true);
-//                        }
-//                        if(dis<-30){
-//                            top.layout(START_OFF,top.getTop(),
-//                                    ScreenUtils.getScreenWidth(context),top.getBottom());
-//                            holder.delete.setEnabled(false);
-//                        }
                         return true;
+                    case MotionEvent.ACTION_UP:
+                        int dis2 = (int) (downX - afterMoveX);
+                            if (dis2 > 80) {
+                                top.layout(START_OFF - 220, top.getTop(),
+                                        ScreenUtils.getScreenWidth(context) - 220, top.getBottom());
+                                holder.delete.setEnabled(true);
+                                holder.delete.setClickable(true);
+                                holder.delete.setFocusable(true);
+                            } else {
+                                top.layout(START_OFF, top.getTop(),
+                                        ScreenUtils.getScreenWidth(context), top.getBottom());
+                                holder.delete.setEnabled(false);
+                                holder.delete.setClickable(true);
+                                holder.delete.setFocusable(true);
+                            }
+                        break;
                 }
                 return false;
             }
@@ -208,24 +217,7 @@ public class CommentAdapter extends CommonAdapter<Comment>{
 
 
     }
-    private void doAnimation(final View v, final float dis){
-        ValueAnimator animator = ValueAnimator.ofFloat(0,dis);
-        animator.setDuration(200);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {  //添加监听器addUpdateListener(AnimatorUpdateListener listener)
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float curValue = (float)animation.getAnimatedValue();      //得到当前运动位置的值,如果是ofInt(),强转成int,如果是float,强转成flaot
-                v.layout((int)(curValue+dis),v.getHeight(),v.getWidth(),v.getHeight());  //通过tv的layout函数来永久改变位置
-//                layout(left(左边起始位置),top(上边起始位置),right,bottom);
-            }
-        });
-        animator.start();
-        v.invalidate();
-        if(-(dis)>45){
-            animator.cancel();
-        }
 
-    }
 
     class ViewHolderForComment {
         protected SimpleDraweeView userPortrait;

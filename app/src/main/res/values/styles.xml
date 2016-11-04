@@ -22,6 +22,7 @@
         <item name="android:windowExitAnimation">@anim/popupwindow_fade</item>
     </style>
 
+
     <style name="FaceMe_PopupWindow_menu">
         <item name="android:windowEnterAnimation">@anim/faceme_popupwindow_in</item>
         <item name="android:windowExitAnimation">@anim/faceme_popupwindow_out</item>
@@ -33,5 +34,18 @@
         <item name="android:singleLine">true</item>
         <item name="android:textColorHint">@color/register_activity_bg</item>
         <item name="android:layout_marginRight">30dp</item>
+    </style>
+    <style name="SettingItem">
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:drawablePadding">5dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+
     </style>
 </resources>

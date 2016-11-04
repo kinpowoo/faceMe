@@ -3,12 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
+        android:padding="4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/iv_authority_back"
             android:src="@drawable/back"
-            android:padding="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
@@ -32,7 +32,7 @@
     <TextView
         android:background="@color/SlateGray"
         android:layout_width="match_parent"
-        android:layout_height="1dp" />
+        android:layout_height="0.1dp" />
 
         <com.jinhanyu.jack.faceme.ClearEditText
             android:layout_marginTop="20dp"

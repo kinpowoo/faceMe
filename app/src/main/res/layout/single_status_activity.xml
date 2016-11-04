@@ -7,10 +7,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
-        android:background="@color/SlateGray"
+        android:background="@color/register_activity_bg"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:padding="8dp"
             android:background="@color/White"
@@ -39,7 +40,7 @@
 
         </RelativeLayout>
 
-    <RelativeLayout
+        <RelativeLayout
         android:layout_marginTop="1dp"
         android:background="@color/White"
         android:orientation="horizontal"
@@ -73,16 +74,22 @@
             android:layout_height="wrap_content" />
 
     </RelativeLayout>
+        <View
+            android:background="@color/register_activity_bg"
+            android:layout_width="match_parent"
+            android:layout_height="0.3dp"/>
     <com.facebook.drawee.view.SimpleDraweeView
         xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:background="@color/White"
         android:id="@+id/iv_single_status_photo"
         android:layout_width="450dp"
+        android:layout_marginTop="1dp"
         fresco:actualImageScaleType="focusCrop"
         fresco:viewAspectRatio="1.33"
         android:layout_height="wrap_content"
         />
     <LinearLayout
+        android:layout_marginTop="1dp"
         android:background="@color/White"
         android:padding="10dp"
         android:layout_width="match_parent"
@@ -98,6 +105,7 @@
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
         <ImageView
             android:id="@+id/iv_single_status_share"
             android:src="@drawable/share"

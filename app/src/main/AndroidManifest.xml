@@ -85,7 +85,8 @@
         <activity android:name=".ui.AddFriendNum"/>
 
 
-
+        <activity android:name=".ui.SettingActivity"/>
+        <activity android:name=".ui.ResetPassActivity"/>
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"

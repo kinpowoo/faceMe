@@ -131,6 +131,8 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
                 startActivity(intent3);
                 break;
             case R.id.iv_userFragment_settings:
+                Intent intent4=new Intent(getActivity(),SettingActivity.class);
+                startActivity(intent4);
                 break;
             case R.id.ll_userFragment_followerNum:
                 Intent intent=new Intent(getActivity(),LikesActivity.class);

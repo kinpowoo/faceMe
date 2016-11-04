@@ -29,14 +29,6 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/lv_comment"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:divider="@color/SlateGray"
-        android:dividerHeight="1dp"
-        android:background="@color/White" />
 
     <LinearLayout
         android:background="@color/Bisque"
@@ -66,15 +58,24 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center"
-                android:text="xiaoer" />
+                 />
 
             <TextView
                 android:id="@+id/tv_comment_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="555555555555555555" />
+                />
         </LinearLayout>
     </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv_comment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@color/SlateGray"
+        android:dividerHeight="1dp"
+        android:background="@color/White" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,12 +83,15 @@
         android:background="@color/White"
         android:padding="5dp">
 
-        <ImageView
+        <CheckBox
             android:id="@+id/iv_comment_atPeople"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/at_people_button"
+            android:button="@null"
+            android:gravity="center_vertical"
             android:padding="5dp"
-            android:src="@drawable/repost" />
+             />
 
         <EditText
             android:id="@+id/et_comment_content"
@@ -104,4 +108,5 @@
             android:padding="5dp"
             android:src="@drawable/send" />
     </LinearLayout>
+
 </LinearLayout>

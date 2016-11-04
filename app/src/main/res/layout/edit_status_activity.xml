@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/Gray"
+    android:background="@color/register_activity_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 <RelativeLayout
@@ -36,6 +36,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>
+    <View
+        android:background="@color/SlateGray"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
     <LinearLayout
         android:layout_marginTop="1dp"
         android:background="@color/White"
@@ -53,7 +57,6 @@
             />
         <TextView
             android:id="@+id/tv_edit_status_username"
-            android:text="kinpowoo"
             android:gravity="center"
             android:padding="3dp"
             android:layout_marginLeft="7dp"
@@ -73,12 +76,15 @@
                 android:id="@+id/sdv_edit_status_statusPhoto"
                 android:layout_width="400dp"
                 android:layout_height="350dp" />
+            <View
+                android:background="@color/SlateGray"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"/>
             <EditText
                 android:id="@+id/et_edit_status_statusText"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginLeft="30dp"
-                android:text="222222"
                 android:padding="10dp"
                 android:gravity="left"
                 android:focusableInTouchMode="true"

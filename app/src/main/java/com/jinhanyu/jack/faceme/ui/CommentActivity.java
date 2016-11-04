@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -35,8 +37,9 @@ import static com.jinhanyu.jack.faceme.R.id.et_comment_content;
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class CommentActivity extends AppCompatActivity implements View.OnClickListener{
-    private ImageView back,atPeople,send;
+public class CommentActivity extends AppCompatActivity implements View.OnClickListener,CompoundButton.OnCheckedChangeListener{
+    private ImageView back,send;
+    private CheckBox atPeople;
     private EditText commentContent;
     private SimpleDraweeView userPortrait;
     private TextView username,statusText;
@@ -51,7 +54,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.comment_activity);
         back= (ImageView) findViewById(R.id.iv_comment_back);
-        atPeople= (ImageView) findViewById(R.id.iv_comment_atPeople);
+        atPeople= (CheckBox) findViewById(R.id.iv_comment_atPeople);
         send= (ImageView) findViewById(R.id.iv_comment_send);
         commentContent= (EditText) findViewById(et_comment_content);
         userPortrait= (SimpleDraweeView) findViewById(R.id.sdv_comment_userPortrait);
@@ -65,7 +68,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         userPortrait.setOnClickListener(this);
         username.setOnClickListener(this);
         back.setOnClickListener(this);
-        atPeople.setOnClickListener(this);
+        atPeople.setOnCheckedChangeListener(this);
         send.setOnClickListener(this);
 
 
@@ -94,8 +97,6 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
            case R.id.iv_comment_back:
               finish();
            break;
-           case R.id.iv_comment_atPeople:
-               break;
            case R.id.iv_comment_send:
                addComment();
                commentContent.setText("");
@@ -157,4 +158,11 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
            }
        });
    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+
+    }
 }

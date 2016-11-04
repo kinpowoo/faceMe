@@ -4,37 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
-        android:padding="10dp"
+        android:padding="4dp"
         android:background="@color/White"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/tv_edit_profile_cancel"
-            android:padding="7dp"
             android:src="@drawable/back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:layout_centerInParent="true"
-            android:padding="7dp"
             android:textStyle="bold"
-            android:textSize="22dp"
+            android:textSize="20dp"
             android:text="编辑主页"
             android:textColor="@color/black"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:id="@+id/tv_edit_profile_commit"
-            android:padding="7dp"
             android:textStyle="bold"
             android:layout_alignParentRight="true"
             android:textSize="22dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
             android:text="完成"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
+    <View
+        android:background="@color/SlateGray"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
     <ScrollView
-        android:background="@color/Gray"
+        android:background="@color/register_activity_bg"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
@@ -59,12 +62,16 @@
         <TextView
             android:id="@+id/tv_edit_profile_changePortrait"
             android:padding="10dp"
-            android:textSize="22dp"
+            android:textSize="18dp"
             android:textColor="@color/CadetBlue"
-            android:text="change profile photo"
+            android:text="修改头像"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
+            <View
+                android:background="@color/SlateGray"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
       <LinearLayout
           android:layout_marginTop="1dp"
           android:background="@color/White"
@@ -110,7 +117,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
-
+            <View
+                android:background="@color/SlateGray"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
             <TextView
                 android:background="@color/WhiteSmoke"
                 android:paddingTop="25dp"
@@ -120,6 +130,10 @@
                 android:textSize="18dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+            <View
+                android:background="@color/SlateGray"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
             <LinearLayout
                 android:layout_marginTop="1dp"
                 android:background="@color/White"
@@ -189,6 +203,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
+            <View
+                android:background="@color/SlateGray"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

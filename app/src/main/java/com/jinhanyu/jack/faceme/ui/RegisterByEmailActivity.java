@@ -59,7 +59,7 @@ public class RegisterByEmailActivity extends Activity{
         if(TextUtils.isEmpty(password)){
             Toast.makeText(this, "请输入密码（密码为6-16个字符的数字或字母）", Toast.LENGTH_SHORT).show();
             return;
-        }else if(!password.matches("^[a-zA-Z0-9]{6,16}$")){
+        }else if(!password.matches("^[a-zA-Z0-9_?/.]{6,16}$")){
             Toast.makeText(this, "非法密码（密码为6-16个字符的数字或字母）", Toast.LENGTH_SHORT).show();
             return;
         }

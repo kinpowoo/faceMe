@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/Silver"
+    android:background="@color/register_activity_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -160,12 +160,13 @@
             android:layout_marginLeft="35dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
     </RadioGroup>
+
        <FrameLayout
+           android:layout_marginTop="1dp"
            android:paddingTop="10dp"
            android:layout_width="match_parent"
-           android:background="@color/WhiteSmoke"
+           android:background="@color/White"
            android:layout_height="match_parent">
            <GridView
                android:id="@+id/gv_userFragment_photos"
@@ -177,7 +178,7 @@
            </GridView>
            <ListView
                android:id="@+id/lv_userFragment_photos"
-               android:divider="@color/Beige"
+               android:divider="@color/register_activity_bg"
                android:dividerHeight="5dp"
                android:visibility="invisible"
                android:layout_width="match_parent"
