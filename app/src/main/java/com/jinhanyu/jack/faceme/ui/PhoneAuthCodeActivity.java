@@ -33,7 +33,6 @@ public class PhoneAuthCodeActivity extends Activity implements View.OnClickListe
     private TextView commit,timerClock,backToChange;
     private ClearEditText authorityCode;
     private String phoneNum;
-    private MyCountTimer countTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,22 +54,21 @@ public class PhoneAuthCodeActivity extends Activity implements View.OnClickListe
     }
 
 
-    public void sendSMSCode(){
-        timerClock.setEnabled(false);
-        countTimer = new MyCountTimer(60000, 1000);
-        countTimer.start();
-        BmobSMS.requestSMSCode(this,phoneNum, "手机号码登陆模板",new RequestSMSCodeListener() {
+    public void sendSMSCode() {
+        timerClock.setText("正在发送验证码");
+        BmobSMS.requestSMSCode(this, phoneNum, "手机号码登陆模板", new RequestSMSCodeListener() {
             @Override
             public void done(Integer smsId, BmobException ex) {
                 // TODO Auto-generated method stub
                 if (ex == null) {// 验证码发送成功
-
-                }else{   //如果验证码发送错误，可停止计时
-                    countTimer.cancel();
+                 timerClock.setText("请填写验证码");
+                } else {   //如果验证码发送错误，可停止计时
+                    timerClock.setText("验证码发送失败");
                 }
             }
         });
-}
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -130,21 +128,7 @@ public class PhoneAuthCodeActivity extends Activity implements View.OnClickListe
     public void afterTextChanged(Editable s) {
     }
 
-
-    class MyCountTimer extends CountDownTimer {
-
-        public MyCountTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-        @Override
-        public void onTick(long millisUntilFinished) {
-            timerClock.setEnabled(false);
-            timerClock.setText((millisUntilFinished / 1000) +"秒后重发");
-        }
-        @Override
-        public void onFinish() {
-            timerClock.setText("重新发送验证码");
-            timerClock.setEnabled(true);
-        }
-    }
 }
+
+
+

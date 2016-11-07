@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.UpdateListener;
@@ -127,25 +128,42 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             case R.id.tv_edit_profile_commit:
-                final BmobFile bmobFile=new BmobFile(file);
+                final BmobFile bmobFile = new BmobFile(file);
+                if (file != null) {
                 bmobFile.uploadblock(new UploadFileListener() {
                     @Override
                     public void done(BmobException e) {
-                        currentUser.setPortrait(bmobFile);
-                        currentUser.setNickname(nickname.getText().toString());
-                        currentUser.setGender(gender.getText().toString());
-                        currentUser.update(new UpdateListener() {
+                        User user = new User();
+                        user.setPortrait(bmobFile);
+                        user.setNickname(nickname.getText().toString());
+                        user.setGender(gender.getText().toString());
+                        user.update(currentUser.getObjectId(), new UpdateListener() {
                             @Override
                             public void done(BmobException e) {
-                                if(e==null){
+                                if (e == null) {
                                     finish();
-                                }else {
-                                    Toast.makeText(EditProfileActivity.this,"更新失败，请重新提交",Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(EditProfileActivity.this, "更新失败，请重新提交", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
                     }
                 });
+              }else {
+                    User user = new User();
+                    user.setNickname(nickname.getText().toString());
+                    user.setGender(gender.getText().toString());
+                    user.update(currentUser.getObjectId(), new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            if (e == null) {
+                                finish();
+                            } else {
+                                Toast.makeText(EditProfileActivity.this, "更新失败，请重新提交", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }
 
                 break;
 
@@ -161,9 +179,11 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             case R.id.tv_edit_profile_email:
                 Intent intent=new Intent(EditProfileActivity.this,EmailVerfiyActivity.class);
                 intent.putExtra("email",email.getText().toString());
-                startActivity(intent);
+                startActivityForResult(intent,2);
                 break;
             case R.id.tv_edit_profile_phone:
+                Intent intent1=new Intent(this,PhoneVerifyActivity.class);
+                startActivity(intent1);
                 break;
 
             case R.id.tv_edit_profile_gender:
@@ -300,6 +320,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                     e.printStackTrace();
                 }
             }
+        }
+        if(requestCode==2&&resultCode==RESULT_OK){
+            email.setText(data.getStringExtra("email"));
         }
     }
 

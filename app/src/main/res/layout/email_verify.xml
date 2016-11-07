@@ -48,6 +48,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <com.jinhanyu.jack.faceme.ClearEditText
+            android:background="@null"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:singleLine="true"
             android:id="@+id/cet_email_verify_emailAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

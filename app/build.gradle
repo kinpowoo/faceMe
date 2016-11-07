@@ -57,4 +57,6 @@ dependencies {
 
     //mob 短信验证
     compile name:'SMSSDK-2.1.2',ext:'aar'
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'com.zcw:togglebutton-library:1.0.0'
 }

@@ -148,6 +148,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
                 bundle2.putString("type","followingNum");
                 bundle2.putString("userId",me.getObjectId());
                 intent2.putExtras(bundle2);
+                startActivity(intent2);
                 break;
             case R.id.btn_userFragment_editProfile:
                 Intent intent1=new Intent(getActivity(),EditProfileActivity.class);
