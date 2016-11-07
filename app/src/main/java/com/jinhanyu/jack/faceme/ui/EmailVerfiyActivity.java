@@ -64,16 +64,16 @@ public class EmailVerfiyActivity extends Activity implements View.OnClickListene
                             public void done(BmobException e) {
                                 Toast.makeText(EmailVerfiyActivity.this, "请求验证邮件成功，请到"
                                         + emailRecieve + "邮箱中进行激活。",Toast.LENGTH_SHORT).show();
-                                finish();
+                              setResult(RESULT_OK,new Intent().putExtra("email",emailAddress.getText().toString()));
+                              finish();
                             }
                         });
                     }
-                }
-                else{
+                } else{
                     if(!Pattern.matches(".*?@.*?\\.com",email)){
                         Toast.makeText(this,"邮件格式错误",Toast.LENGTH_SHORT).show();
                     }else{
-                        User bmobUser =new User();
+                        BmobUser bmobUser =new BmobUser();
                         bmobUser.setEmail(email);
                         bmobUser.update(currentUser.getObjectId(),new UpdateListener() {
                             @Override
@@ -85,6 +85,7 @@ public class EmailVerfiyActivity extends Activity implements View.OnClickListene
                                               if(e==null){
                                                   Toast.makeText(EmailVerfiyActivity.this, "请求验证邮件成功，请到"
                                                           + email + "邮箱中进行激活。",Toast.LENGTH_SHORT).show();
+                                                  setResult(RESULT_OK,new Intent().putExtra("email",emailAddress.getText().toString()));
                                                   finish();
                                               }else {
                                                   Toast.makeText(EmailVerfiyActivity.this, "请求验证邮件失败，请重新提交",Toast.LENGTH_SHORT).show();

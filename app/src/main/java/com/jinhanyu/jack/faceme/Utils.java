@@ -1,5 +1,11 @@
 package com.jinhanyu.jack.faceme;
 
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import com.jinhanyu.jack.faceme.entity.User;
 
 import java.text.ParseException;
@@ -48,6 +54,14 @@ public class Utils {
         return currentUser;
     }
 
-
-
+    public static void setETColor(String str ,int start ,int end , int color , EditText tv){
+        SpannableStringBuilder builder = new SpannableStringBuilder(str);
+        builder.setSpan(new ForegroundColorSpan(color),start,end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(builder);
+    }
+    public static void setTVColor(String str ,int start ,int end , int color , TextView tv){
+        SpannableStringBuilder builder = new SpannableStringBuilder(str);
+        builder.setSpan(new ForegroundColorSpan(color),start,end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv.setText(builder);
+    }
 }

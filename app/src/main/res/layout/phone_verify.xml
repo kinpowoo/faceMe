@@ -50,7 +50,9 @@
         <com.jinhanyu.jack.faceme.ClearEditText
             android:id="@+id/cet_phone_verify_phoneNum"
             android:paddingLeft="5dp"
-            android:gravity="center"
+            android:background="@null"
+            android:gravity="left|center_vertical"
+            android:layout_gravity="center_vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

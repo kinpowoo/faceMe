@@ -88,7 +88,6 @@ public class MainFragment extends Fragment {
         statusQuery.findObjects(new FindListener<Status>() {
             @Override
             public void done(List<Status> data, BmobException e) {
-                Log.i("statuses",data.size()+"");
                 list.clear();
                 list.addAll(data);
                 adapter.notifyDataSetChanged();

@@ -35,4 +35,6 @@ dependencies {
     compile 'cn.bmob.android:bmob-sms:1.0.1'
     compile 'com.android.support:design:24.2.1'
     compile files('libs/AMap_Location_V2.9.0_20160906.jar')
+    compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'com.zcw:togglebutton-library:1.0.0'
 }

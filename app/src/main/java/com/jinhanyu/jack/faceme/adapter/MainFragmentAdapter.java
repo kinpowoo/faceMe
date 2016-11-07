@@ -116,7 +116,6 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             userBmobQuery.count(User.class, new CountListener() {
                 @Override
                 public void done(Integer num, BmobException e) {
-                    Log.i("favoriteNum", num + "");
                     status.setFavoriteNum(num);
                     viewHolder.favoriteNum.setText(num + " 个赞");
                 }

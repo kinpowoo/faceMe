@@ -65,7 +65,7 @@ public class ResetPassActivity extends Activity implements View.OnClickListener{
                             }
                         });
                     }else{
-                        Toast.makeText(this,"请输入规范的密码",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,"新密码必须为6-16位",Toast.LENGTH_SHORT).show();
                     }
                 }else {
                     Toast.makeText(this,"两次密码输入不一致,\n请重新输入",Toast.LENGTH_SHORT).show();

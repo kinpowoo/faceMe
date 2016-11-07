@@ -77,8 +77,7 @@
         android:drawablePadding="8dp"
         android:paddingBottom="10dp"
         android:paddingLeft="24dp"
-        android:paddingTop="10dp"
-        android:text="81个赞" />
+        android:paddingTop="10dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -112,7 +111,6 @@
         android:paddingBottom="10dp"
         android:paddingLeft="20dp"
         android:paddingTop="10dp"
-        android:text="查看全部2条评论"
         android:textColor="@color/SlateGray" />
 
     <TextView
