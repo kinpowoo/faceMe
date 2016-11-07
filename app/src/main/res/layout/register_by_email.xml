@@ -47,9 +47,10 @@
                    android:textColor="@color/black"/>
 
                <EditText
+                   android:inputType="textEmailAddress"
                    style="@style/MyEditText"
                    android:id="@+id/et_email"
-                   android:textDirection="rtl"
+                   android:gravity="right"
                    android:hint="请输入你的常用邮箱地址"
                    android:layout_marginLeft="18dp"
                    android:layout_width="wrap_content"
@@ -73,9 +74,10 @@
                     android:textColor="@color/black"/>
 
                 <EditText
+                    android:inputType="textPassword"
                     style="@style/MyEditText"
                     android:id="@+id/et_password"
-                    android:textDirection="rtl"
+                    android:gravity="right"
                     android:hint="6-16位数字或字母"
                     android:layout_marginLeft="18dp"
                     android:layout_width="wrap_content"
@@ -99,8 +101,9 @@
                     android:textColor="@color/black"/>
 
                 <EditText
+                    android:inputType="textPassword"
                     style="@style/MyEditText"
-                    android:textDirection="rtl"
+                    android:gravity="right"
                     android:hint="请再次输入你的密码"
                     android:layout_marginLeft="18dp"
                     android:layout_width="wrap_content"
@@ -124,9 +127,10 @@
                     android:textColor="@color/black"/>
 
                 <EditText
+                    android:inputType="number"
                     style="@style/MyEditText"
                     android:id="@+id/et_verify_code"
-                    android:textDirection="rtl"
+                    android:gravity="right"
                     android:hint="请输入验证码"
                     android:layout_marginLeft="18dp"
                     android:layout_marginRight="18dp"

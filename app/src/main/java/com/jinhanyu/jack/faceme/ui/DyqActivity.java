@@ -10,8 +10,11 @@ import android.widget.TextView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.adapter.DyqAdapter;
 import com.jinhanyu.jack.faceme.entity.DyqItem;
+import com.jinhanyu.jack.faceme.entity.User;
 
 import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
 
 /**
  * Created by anzhuo on 2016/10/27.陈礼
@@ -33,8 +36,14 @@ public class DyqActivity extends Activity implements View.OnClickListener {
         icon = (TextView) findViewById(R.id.tv_icon);
         common_listView = (ListView) findViewById(R.id.common_listView);
 
-
         iv_back.setOnClickListener(this);
+
+        BmobQuery<User> bmobQuery = new BmobQuery<>();
+
+
+
+
+
 
 
         adapter = new DyqAdapter(mlist, DyqActivity.this);

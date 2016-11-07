@@ -8,7 +8,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.jinhanyu.jack.faceme.CustomProgress;
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.SelectableFaceMePopupWindow;
 import com.jinhanyu.jack.faceme.entity.User;
 
 import cn.bmob.v3.exception.BmobException;
@@ -44,9 +46,12 @@ public class LoginActivity extends Activity {
             return;
         }
 
+        CustomProgress.show(this,"正在登陆...");
+
         User.loginByAccount(username, password, new LogInListener<User>() {
             @Override
             public void done(User user, BmobException e) {
+                CustomProgress.unshow();
                 if (e == null) {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
@@ -59,6 +64,22 @@ public class LoginActivity extends Activity {
     }
 
     public void forgetPassword(View view) {
+
+        new SelectableFaceMePopupWindow(this)
+                .setTitle("请选择")
+                .addOption("电子邮箱注册用户", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(LoginActivity.this, FindPasswordByEmailActivity.class));
+                    }
+                })
+                .addOption("手机号码注册用户", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(LoginActivity.this, FindPasswordByPhoneActivity.class));
+                    }
+                })
+                .show(view);
     }
 
     public void register(View view) {

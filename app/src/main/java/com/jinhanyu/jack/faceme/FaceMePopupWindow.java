@@ -49,6 +49,7 @@ public class FaceMePopupWindow{
                 if(onConfirmListener!=null){
                     onConfirmListener.onClick(v);
                 }
+                popupWindow.dismiss();
             }
         });
         View bt_cancel =  contentView.findViewById(R.id.tv_cancel);

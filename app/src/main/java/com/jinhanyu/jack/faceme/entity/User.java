@@ -1,5 +1,7 @@
 package com.jinhanyu.jack.faceme.entity;
 
+import com.jinhanyu.jack.faceme.R;
+
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.datatype.BmobRelation;
@@ -72,6 +74,10 @@ public class User extends BmobUser {
 
 
     public BmobFile getPortrait() {
+        if(portrait==null){
+            portrait = new BmobFile();
+            portrait.setUrl("res://com.jinhanyu.jack.faceme/"+ R.mipmap.user_default_avatar);
+        }
         return portrait;
     }
 

@@ -43,20 +43,27 @@
         <!--高德地图 -->
         <meta-data android:name="com.amap.api.v2.apikey" android:value="e6f34afa50824eda807c6ff7e25282ac"/>
 
-        <!--导航页-->
-        <activity android:name=".ui.SplshActivity">
-        </activity>
 
-        <!--登录注册-->
-        <activity android:name=".ui.LoginActivity">
+        <!--导航页-->
+        <activity android:name=".ui.LogoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.SplshActivity"/>
+
+        <!--登录注册-->
+        <activity android:name=".ui.LoginActivity">
+
+        </activity>
         <activity android:name=".ui.RegisterByPhoneActivity"/>
         <activity android:name=".ui.RegisterByEmailActivity"/>
         <activity android:name=".ui.UserAgreementActivity"/>
+        <activity android:name=".ui.FindPasswordByEmailActivity"/>
+        <activity android:name=".ui.FindPasswordByPhoneActivity"/>
+        <activity android:name=".ui.RegisterExtraActivity"/>
+
 
         <!--主页面-->
         <activity android:name=".ui.MainActivity" android:launchMode="singleTask">

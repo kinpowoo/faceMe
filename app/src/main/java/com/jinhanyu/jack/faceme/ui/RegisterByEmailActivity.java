@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.jinhanyu.jack.faceme.CustomProgress;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.VerifyCodeView;
 import com.jinhanyu.jack.faceme.entity.User;
@@ -80,6 +81,7 @@ public class RegisterByEmailActivity extends Activity{
             return;
         }
 
+        CustomProgress.show(this,"正在注册...");
 
         User user = new User();
         user.setUsername(email);
@@ -88,7 +90,13 @@ public class RegisterByEmailActivity extends Activity{
         user.signUp(new SaveListener<User>() {
             @Override
             public void done(User user, BmobException e) {
-
+                    if(e==null){
+                        CustomProgress.unshow();
+                        Toast.makeText(RegisterByEmailActivity.this, "注册成功，请前往邮箱查收邮件完成验证", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(RegisterByEmailActivity.this,RegisterExtraActivity.class));
+                    }else {
+                        Toast.makeText(RegisterByEmailActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+                    }
             }
         });
 

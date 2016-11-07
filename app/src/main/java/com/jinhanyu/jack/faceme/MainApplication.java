@@ -8,6 +8,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import cn.bmob.v3.Bmob;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.smssdk.SMSSDK;
 
 /**
  * Created by anzhuo on 2016/10/19.
@@ -23,7 +24,6 @@ public class MainApplication extends Application {
         oks = new OnekeyShare();
         //关闭sso授权
         oks.disableSSOWhenAuthorize();
-
         // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
         //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
         // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
@@ -44,6 +44,11 @@ public class MainApplication extends Application {
         oks.setSite("ShareSDK");
         // siteUrl是分享此内容的网站地址，仅在QQ空间使用
         oks.setSiteUrl("http://sharesdk.cn");
+
+
+        //Mob 短信验证码
+        SMSSDK.initSDK(this,"18c6f00007aee","f25f6453f8ecd8b10795865b2e77b770");
+
 
     }
 

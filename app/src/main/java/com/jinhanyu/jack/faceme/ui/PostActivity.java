@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jinhanyu.jack.faceme.CustomProgress;
 import com.jinhanyu.jack.faceme.LocationUtils;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.entity.Position;
@@ -46,7 +47,7 @@ public class PostActivity extends Activity implements View.OnClickListener {
     private ImageView location, surfaceview;//定位
     private TextView location_show;//具体位置
     private String picPath;
-    private Position location1;
+    private Position location1= new Position();
 
     Handler handler=new Handler(){
         @Override
@@ -128,6 +129,7 @@ public class PostActivity extends Activity implements View.OnClickListener {
             case R.id.tv_uploading:
                 final String content = et_content.getText().toString();//发表的内容
                 final BmobFile bmobFile = new BmobFile(new File(picPath));
+                CustomProgress.show(this,"正在发表...");
                 bmobFile.uploadblock(new UploadFileListener() {
                     @Override
                     public void done(BmobException e) {
@@ -140,6 +142,7 @@ public class PostActivity extends Activity implements View.OnClickListener {
                         status.save(new SaveListener<String>() {
                             @Override
                             public void done(String s, BmobException e) {
+                                CustomProgress.unshow();
                                 if (e == null) {
                                     startActivity(new Intent(PostActivity.this, MainActivity.class));
                                     finish();

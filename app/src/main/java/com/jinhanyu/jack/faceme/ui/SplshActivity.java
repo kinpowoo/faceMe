@@ -38,6 +38,7 @@ public class SplshActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splsh);
 
+        getSharedPreferences("logo",MODE_APPEND).edit().putBoolean("first",false).commit();
         animation = AnimationUtils.loadAnimation(SplshActivity.this, R.anim.animationset);
         flipper = (ViewPager) this.findViewById(R.id.ViewFlipper1);
         rg = (RadioGroup) findViewById(R.id.rg);
