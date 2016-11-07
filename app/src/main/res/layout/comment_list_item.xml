@@ -67,5 +67,6 @@
                 android:id="@+id/tv_comment_item_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
         </RelativeLayout>
     </com.daimajia.swipe.SwipeLayout>

@@ -42,18 +42,6 @@ public class CommentAdapter extends BaseSwipeAdapter{
     private Context context;
     private List<Comment> data;
 
-    private int START_OFF=0;
-    private Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            View topLayer= (View) msg.obj;
-            int dis=msg.what;
-            topLayer.layout(START_OFF-dis,topLayer.getTop(),
-                    ScreenUtils.getScreenWidth(context)-dis,topLayer.getBottom());
-//            itemView.invalidate();
-        }
-    };
     public CommentAdapter(Context context,List<Comment> list){
         this.context=context;
         this.data=list;
@@ -154,10 +142,17 @@ public class CommentAdapter extends BaseSwipeAdapter{
         viewHold.commentContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                    Intent intent = new Intent(context, UserProfileActivity.class);
-                    intent.putExtra("userId", comment.getCommentor().getObjectId());
-                    context.startActivity(intent);
+                    String text=comment.getText();
+                   Pattern pattern = Pattern.compile("@.+?\0\\s");
+                   Matcher matcher = pattern.matcher(text);
+                   if(matcher.find()){
+                        context.startActivity(new Intent(context,UserProfileActivity.class)
+                                .putExtra("userId",comment.getReplyToUser().getObjectId()));
+                   }else {
+                       Intent intent = new Intent(context, UserProfileActivity.class);
+                       intent.putExtra("userId", comment.getCommentor().getObjectId());
+                       context.startActivity(intent);
+                   }
 
             }
         });
