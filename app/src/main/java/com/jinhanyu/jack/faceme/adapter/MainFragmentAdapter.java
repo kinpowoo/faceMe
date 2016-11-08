@@ -1,5 +1,6 @@
 package com.jinhanyu.jack.faceme.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jinhanyu.jack.faceme.FaceMePopupMenu;
 import com.jinhanyu.jack.faceme.MainApplication;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.ScreenUtils;
@@ -38,16 +41,16 @@ import cn.bmob.v3.listener.UpdateListener;
 public class MainFragmentAdapter extends CommonAdapter<Status> {
     User me = User.getCurrentUser(User.class);
     LinearLayout.LayoutParams params;
-
-
-    public MainFragmentAdapter(List<Status> data, Context context) {
+    Activity activity;
+    public MainFragmentAdapter(List<Status> data, Context context, Activity activity) {
         super(data, context);
         int width= ScreenUtils.getScreenWidth(context);
         params = new LinearLayout.LayoutParams(width,width);
+        this.activity=activity;
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(int position, View view, final ViewGroup parent) {
         final ViewHolder viewHolder;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.main_fragment_list_item, null);
@@ -217,7 +220,21 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             }
         });
 
-
+         viewHolder.postPhoto.setOnLongClickListener(new View.OnLongClickListener() {
+             @Override
+             public boolean onLongClick(View v) {
+                 FaceMePopupMenu popupMenu=new FaceMePopupMenu(activity);
+                 popupMenu.setOnConfirmListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         Utils.downPic(status.getPhoto().getUrl());
+                         Toast.makeText(context,"图片已保存到本地",Toast.LENGTH_SHORT).show();
+                     }
+                 });
+                 popupMenu.show(parent);
+                 return false;
+             }
+         });
 
         return view;
     }

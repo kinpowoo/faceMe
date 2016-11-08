@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements AdapterView.OnItemLongClickListener{
     private ListView listView;
     private List<Status> list;
     private MainFragmentAdapter adapter;
@@ -49,9 +50,10 @@ public class MainFragment extends Fragment {
         ptrFrameLayout= (PtrFrameLayout) view.findViewById(R.id.iv_mainFragment_ptrFrame);
         ptr_refresh=new Ptr_refresh(getActivity());
         list=new ArrayList<>();
-        adapter=new MainFragmentAdapter(list,getActivity());
+        adapter=new MainFragmentAdapter(list,getActivity(),getActivity());
         listView.setAdapter(adapter);
 
+        listView.setOnItemLongClickListener(this);
 
         ptrFrameLayout.setHeaderView(ptr_refresh);
         ptrFrameLayout.addPtrUIHandler(ptr_refresh);
@@ -153,5 +155,18 @@ public class MainFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    public void downloadPic(){
+
+
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+
+        return false;
     }
 }

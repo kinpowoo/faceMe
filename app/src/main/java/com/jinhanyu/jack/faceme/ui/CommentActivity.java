@@ -357,4 +357,10 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
             statusInfo.setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    protected void onRestart() {
+        getFollowingList();
+        super.onRestart();
+    }
 }

@@ -75,7 +75,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
         list=new ArrayList<>();
         adapter=new GridViewAdapter(list,getActivity());
         gridView.setAdapter(adapter);
-        listAdapter=new MainFragmentAdapter(list,getActivity());
+        listAdapter=new MainFragmentAdapter(list,getActivity(),getActivity());
         listView.setAdapter(listAdapter);
         fillData();
         return view;

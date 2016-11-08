@@ -23,17 +23,17 @@
     </RelativeLayout>
 
     <View
-        android:background="@color/SlateGray"
+        android:background="@color/register_activity_bg"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"/>
 
     <View
-        android:background="@color/register_activity_bg"
+        android:background="@color/WhiteSmoke"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         />
     <View
-        android:background="@color/SlateGray"
+        android:background="@color/register_activity_bg"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"/>
 
@@ -46,7 +46,7 @@
 
     <View
         android:layout_marginLeft="50dp"
-        android:background="@color/SlateGray"
+        android:background="@color/register_activity_bg"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"/>
     <TextView
@@ -57,11 +57,51 @@
         style="@style/SettingItem" />
     <View
         android:layout_marginLeft="50dp"
-        android:background="@color/SlateGray"
+        android:background="@color/register_activity_bg"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"/>
 
+    <TextView
+        android:text="Misc"
+        android:textSize="20dp"
+        android:padding="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/tv_settings_clearCache"
+        android:text="清理缓存"
+        android:drawableLeft="@drawable/cache"
+        android:drawableRight="@drawable/enter"
+        style="@style/SettingItem" />
+    <View
+        android:layout_marginLeft="50dp"
+        android:background="@color/register_activity_bg"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
+    <TextView
+        android:id="@+id/tv_settings_feedback"
+        android:text="反馈"
+        android:drawableLeft="@drawable/feedback"
+        android:drawableRight="@drawable/enter"
+        style="@style/SettingItem" />
+    <View
+        android:layout_marginLeft="50dp"
+        android:background="@color/register_activity_bg"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
+
+    <TextView
+        android:id="@+id/tv_settings_about"
+        android:text="关于"
+        android:drawableLeft="@drawable/about"
+        android:drawableRight="@drawable/enter"
+        style="@style/SettingItem" />
+    <View
+        android:layout_marginLeft="50dp"
+        android:background="@color/register_activity_bg"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
     <TextView
         android:id="@+id/tv_settings_logOut"
         android:background="@drawable/log_out_button"

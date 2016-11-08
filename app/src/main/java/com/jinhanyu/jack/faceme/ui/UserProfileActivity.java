@@ -86,7 +86,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         list=new ArrayList<>();
         adapter=new GridViewAdapter(list,this);
         gridView.setAdapter(adapter);
-        listAdapter=new MainFragmentAdapter(list,this);
+        listAdapter=new MainFragmentAdapter(list,this,this);
         listView.setAdapter(listAdapter);
 
         userId=getIntent().getStringExtra("userId");

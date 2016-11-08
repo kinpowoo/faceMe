@@ -15,12 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jinhanyu.jack.faceme.FaceMePopupMenu;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.Utils;
@@ -43,8 +46,8 @@ import cn.bmob.v3.listener.UpdateListener;
 /**
  * Created by jianbo on 2016/10/21.
  */
-public class SingleStatusActivity extends AppCompatActivity implements View.OnClickListener{
-    private ImageView back,refresh,option,favoriteIcon,commentIcon,shareIcon;
+public class SingleStatusActivity extends AppCompatActivity implements View.OnClickListener,View.OnLongClickListener{
+    private ImageView back,option,favoriteIcon,commentIcon,shareIcon;
     private SimpleDraweeView userPortrait,statusPhoto;
     private TextView favoriteNum,textBy,text,commentNum,postTime,username;
     private String statusId;
@@ -75,7 +78,6 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(width,width);
 
         back= (ImageView) findViewById(R.id.iv_single_status_back);
-        refresh= (ImageView) findViewById(R.id.iv_single_status_refresh);
         option= (ImageView) findViewById(R.id.iv_single_status_option);
         favoriteIcon= (ImageView) findViewById(R.id.iv_single_status_favorite);
         commentIcon= (ImageView) findViewById(R.id.iv_single_status_comment);
@@ -102,7 +104,6 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         userPortrait.setOnClickListener(this);
         username.setOnClickListener(this);
         back.setOnClickListener(this);
-        refresh.setOnClickListener(this);
         option.setOnClickListener(this);
         favoriteIcon.setOnClickListener(this);
         commentIcon.setOnClickListener(this);
@@ -110,11 +111,13 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         favoriteNum.setOnClickListener(this);
         text.setOnClickListener(this);
         commentNum.setOnClickListener(this);
+        statusPhoto.setOnLongClickListener(this);
 
         delete.setOnClickListener(this);
         edit.setOnClickListener(this);
         share.setOnClickListener(this);
         cancel.setOnClickListener(this);
+
 
         statusId=getIntent().getStringExtra("statusId");
         if(statusId!=null){
@@ -334,11 +337,10 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                             }
 
                         }).start();
-                    }
+                    }else {
+                 downPic(option);
+                }
 //                }
-                break;
-            case R.id.iv_single_status_refresh:
-                fillData(status);
                 break;
             case R.id.tv_single_status_option_menu_delete:
                     dialog=new AlertDialog.Builder(this);
@@ -382,5 +384,23 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         lp.alpha = bgAlpha; //0.0-1.0
         getWindow().setAttributes(lp);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    public void downPic(View v){
+        FaceMePopupMenu popupMenu=new FaceMePopupMenu(this);
+        popupMenu.show(v);
+        popupMenu.setOnConfirmListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.downPic(status.getPhoto().getUrl());
+            }
+        });
+    }
+
+
+    @Override
+    public boolean onLongClick(View v) {
+        downPic(statusPhoto);
+        return false;
     }
 }

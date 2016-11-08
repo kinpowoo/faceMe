@@ -44,6 +44,9 @@ public class EmailVerfiyActivity extends Activity implements View.OnClickListene
         commit.setOnClickListener(this);
 
         emailRecieve=getIntent().getStringExtra("email");
+        if(emailRecieve!=null){
+            emailAddress.setText(emailRecieve);
+        }
     }
 
 

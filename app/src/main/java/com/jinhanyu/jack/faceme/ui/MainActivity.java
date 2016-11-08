@@ -2,6 +2,7 @@ package com.jinhanyu.jack.faceme.ui;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +15,7 @@ import android.widget.RadioButton;
 
 import com.jinhanyu.jack.faceme.R;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -150,7 +152,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+            ByteArrayOutputStream outputStream= (ByteArrayOutputStream) data.getExtras().get("data");
+            Bitmap bitmap= BitmapFactory.decodeByteArray(outputStream.toByteArray(),0,outputStream.toByteArray().length);
             String sdStatus = Environment.getExternalStorageState();
             if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
                 return;

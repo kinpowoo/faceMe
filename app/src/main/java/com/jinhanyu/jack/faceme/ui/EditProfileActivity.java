@@ -116,6 +116,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         userPortrait.setImageURI(currentUser.getPortrait().getUrl());
         username.setText(currentUser.getUsername());
         nickname.setText(currentUser.getNickname());
+        nickname.setSelection(nickname.getText().length());
         email.setText(currentUser.getEmail());
         phone.setText(currentUser.getMobilePhoneNumber());
         gender.setText(currentUser.getGender());
