@@ -1,6 +1,7 @@
 package com.jinhanyu.jack.faceme.ui;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,8 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -19,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +31,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.Utils;
+import com.jinhanyu.jack.faceme.adapter.AtPeopleAdapter;
 import com.jinhanyu.jack.faceme.adapter.CommentAdapter;
 import com.jinhanyu.jack.faceme.adapter.CommonAdapter;
 import com.jinhanyu.jack.faceme.entity.Comment;
@@ -56,7 +62,8 @@ import static com.jinhanyu.jack.faceme.R.id.parallax;
  * Created by anzhuo on 2016/10/18.
  */
 public class CommentActivity extends AppCompatActivity implements View.OnClickListener,
-        CompoundButton.OnCheckedChangeListener,AdapterView.OnItemLongClickListener{
+        CompoundButton.OnCheckedChangeListener,AdapterView.OnItemLongClickListener,
+        TextWatcher,AdapterView.OnItemClickListener{
     private ImageView back,send;
     private CheckBox atPeople;
     private EditText commentContent;
@@ -64,14 +71,16 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     private TextView username,statusText;
     private ListView listView;
     private CommentAdapter adapter;
+    private AtPeopleAdapter atPeopleAdapter;
     private List<Comment> list;
+    private List<User> followingList,atPeopleList;
     private String statusId;
     private Status status;
     private boolean commentOther=false;
     private User toWho;
-    private String commentorname;
-
-
+    private String commentorName;
+    private String name;
+    private LinearLayout statusInfo;
 
 
     @Override
@@ -86,16 +95,23 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         username= (TextView) findViewById(R.id.tv_comment_username);
         statusText= (TextView) findViewById(R.id.tv_comment_text);
         listView= (ListView) findViewById(R.id.lv_comment);
+        statusInfo= (LinearLayout) findViewById(R.id.ll_status_info);
         list=new ArrayList<>();
         adapter=new CommentAdapter(this,list);
         listView.setAdapter(adapter);
+
+        getFollowingList();
+        atPeopleList=new ArrayList<>();
+        atPeopleAdapter=new AtPeopleAdapter(atPeopleList,this);
 
         userPortrait.setOnClickListener(this);
         username.setOnClickListener(this);
         back.setOnClickListener(this);
         atPeople.setOnCheckedChangeListener(this);
         send.setOnClickListener(this);
+        commentContent.addTextChangedListener(this);
 
+        listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
         statusId=getIntent().getStringExtra("statusId");
@@ -116,6 +132,17 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    public void getFollowingList(){
+        followingList=new ArrayList<>();
+     BmobQuery<User> query=new BmobQuery<>();
+        query.addWhereRelatedTo("following",new BmobPointer(Utils.getCurrentUser()));
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+               followingList.addAll(list);
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {
@@ -138,15 +165,17 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(intent2);
                 break;
             case R.id.iv_comment_item_atPeople:
-               commentorname=list.get(listView.pointToPosition(v.getScrollX(),v.getScrollY())).getCommentor().getUsername();
+                toWho=list.get(listView.pointToPosition(v.getScrollX(),v.getScrollY())).getCommentor();
+                commentorName=toWho.getUsername();
                 Pattern pattern = Pattern.compile("@.+?\0");
                 String con = commentContent.getText().toString();
                 Matcher matcher = pattern.matcher(con);
                 if (!matcher.find() && (con == null || con.equals(""))) {
-                    commentContent.setText("@" + commentorname + '\0' + " ");
-                    Utils.setETColor(commentContent.getText().toString(), 0, commentorname.length() + 1
+                    commentContent.setText("@" + commentorName + '\0' + " ");
+                    Utils.setETColor(commentContent.getText().toString(), 0, commentorName.length() + 1
                             , commentContent.getResources().getColor(R.color.BlueViolet), commentContent);
                     commentContent.setSelection(commentContent.getText().length());
+
                 }
                 break;
         }
@@ -156,7 +185,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         final String comment=commentContent.getText().toString();
         Pattern pattern=Pattern.compile("@.+?\0");
         final Matcher matcher=pattern.matcher(comment);
-        if(matcher.find()&&(comment==null||comment.equals(""))){
+        if(matcher.find()){
             commentOther=true;
                   Comment com=new Comment();
                   com.setCommentor(Utils.getCurrentUser());
@@ -210,7 +239,6 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
        BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
        commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
        commentBmobQuery.include("commentor,replyToUser");
-
        commentBmobQuery.findObjects(new FindListener<Comment>() {
            @Override
            public void done(List<Comment> data, BmobException e) {
@@ -218,14 +246,27 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                list.addAll(data);
                Collections.sort(list);
                adapter.notifyDataSetChanged();
-
            }
        });
    }
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        String content=commentContent.getText().toString();
+        if(isChecked){
+            listView.setAdapter(atPeopleAdapter);
 
+            if(content==null||content.equals("")){
+                commentContent.setText("@");
+                commentContent.setSelection(commentContent.getText().length());
+            }
+        }else {
+            statusInfo.setVisibility(View.VISIBLE);
+            listView.setAdapter(adapter);
+            if(content.length()==1&&content.charAt(0)=='@'){
+                commentContent.setText("");
+            }
+        }
 
     }
 
@@ -248,5 +289,72 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
 
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+           if(s.length()==1&&s.charAt(0)=='@'){
+               statusInfo.setVisibility(View.GONE);
+               atPeople.setChecked(true);
+               atPeopleList.clear();
+               atPeopleAdapter.notifyDataSetChanged();
+
+
+           }else {
+               if(atPeople.isChecked()){
+                   atPeople.setChecked(false);
+               }
+           }
+        if(s.length()>1&&s.charAt(0)=='@') {
+            Pattern pattern = Pattern.compile("@.+?\0\\s");
+            String comment = commentContent.getText().toString();
+            Matcher matcher = pattern.matcher(comment);
+            if (matcher.find()) {
+                listView.setAdapter(adapter);
+            }
+            else {
+                statusInfo.setVisibility(View.GONE);
+                listView.setAdapter(atPeopleAdapter);
+
+                if (!atPeople.isChecked()) {
+                    atPeople.setChecked(true);
+                }
+                atPeopleList.clear();
+                name = s.toString().substring(1, s.length());
+                for (User user : followingList) {
+                    if (user.getUsername().contains(name)) {
+                        atPeopleList.add(user);
+                        atPeopleAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        if(s.equals("")||s==null){
+            statusInfo.setVisibility(View.VISIBLE);
+            if(atPeople.isChecked()){
+             atPeople.setChecked(false);
+            }
+        }
+
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        if(parent.getAdapter() instanceof AtPeopleAdapter) {
+            String name = atPeopleList.get(position).getUsername();
+            String afterAt = "@" + name + "\0" + " ";
+            toWho = atPeopleList.get(position);
+            Utils.setETColor(afterAt, 0, afterAt.length(), getResources().getColor(R.color.Blue), commentContent);
+            commentContent.setSelection(afterAt.length());
+            statusInfo.setVisibility(View.VISIBLE);
+        }
+    }
 }

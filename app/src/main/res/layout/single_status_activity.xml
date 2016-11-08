@@ -3,15 +3,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <LinearLayout
-        android:background="@color/register_activity_bg"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
         <RelativeLayout
             android:padding="8dp"
             android:background="@color/White"
@@ -39,7 +30,13 @@
                 android:layout_height="wrap_content" />
 
         </RelativeLayout>
-
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
         <RelativeLayout
         android:layout_marginTop="1dp"
         android:background="@color/White"
