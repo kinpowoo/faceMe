@@ -3,7 +3,6 @@ package com.jinhanyu.jack.faceme.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jinhanyu.jack.faceme.MainApplication;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.Utils;
@@ -30,7 +30,6 @@ import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CountListener;
-import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -39,6 +38,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class MainFragmentAdapter extends CommonAdapter<Status> {
     User me = User.getCurrentUser(User.class);
     LinearLayout.LayoutParams params;
+
 
     public MainFragmentAdapter(List<Status> data, Context context) {
         super(data, context);
@@ -63,6 +63,9 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             viewHolder.text = (TextView) view.findViewById(R.id.tv_status_text);
             viewHolder.commentNum = (TextView) view.findViewById(R.id.tv_status_commentNum);
             viewHolder.postTime = (TextView) view.findViewById(R.id.tv_status_postTime);
+            viewHolder.tag_one = (TextView) view.findViewById(R.id.tag_one);
+            viewHolder.tag_two = (TextView) view.findViewById(R.id.tag_two);
+            viewHolder.tag_three = (TextView) view.findViewById(R.id.tag_three);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -140,6 +143,24 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         viewHolder.postPhoto.setImageURI(status.getPhoto().getUrl());
         viewHolder.textBy.setText(status.getAuthor().getUsername()+": ");
         viewHolder.text.setText(status.getText());
+        int tag_count = status.getTags().size() > 3 ? 3 : status.getTags().size();
+        viewHolder.tag_one.setVisibility(View.INVISIBLE);
+        viewHolder.tag_two.setVisibility(View.INVISIBLE);
+        viewHolder.tag_three.setVisibility(View.INVISIBLE);
+        if(tag_count>0){
+            viewHolder.tag_one.setVisibility(View.VISIBLE);
+            viewHolder.tag_one.setText(status.getTags().get(0));
+        }
+        if(tag_count>1){
+            viewHolder.tag_two.setVisibility(View.VISIBLE);
+            viewHolder.tag_two.setText(status.getTags().get(1));
+        }
+        if(tag_count>2){
+            viewHolder.tag_three.setVisibility(View.VISIBLE);
+            viewHolder.tag_three.setText(status.getTags().get(2));
+        }
+
+
         try {
             viewHolder.postTime.setText(Utils.calculTime(status.getCreatedAt()));
         } catch (ParseException e) {
@@ -176,7 +197,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         viewHolder.shareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                MainApplication.showShareRemote(context,status.getPhoto().getUrl(),status.getText());
             }
         });
         viewHolder.username.setOnClickListener(new View.OnClickListener() {
@@ -195,11 +216,14 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                 context.startActivity(intent1);
             }
         });
+
+
+
         return view;
     }
     class ViewHolder {
         protected SimpleDraweeView userPortrait, postPhoto;
-        protected TextView username, favoriteNum, textBy, text, commentNum, postTime;
+        protected TextView username, favoriteNum, textBy, text, commentNum, postTime,tag_one,tag_two,tag_three;
         protected ImageView favoriteIcon, commentIcon, shareIcon;
 
     }

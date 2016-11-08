@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
@@ -72,7 +73,8 @@ public class FlowFragment extends Fragment implements View.OnClickListener {
                 iv_frame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-
+                        Toast.makeText(getActivity(), "已是最新", Toast.LENGTH_SHORT).show();
+                        adapter.notifyDataSetChanged();
                         iv_frame.refreshComplete();
                         //这里加入刷新代码
 

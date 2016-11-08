@@ -39,6 +39,7 @@
         android:layout_width="120dp"
         android:padding="5dp"
         android:layout_marginRight="8dp"
+        android:textColor="@color/White"
         android:layout_gravity="center_vertical"
         android:background="@drawable/follow_button"
         android:layout_height="30dp" />

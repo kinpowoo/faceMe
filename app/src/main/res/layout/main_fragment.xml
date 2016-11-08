@@ -9,7 +9,7 @@
         android:padding="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/CadetBlue">
+        android:background="@color/DarkSeaGreen">
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
         <ListView
             android:id="@+id/lv_mainFragment"
             android:dividerHeight="5dp"
-            android:divider="@color/WhiteSmoke"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </in.srain.cube.views.ptr.PtrFrameLayout>

@@ -21,11 +21,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="搜索标题"
+            android:text="搜索列表"
             android:textColor="@color/black"
             android:textSize="22sp" />
 
     </RelativeLayout>
+
 
     <in.srain.cube.views.ptr.PtrFrameLayout xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
         android:id="@+id/iv_ptrFrame"

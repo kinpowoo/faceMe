@@ -101,14 +101,14 @@
             android:layout_height="wrap_content" />
         <ImageView
             android:id="@+id/iv_single_status_comment"
-            android:src="@drawable/comment"
+            android:src="@mipmap/message"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <ImageView
             android:id="@+id/iv_single_status_share"
-            android:src="@drawable/share"
+            android:src="@mipmap/shape"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -121,7 +121,7 @@
         android:paddingBottom="10dp"
         android:paddingLeft="24dp"
         android:drawablePadding="8dp"
-        android:drawableLeft="@drawable/favorite_small"
+        android:drawableLeft="@mipmap/good"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <LinearLayout

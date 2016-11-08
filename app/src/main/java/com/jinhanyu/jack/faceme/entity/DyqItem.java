@@ -4,10 +4,10 @@ package com.jinhanyu.jack.faceme.entity;
  * Created by anzhuo on 2016/10/27.陈礼
  */
 public class DyqItem {
-    private String head;
-    private String name;
+    private String head;//头像
+    private String name;//名字
     private String intro;//简介
-    private String focus;
+    private String focus;//是否关注
 
     public String getHead() {
         return head;

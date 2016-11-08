@@ -18,11 +18,11 @@
         android:text="FaceMe"
         android:layout_gravity="center_horizontal"
         android:textSize="50sp"
-        android:textStyle="italic"
+        android:textStyle="italic|bold"
         android:shadowColor="@color/SlateGray"
         android:shadowDx="30"
         android:shadowDy="-5"
-        android:shadowRadius="10"/>
+        android:shadowRadius="15"/>
 
 
     <RadioGroup

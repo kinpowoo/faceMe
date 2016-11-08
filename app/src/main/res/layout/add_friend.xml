@@ -30,17 +30,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/test_color_b"
-        android:padding="8dp">
+        android:padding="8dp"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/search_name"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@drawable/edittext_shape"
             android:hint="请输入用户名"
             android:padding="6dp"
             android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/iv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="-40dp"
+            android:src="@drawable/search_light"/>
 
     </LinearLayout>
 

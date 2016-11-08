@@ -41,11 +41,18 @@
         android:text="热门活动"
         android:textSize="18sp"
         android:layout_margin="15dp"
+        android:textStyle="bold"
         android:textColor="@color/black"/>
+
+    <View
+        android:background="@color/SlateGray"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp">
 
     <ImageView
         android:layout_width="wrap_content"

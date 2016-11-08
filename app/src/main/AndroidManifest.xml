@@ -43,7 +43,6 @@
         <!--高德地图 -->
         <meta-data android:name="com.amap.api.v2.apikey" android:value="e6f34afa50824eda807c6ff7e25282ac"/>
 
-
         <!--导航页-->
         <activity android:name=".ui.LogoActivity">
             <intent-filter>
@@ -86,7 +85,7 @@
         <activity android:name=".ui.NearbyActivity" />
         <activity android:name=".ui.WonderfulActivities" />
         <activity android:name=".ui.DyqActivity" />
-
+        <activity android:name=".ui.CustomTag"/>
         <activity android:name=".ui.SearchResultActivity"/>
         <activity android:name=".ui.PostActivity"/>
         <activity android:name=".ui.AddFriendNum"/>
@@ -122,9 +121,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-
-        <activity android:name=".TestActivity">
-        </activity>
 
         <service android:name="com.amap.api.location.APSService"></service>
 

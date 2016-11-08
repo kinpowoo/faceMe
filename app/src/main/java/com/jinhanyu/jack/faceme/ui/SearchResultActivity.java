@@ -9,8 +9,12 @@ import android.widget.TextView;
 
 import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.Utils;
+import com.jinhanyu.jack.faceme.adapter.GridViewAdapter;
 import com.jinhanyu.jack.faceme.entity.Status;
+import com.jinhanyu.jack.faceme.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -28,6 +32,9 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
     private in.srain.cube.views.ptr.PtrFrameLayout iv_ptrFrame;//下拉刷新
     private GridView gv;//九宫格图片显示
     private Ptr_refresh refresh;//下拉刷新类对象
+    private List<Status> list = new ArrayList<>();
+    private User user;
+    private GridViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,16 +49,19 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
         refresh = new Ptr_refresh(SearchResultActivity.this);
 
         //加载图片
-            BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
-                  statusBmobQuery.findObjects(new FindListener<Status>() {
-                      @Override
-                      public void done(List<Status> list, BmobException e) {
-                             list.clear();
-
-                      }
-                  });
-
-
+        user= Utils.getCurrentUser();
+        BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
+        statusBmobQuery.addWhereEqualTo("tags",getIntent().getStringExtra("search_text"));
+        statusBmobQuery.include("author");
+        statusBmobQuery.findObjects(new FindListener<Status>() {
+            @Override
+            public void done(List<Status> data, BmobException e) {
+                list.addAll(data);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter = new GridViewAdapter(list, this);
+        gv.setAdapter(adapter);
 
         //控件的监听
         iv_back.setOnClickListener(this);
@@ -69,7 +79,7 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
                     @Override
                     public void run() {
 
-
+                        adapter.notifyDataSetChanged();
 
 
                         iv_ptrFrame.refreshComplete();

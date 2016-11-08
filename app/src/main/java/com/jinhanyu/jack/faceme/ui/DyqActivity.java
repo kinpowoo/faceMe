@@ -3,8 +3,8 @@ package com.jinhanyu.jack.faceme.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.jinhanyu.jack.faceme.R;
@@ -25,16 +25,17 @@ public class DyqActivity extends Activity implements View.OnClickListener {
     List<DyqItem> mlist;
     DyqAdapter adapter;//适配器
     DyqItem dyqItem;//数据源
-    private ListView common_listView;
+    private GridView gv;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.common);
+        setContentView(R.layout.search_result);
 
         iv_back = (ImageView) findViewById(R.id.iv_back);
         icon = (TextView) findViewById(R.id.tv_icon);
-        common_listView = (ListView) findViewById(R.id.common_listView);
+        gv = (GridView) findViewById(R.id.gv);
 
         iv_back.setOnClickListener(this);
 
@@ -46,11 +47,27 @@ public class DyqActivity extends Activity implements View.OnClickListener {
 
 
 
-        adapter = new DyqAdapter(mlist, DyqActivity.this);
-        common_listView.setAdapter(adapter);
+        type =getIntent().getStringExtra("icon");
+        switch (type) {
+            case "星客站":
+                icon.setText("星客站");
 
-        //设置标题
-        icon.setText(getIntent().getStringExtra("icon"));
+
+                break;
+            case "兴趣推荐":
+                icon.setText("兴趣推荐");
+
+
+                break;
+            case "附近的人":
+                icon.setText("附近的人");
+
+                break;
+        }
+        adapter = new DyqAdapter(mlist, DyqActivity.this);
+        gv.setAdapter(adapter);
+
+
     }
 
     @Override

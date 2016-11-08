@@ -56,6 +56,205 @@
         android:textColor="@color/black" />
 
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="添加标签"
+                android:textSize="22sp" />
+
+                <CheckedTextView
+                    android:id="@+id/custom_type_one"
+                    android:layout_width="100dp"
+                    android:visibility="invisible"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:background="@drawable/custom_type_shape"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="5dp"
+                    android:text=""
+                    android:textColor="@color/test_color_a" />
+
+                <CheckedTextView
+                    android:id="@+id/custom_type_two"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:visibility="invisible"
+                    android:background="@drawable/custom_type_shape"
+                    android:paddingBottom="5dp"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="5dp"
+                    android:text=""
+                    android:textColor="@color/test_color_a" />
+
+            </LinearLayout>
+            <GridLayout
+                android:id="@+id/gl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alignmentMode="alignBounds"
+                android:columnCount="4"
+                android:padding="5dp"
+                android:rowCount="4">
+
+                <CheckedTextView
+                    android:id="@+id/tv_FaceMe"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/type_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="5dp"
+                    android:text="FaceMe"
+                    android:textColor="@drawable/test_color" />
+
+                <CheckedTextView
+                    android:id="@+id/tv_travel"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/type_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="5dp"
+                    android:text="旅行"
+                    android:textColor="@drawable/test_color" />
+
+                <CheckedTextView
+                    android:id="@+id/tv_baby"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_columnSpan="2"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/type_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="5dp"
+                    android:text="小宝贝"
+                    android:textColor="@drawable/test_color" />
+
+                <CheckedTextView
+                    android:id="@+id/tv_nearby"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/type_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="5dp"
+                    android:text="附近"
+                    android:textColor="@drawable/test_color" />
+
+                <CheckedTextView
+                    android:id="@+id/tv_start"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/type_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="5dp"
+                    android:text="明星"
+                    android:textColor="@drawable/test_color" />
+
+                <CheckedTextView
+                    android:id="@+id/tv_boy"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_columnSpan="2"
+                    android:background="@drawable/type_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="5dp"
+                    android:text="帅哥"
+                    android:textColor="@drawable/test_color"/>
+
+                <CheckedTextView
+                    android:id="@+id/tv_belle"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/type_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="20dp"
+                    android:layout_marginTop="10dp"
+                    android:paddingTop="5dp"
+                    android:text="美女"
+                    android:textColor="@drawable/test_color" />
+
+                <CheckedTextView
+                    android:id="@+id/tv_food"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/type_bg"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="2dp"
+                    android:paddingRight="30dp"
+                    android:paddingTop="5dp"
+                    android:text="美食"
+                    android:textColor="@drawable/test_color" />
+
+
+                <ImageView
+                    android:id="@+id/tv_add"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:background="@drawable/type_bg"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
+                    android:src="@mipmap/add" />
+            </GridLayout>
+
+            <TextView
+                android:clickable="true"
+                android:onClick="share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="35dp"
+                android:text="分享到"
+                android:textSize="22sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -114,146 +313,4 @@
             android:textSize="21sp" />
     </LinearLayout>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="添加标签"
-                android:textSize="22sp" />
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:alignmentMode="alignBounds"
-                android:columnCount="4"
-                android:padding="5dp"
-                android:rowCount="4">
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/label_shape"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
-                    android:text="叶落知秋"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/label_shape"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="5dp"
-                    android:text="带着图钉去.."
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnSpan="2"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/label_shape"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
-                    android:text="秋意浓"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/label_shape"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
-                    android:text="你好十月"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/label_shape"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
-                    android:text="家乡"
-                    android:textColor="@color/black" />
-
-                <TextView
-                    android:layout_width="45dp"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/label_shape"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
-                    android:text="..." />
-
-                <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/label_shape"
-                    android:paddingBottom="4dp"
-                    android:paddingTop="4dp"
-                    android:src="@mipmap/add" />
-            </GridLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="35dp"
-                android:text="分享到"
-                android:textSize="22sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/share_shape"
-                    android:padding="5dp"
-                    android:src="@mipmap/qq_space" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/share_shape"
-                    android:padding="5dp"
-                    android:src="@mipmap/weibo" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-    </ScrollView>
 </LinearLayout>

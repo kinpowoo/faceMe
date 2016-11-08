@@ -47,7 +47,7 @@
     <color name="Feldspar">#D19275</color>
     <color name="FireBrick">#B22222</color>
     <color name="FloralWhite">#FFFAF0</color>
-    <color name="ForestGreen">#228B22</color>
+    <color name="ForestGreen">#bf228b22</color>
     <color name="Fuchsia">#FF00FF</color>
     <color name="Gainsboro">#DCDCDC</color>
     <color name="GhostWhite">#F8F8FF</color>
@@ -115,7 +115,7 @@
     <color name="Peru">#CD853F</color>
     <color name="Pink">#FFC0CB</color>
     <color name="Plum">#DDA0DD</color>
-    <color name="PowderBlue">#B0E0E6</color>
+    <color name="PowderBlue">#81dce4e6</color>
     <color name="Purple">#800080</color>
     <color name="Red">#FF0000</color>
     <color name="RosyBrown">#c1a8a8</color>
@@ -151,5 +151,6 @@
     <color name="test_color_b">#8a8a8a</color>
     <color name="location_shape">#cfcfcf</color>
     <color name="register_activity_bg">#e7e7e7</color>
+    <color name="logo">#52a8fc</color>
 
 </resources>

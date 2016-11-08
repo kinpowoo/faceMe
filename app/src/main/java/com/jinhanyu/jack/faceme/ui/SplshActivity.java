@@ -7,10 +7,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.BounceInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -128,11 +128,14 @@ public class SplshActivity extends AppCompatActivity {
         title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlphaAnimation alphaAnimation = new AlphaAnimation(1f, 0f);//第一个参数是动画最初效果（1f为100%不透明）
-                alphaAnimation.setDuration(1000);//设置渐变时间 单位是毫秒
-                alphaAnimation.setInterpolator(new BounceInterpolator());//差值器
-                alphaAnimation.setFillAfter(true);//设置变化后是否为最终展示（不设置的话会变回最初样子）
-                title.startAnimation(alphaAnimation);//变化开始
+
+                TranslateAnimation translateAnimation = new TranslateAnimation(Animation.START_ON_FIRST_FRAME, 0f,
+                Animation.RELATIVE_TO_SELF, 0f, Animation.START_ON_FIRST_FRAME, 0f,
+                Animation.RELATIVE_TO_SELF, 1f);//第一个参数是动画最初效果（1f为100%不透明）
+                translateAnimation.setDuration(3000);//设置渐变时间 单位是毫秒
+                translateAnimation.setInterpolator(new BounceInterpolator());//差值器
+                translateAnimation.setFillAfter(true);//设置变化后是否为最终展示（不设置的话会变回最初样子）
+                title.startAnimation(translateAnimation);//变化开始
                 try {
                     Thread.sleep(1200);
                     startActivity(new Intent(SplshActivity.this, LoginActivity.class));

@@ -25,7 +25,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Created by anzhuo on 2016/10/25.陈礼
  */
 public class AddFriend extends Activity implements View.OnClickListener {
-    private ImageView iv_back;
+    private ImageView iv_back,iv_search;
     private Ptr_refresh refresh;//刷新类
     private in.srain.cube.views.ptr.PtrFrameLayout iv_frame;
     private EditText seart_name;
@@ -41,6 +41,7 @@ public class AddFriend extends Activity implements View.OnClickListener {
         setContentView(R.layout.add_friend);
 
         iv_back = (ImageView) findViewById(R.id.iv_back);
+        iv_search = (ImageView) findViewById(R.id.iv_search);
         iv_frame = (PtrFrameLayout) findViewById(R.id.iv_ptrFrame);
         seart_name = (EditText) findViewById(R.id.search_name);
         focus_num = (TextView) findViewById(R.id.focus_num);
@@ -54,6 +55,7 @@ public class AddFriend extends Activity implements View.OnClickListener {
 
         refresh = new Ptr_refresh(this);
         iv_back.setOnClickListener(this);
+        iv_search.setOnClickListener(this);
         focus_show.setOnClickListener(this);
         fans_show.setOnClickListener(this);
         add_friend.setOnClickListener(this);
@@ -113,6 +115,9 @@ public class AddFriend extends Activity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_back://返回
                finish();
+                break;
+            case R.id.iv_search:
+
                 break;
             case R.id.focus_show://关注
                 Intent intent2=new Intent(this,LikesActivity.class);

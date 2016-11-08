@@ -12,16 +12,15 @@ import android.widget.TextView;
 
 public class CustomProgress extends Dialog {
 
+
     private static CustomProgress customProgress;
 
-    public static void show(Context context,String message){
-        if(customProgress==null){
-            customProgress = new CustomProgress(context,R.style.Custom_Progress);
-        }
+    public static void show(Context context, String message) {
+        customProgress = new CustomProgress(context, R.style.Custom_Progress);
         customProgress.show(message);
     }
 
-    public static void unshow(){
+    public static void unshow() {
         customProgress.dismiss();
     }
 
@@ -65,8 +64,7 @@ public class CustomProgress extends Dialog {
     /**
      * 弹出自定义ProgressDialog
      *
-     * @param message
-     *            提示
+     * @param message 提示
      */
     public void show(CharSequence message) {
         setTitle("");
