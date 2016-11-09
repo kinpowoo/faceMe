@@ -53,7 +53,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
     private String statusId;
     private Status status;
     private View menuView;
-    private TextView delete,edit,cancel,share;
+    private TextView delete,edit,cancel,share,tag_one,tag_two,tag_three;
     private User currentUser=Utils.getCurrentUser();
     private PopupWindow popupWindow;
     private Float alpha=1.0f;
@@ -84,6 +84,9 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         shareIcon= (ImageView) findViewById(R.id.iv_single_status_share);
         userPortrait= (SimpleDraweeView) findViewById(R.id.sdv_single_status_userPortrait);
         statusPhoto= (SimpleDraweeView) findViewById(R.id.iv_single_status_photo);
+        tag_one= (TextView) findViewById(R.id.tag_one);
+        tag_two= (TextView) findViewById(R.id.tag_two);
+        tag_three= (TextView) findViewById(R.id.tag_three);
         statusPhoto.setLayoutParams(params);
         statusPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
 
@@ -186,7 +189,22 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                 }
             });
 
-
+        int tag_count = st.getTags().size() > 3 ? 3 : st.getTags().size();
+        tag_one.setVisibility(View.INVISIBLE);
+        tag_two.setVisibility(View.INVISIBLE);
+        tag_three.setVisibility(View.INVISIBLE);
+        if(tag_count>0){
+           tag_one.setVisibility(View.VISIBLE);
+           tag_one.setText(st.getTags().get(0));
+        }
+        if(tag_count>1){
+            tag_two.setVisibility(View.VISIBLE);
+            tag_two.setText(st.getTags().get(1));
+        }
+        if(tag_count>2){
+            tag_three.setVisibility(View.VISIBLE);
+            tag_three.setText(st.getTags().get(2));
+        }
 
 
         textBy.setText(st.getAuthor().getUsername()+": ");
@@ -373,7 +391,9 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
             case R.id.tv_single_status_option_menu_edit:
                 Intent intent6=new Intent(this,EditStatusActivity.class);
                 intent6.putExtra("statusId",status.getObjectId());
+                popupWindow.dismiss();
                 startActivity(intent6);
+
                 break;
         }
     }
@@ -402,5 +422,14 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
     public boolean onLongClick(View v) {
         downPic(statusPhoto);
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(status!=null){
+            fillData(status);
+        }
+
     }
 }

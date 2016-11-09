@@ -1,5 +1,6 @@
 package com.jinhanyu.jack.faceme.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,11 @@ public class EditStatusActivity extends AppCompatActivity implements View.OnClic
         statusPhoto= (SimpleDraweeView) findViewById(R.id.sdv_edit_status_statusPhoto);
         statusText= (EditText) findViewById(R.id.et_edit_status_statusText);
 
+
+        cancel.setOnClickListener(this);
+        commit.setOnClickListener(this);
+
+
         statusId=getIntent().getStringExtra("statusId");
         if(statusId!=null){
             BmobQuery<Status> query=new BmobQuery<>();
@@ -59,6 +65,8 @@ public class EditStatusActivity extends AppCompatActivity implements View.OnClic
         username.setText(status.getAuthor().getUsername());
         statusPhoto.setImageURI(status.getPhoto().getUrl());
         statusText.setText(status.getText());
+        statusText.requestFocus();
+        statusText.setSelection(statusText.getText().length());
     }
 
     @Override
@@ -69,11 +77,13 @@ public class EditStatusActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.tv_edit_status_commit:
                 String afterEdit=statusText.getText().toString();
-                status.setText(afterEdit);
-                status.update(new UpdateListener() {
+                final Status st=new Status();
+                st.setText(afterEdit);
+                st.update(status.getObjectId(),new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
-                        finish();
+                        startActivity(new Intent(EditStatusActivity.this,
+                                SingleStatusActivity.class).putExtra("statusId",status.getObjectId()));
                     }
                 });
                 break;

@@ -67,7 +67,10 @@
         android:padding="18dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
+    <View
+        android:background="@color/register_activity_bg"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
     <TextView
         android:id="@+id/tv_settings_clearCache"
         android:text="清理缓存"

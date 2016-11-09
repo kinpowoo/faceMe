@@ -73,87 +73,162 @@
         xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:background="@color/White"
         android:id="@+id/iv_single_status_photo"
-        android:layout_width="450dp"
+        android:layout_width="380dp"
         android:layout_marginTop="1dp"
+        android:layout_gravity="center"
         fresco:actualImageScaleType="focusCrop"
-        fresco:viewAspectRatio="1.33"
-        android:layout_height="wrap_content"
+        android:layout_height="400dp"
         />
-    <LinearLayout
-        android:layout_marginTop="1dp"
-        android:background="@color/White"
-        android:padding="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/iv_single_status_favorite"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <ImageView
-            android:id="@+id/iv_single_status_comment"
-            android:src="@mipmap/message"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
-        <ImageView
-            android:id="@+id/iv_single_status_share"
-            android:src="@mipmap/shape"
-            android:layout_marginLeft="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <TextView
-        android:id="@+id/tv_single_status_favoriteNum"
-        android:background="@color/White"
-        android:layout_marginTop="1dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingLeft="24dp"
-        android:drawablePadding="8dp"
-        android:drawableLeft="@mipmap/good"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <LinearLayout
-        android:background="@color/White"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:paddingRight="20dp"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/tv_single_status_textBy"
-            android:textSize="19dp"
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/tv_single_status_text"
-            android:textSize="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
-    <TextView
-        android:id="@+id/tv_single_status_commentNum"
-        android:background="@color/White"
-        android:textColor="@color/SlateGray"
-        android:text="查看全部2条评论"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/tv_single_status_postTime"
-        android:background="@color/White"
-        android:paddingLeft="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/White"
+                    android:orientation="horizontal"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="10dp">
+
+                    <TextView
+                        android:id="@+id/tv_single_status_textBy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/Black"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_single_status_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/White"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:src="@mipmap/tag"/>
+
+                    <TextView
+                        android:visibility="invisible"
+                        android:id="@+id/tag_one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/test_color_a"
+                        android:padding="5dp"
+                        android:background="@drawable/custom_type_shape"/>
+
+                    <TextView
+                        android:visibility="invisible"
+                        android:id="@+id/tag_two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/test_color_a"
+                        android:padding="5dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/custom_type_shape"/>
+
+                    <TextView
+                        android:visibility="invisible"
+                        android:id="@+id/tag_three"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/test_color_a"
+                        android:padding="5dp"
+                        android:background="@drawable/custom_type_shape"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/SlateGray"/>
+
+                <TextView
+                    android:id="@+id/tv_single_status_commentNum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/White"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:textColor="@color/SlateGray" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@color/SlateGray"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/White"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:id="@+id/iv_single_status_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp" />
+
+                    <ImageView
+                        android:id="@+id/iv_single_status_comment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:src="@mipmap/message" />
+
+                    <ImageView
+                        android:id="@+id/iv_single_status_share"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:src="@mipmap/shape" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/White">
+                    <TextView
+                        android:id="@+id/tv_single_status_postTime"
+                        android:background="@color/White"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="1dp"
+                        android:paddingBottom="1dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/tv_single_status_favoriteNum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:background="@color/White"
+                        android:drawableLeft="@mipmap/good"
+                        android:drawablePadding="8dp"
+                        android:gravity="center"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="1dp"
+                        android:textColor="@color/GoldenRod" />
+                </LinearLayout>
     </LinearLayout>
 </ScrollView>
 </LinearLayout>

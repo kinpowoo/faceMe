@@ -24,7 +24,7 @@ import static com.jinhanyu.jack.faceme.R.id.tv_settings_logOut;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener{
     private ImageView back;
-    private TextView editProfile,changePass,clearCache,logOut;
+    private TextView editProfile,changePass,clearCache,logOut,feedback,about;
     private Drawable drawable;
     private Drawable leftDrawable,rightDrawable;
 
@@ -41,6 +41,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         changePass= (TextView) findViewById(R.id.tv_settings_changePass);
         logOut= (TextView) findViewById(tv_settings_logOut);
         clearCache= (TextView) findViewById(R.id.tv_settings_clearCache);
+        feedback= (TextView) findViewById(R.id.tv_settings_feedback);
+        about= (TextView) findViewById(R.id.tv_settings_about);
 
         showCacheSize();
 
@@ -49,6 +51,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         changePass.setOnClickListener(this);
         logOut.setOnClickListener(this);
         clearCache.setOnClickListener(this);
+        feedback.setOnClickListener(this);
+        about.setOnClickListener(this);
     }
 
     @Override
@@ -79,7 +83,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 }, 2000);
                 break;
 
-            case tv_settings_logOut:
+            case R.id.tv_settings_logOut:
                 final FaceMePopupWindow popupWindow=new FaceMePopupWindow(this);
                 popupWindow.setTitle("是否退出登录？");
                 popupWindow.setOnConfirmListener(new View.OnClickListener() {
@@ -92,6 +96,12 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
                 popupWindow.show(logOut);
+                break;
+            case R.id.tv_settings_feedback:
+                startActivity(new Intent(this,FeedBackActivity.class));
+                break;
+            case R.id.tv_settings_about:
+                startActivity(new Intent(this,AboutActivity.class));
                 break;
         }
     }

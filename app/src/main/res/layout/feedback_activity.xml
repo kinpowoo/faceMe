@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<RelativeLayout
+    android:padding="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/iv_feedback_back"
+        android:src="@drawable/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="意见反馈"
+        android:textStyle="bold"
+        android:textSize="22dp"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>
+    <View
+        android:layout_marginTop="1dp"
+        android:background="@color/register_activity_bg"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp">
+    <EditText
+        android:layout_marginTop="15dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:gravity="left"
+        android:textSize="18dp"
+        android:hint="这里输入反馈意见"
+        android:id="@+id/et_feedback_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+        <TextView
+            android:id="@+id/tv_feedback_count"
+            android:text="剩余140字"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="20dp"
+            android:layout_gravity="bottom|right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_feedback_commit"
+        android:background="@drawable/log_out_button"
+        android:text="提交"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:padding="15dp"
+        android:gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
