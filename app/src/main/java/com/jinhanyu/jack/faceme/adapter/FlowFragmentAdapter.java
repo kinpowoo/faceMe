@@ -16,6 +16,7 @@ import java.util.List;
  * Created by anzhuo on 2016/10/18.陈礼
  */
 public class FlowFragmentAdapter extends CommonAdapter<SingleFavoriteItem> {
+
     public FlowFragmentAdapter(List<SingleFavoriteItem> data, Context context) {
         super(data, context);
     }
@@ -33,7 +34,6 @@ public class FlowFragmentAdapter extends CommonAdapter<SingleFavoriteItem> {
             viewHolder= (ViewHolder) convertView.getTag();
         }
         SingleFavoriteItem singleFavoriteItem = data.get(position);
-
         viewHolder.picture_test.setText(singleFavoriteItem.getPicture_text());
         viewHolder.picture.setImageURI(singleFavoriteItem.getPicture());
         return convertView;

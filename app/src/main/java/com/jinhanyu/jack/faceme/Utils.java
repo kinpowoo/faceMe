@@ -3,6 +3,8 @@ package com.jinhanyu.jack.faceme;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -90,7 +92,7 @@ public class Utils {
     }
 
 
-    public static void downPic(final String url){
+    public static void downPic(final String url, final Handler handler){
         threadPool.execute(new Runnable() {
             @Override
             public void run() {
@@ -111,9 +113,13 @@ public class Utils {
                         if (!dest.exists()) {
                             dest.mkdirs();
                         }
-                        OutputStream out = new FileOutputStream(new File(dest, fileName + ".jpg"));
+                        File loc=new File(dest, fileName + ".jpg");
+                        OutputStream out = new FileOutputStream(loc);
                         Bitmap bitmap = BitmapFactory.decodeByteArray(outputStream.toByteArray(), 0, outputStream.toByteArray().length);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                        Message message=new Message();
+                        handler.obtainMessage(1,loc.getAbsolutePath());
+                        message.sendToTarget();
                     }
                 } catch (java.io.IOException e) {
                     e.printStackTrace();

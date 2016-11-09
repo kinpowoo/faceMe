@@ -5,7 +5,13 @@
     android:gravity="center">
 
     <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:id="@+id/picture"
+        fresco:progressBarImage="@drawable/loading"
+        fresco:progressBarImageScaleType="centerInside"
+        fresco:progressBarAutoRotateInterval="5000"
+        fresco:failureImage="@drawable/failure"
+        fresco:failureImageScaleType="centerInside"
         android:layout_width="match_parent"
         android:layout_height="180dp">
     </com.facebook.drawee.view.SimpleDraweeView>

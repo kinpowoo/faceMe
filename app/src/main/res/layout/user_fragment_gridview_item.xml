@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="130dp"
     android:layout_height="130dp">
-<com.facebook.drawee.view.SimpleDraweeView
-    android:id="@+id/sdv_userFragment_gridview_item"
-    android:layout_width="150dp"
-    android:layout_height="150dp" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        fresco:progressBarImage="@drawable/loading"
+        fresco:progressBarImageScaleType="centerInside"
+        fresco:progressBarAutoRotateInterval="5000"
+        fresco:failureImage="@drawable/failure"
+        fresco:failureImageScaleType="centerInside"
+        android:id="@+id/sdv_userFragment_gridview_item"
+        android:layout_width="150dp"
+        android:layout_height="150dp" />
+
 </LinearLayout>

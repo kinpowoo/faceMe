@@ -76,6 +76,11 @@
         android:layout_width="380dp"
         android:layout_marginTop="1dp"
         android:layout_gravity="center"
+        fresco:progressBarImage="@drawable/loading"
+        fresco:progressBarImageScaleType="centerInside"
+        fresco:progressBarAutoRotateInterval="5000"
+        fresco:failureImage="@drawable/failure"
+        fresco:failureImageScaleType="centerInside"
         fresco:actualImageScaleType="focusCrop"
         android:layout_height="400dp"
         />

@@ -33,7 +33,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class MainFragment extends Fragment implements AdapterView.OnItemLongClickListener{
+public class MainFragment extends Fragment{
     private ListView listView;
     private List<Status> list;
     private MainFragmentAdapter adapter;
@@ -52,8 +52,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemLongClic
         list=new ArrayList<>();
         adapter=new MainFragmentAdapter(list,getActivity(),getActivity());
         listView.setAdapter(adapter);
-
-        listView.setOnItemLongClickListener(this);
 
         ptrFrameLayout.setHeaderView(ptr_refresh);
         ptrFrameLayout.addPtrUIHandler(ptr_refresh);
@@ -107,7 +105,6 @@ public class MainFragment extends Fragment implements AdapterView.OnItemLongClic
             public void done(List<Status> data, BmobException e) {
                 if(data.size()> 0 ){
                     lastFetchDate = data.get(0).getCreatedAt();
-                    Log.i("lastFetchDate in refresh",lastFetchDate);
                     list.addAll(0,data);
                     adapter.notifyDataSetChanged();
                     Toast.makeText(getActivity(), "刷新了"+data.size()+"条数据", Toast.LENGTH_SHORT).show();
@@ -150,23 +147,5 @@ public class MainFragment extends Fragment implements AdapterView.OnItemLongClic
                 adapter.notifyDataSetChanged();
             }
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    public void downloadPic(){
-
-
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-
-        return false;
     }
 }

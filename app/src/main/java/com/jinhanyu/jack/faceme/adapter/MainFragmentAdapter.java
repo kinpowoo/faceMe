@@ -80,6 +80,8 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         } else {
             viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
         }
+
+
         viewHolder.favoriteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,7 +229,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                  popupMenu.setOnConfirmListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
-                         Utils.downPic(status.getPhoto().getUrl());
+                         Utils.downPic(status.getPhoto().getUrl(),null);
                          Toast.makeText(context,"图片已保存到本地",Toast.LENGTH_SHORT).show();
                      }
                  });

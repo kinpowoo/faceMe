@@ -89,26 +89,13 @@ public class CommentAdapter extends BaseSwipeAdapter{
         }
 
         viewHold.atPeople.setTag("repost");
-        view.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(final View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        return false;
-                    case MotionEvent.ACTION_MOVE:
-                        if(comment.getCommentor().getUsername().equals(Utils.getCurrentUser().getUsername())) {
-//                            itemView = v; // 得到itemView，在上面加动画
-                            viewHold.atPeople.setVisibility(View.GONE);
-                            viewHold.delete.setVisibility(View.VISIBLE);
-                        }else {
-                            viewHold.delete.setVisibility(View.GONE);
-                            viewHold.atPeople.setVisibility(View.VISIBLE);
-                        }
-                        break;
-                }
-                return false;
-            }
-        });
+        if(comment.getCommentor().getUsername().equals(Utils.getCurrentUser().getUsername())) {
+            viewHold.atPeople.setVisibility(View.GONE);
+            viewHold.delete.setVisibility(View.VISIBLE);
+        }else {
+            viewHold.delete.setVisibility(View.GONE);
+            viewHold.atPeople.setVisibility(View.VISIBLE);
+        }
 
         viewHold.delete.setOnClickListener(new View.OnClickListener() {
             @Override

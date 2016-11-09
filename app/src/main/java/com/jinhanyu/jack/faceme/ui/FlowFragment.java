@@ -16,10 +16,8 @@ import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.adapter.FlowFragmentAdapter;
 import com.jinhanyu.jack.faceme.entity.SingleFavoriteItem;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
@@ -28,17 +26,18 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Created by anzhuo on 2016/10/18.陈礼 图钉墙
  */
 public class FlowFragment extends Fragment implements View.OnClickListener {
-    private SingleFavoriteItem singleFavoriteItem;//数据源
-    private FlowFragmentAdapter adapter;//适配器
     private GridView gv;
-    private List<SingleFavoriteItem> list;
+    private FlowFragmentAdapter adapter;
     private in.srain.cube.views.ptr.PtrFrameLayout iv_frame;
     private Ptr_refresh ptr_refresh;
     private ImageView NearbyActivity;
     private ImageView AddFriend;
     private TextView SearchTag;
+    private List<SingleFavoriteItem> database;
 
-
+    final private int[] photos= {R.mipmap.start, R.mipmap.popularity, R.mipmap.movie,
+            R.mipmap.travel, R.mipmap.belle, R.mipmap.food, R.mipmap.deary, R.mipmap.nearby2};
+    final private String [] tags={"人气","星动态","小电影","旅行","美女","美食","小宝贝","附近动态"};
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flow_fragment, null);
@@ -54,15 +53,13 @@ public class FlowFragment extends Fragment implements View.OnClickListener {
         NearbyActivity.setOnClickListener(this);
         AddFriend.setOnClickListener(this);
 
-        list = new ArrayList<>();
+
+        database=new ArrayList<>();
         ptr_refresh = new Ptr_refresh(getActivity());
 
-        AddPicture_test();//文字
-
-
-        adapter = new FlowFragmentAdapter(list, getActivity());
+        adapter = new FlowFragmentAdapter(database, getActivity());
         gv.setAdapter(adapter);
-
+        addPic();
 
         //下拉刷新
         iv_frame.setHeaderView(ptr_refresh);
@@ -88,33 +85,29 @@ public class FlowFragment extends Fragment implements View.OnClickListener {
         gv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                list.remove(position);
+                database.remove(position);
                 adapter.notifyDataSetChanged();
                 return false;
             }
         });
-
-
         return view;
     }
 
-
     //添加固定图片文字
-    public void AddPicture_test() {
-        final String[] default_tags = getResources().getStringArray(R.array.default_tags);
-        int[] test2 = {R.mipmap.start, R.mipmap.popularity, R.mipmap.movie, R.mipmap.travel, R.mipmap.belle, R.mipmap.food, R.mipmap.deary, R.mipmap.nearby2};
+    public void addPic() {
         for (int i = 0; i < 8; i++) {
-            singleFavoriteItem = new SingleFavoriteItem();
-            singleFavoriteItem.setPicture_text(default_tags[i]);
-            singleFavoriteItem.setPicture("res://com.jinhanyu.jack.faceme/" + test2[i]);
-            list.add(singleFavoriteItem);
+          SingleFavoriteItem  singleFavoriteItem = new SingleFavoriteItem();
+            singleFavoriteItem.setPicture_text(tags[i]);
+            singleFavoriteItem.setPicture("res://com.jinhanyu.jack.faceme/"+photos[i]);
+            database.add(singleFavoriteItem);
+            adapter.notifyDataSetChanged();
         }
 
           //点击不同图片——进行跳转
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getActivity(),SearchResultActivity.class).putExtra("search_text",default_tags[position]));
+                startActivity(new Intent(getActivity(),SearchResultActivity.class).putExtra("search_text",tags[position]));
             }
         });
 

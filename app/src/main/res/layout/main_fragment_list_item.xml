@@ -51,6 +51,7 @@
     </LinearLayout>
 
     <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:id="@+id/iv_status_photo"
         android:layout_width="350dp"
         android:layout_height="400dp"
@@ -58,6 +59,11 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="5dp"
         android:background="@color/White"
+        fresco:progressBarImage="@drawable/loading"
+        fresco:progressBarImageScaleType="centerInside"
+        fresco:progressBarAutoRotateInterval="5000"
+        fresco:failureImage="@drawable/failure"
+        fresco:failureImageScaleType="centerInside"
         android:paddingLeft="15dp"
         android:paddingRight="15dp" />
 

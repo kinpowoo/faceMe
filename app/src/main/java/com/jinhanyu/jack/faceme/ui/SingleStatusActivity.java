@@ -21,9 +21,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.FaceMePopupMenu;
+import com.jinhanyu.jack.faceme.MainApplication;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.Utils;
@@ -63,6 +65,9 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         public void handleMessage(Message msg) {
             switch (msg.what){
                 case 1:
+                    Toast.makeText(SingleStatusActivity.this,"下载成功",Toast.LENGTH_SHORT).show();
+                    break;
+                case 2:
                     backgroundAlpha((float)msg.obj);
                     break;
             }
@@ -237,6 +242,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                 startActivity(intent3);
                 break;
             case R.id.iv_single_status_share:
+                MainApplication.showShareRemote(this,status.getPhoto().getUrl(),status.getText());
                 break;
             case R.id.tv_single_status_favoriteNum:
                 Intent intent4=new Intent(this, LikesActivity.class);
@@ -324,7 +330,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                                                 e.printStackTrace();
                                             }
                                             Message msg = mHandler.obtainMessage();
-                                            msg.what = 1;
+                                            msg.what = 2;
                                             alpha += 0.01f;
                                             msg.obj = alpha;
                                             mHandler.sendMessage(msg);
@@ -347,7 +353,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                                         e.printStackTrace();
                                     }
                                     Message msg = mHandler.obtainMessage();
-                                    msg.what = 1;
+                                    msg.what = 2;
                                     //每次减少0.01，精度越高，变暗的效果越流畅
                                     alpha -= 0.01f;
                                     msg.obj = alpha;
@@ -412,7 +418,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         popupMenu.setOnConfirmListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Utils.downPic(status.getPhoto().getUrl());
+                Utils.downPic(status.getPhoto().getUrl(),mHandler);
 
             }
         });

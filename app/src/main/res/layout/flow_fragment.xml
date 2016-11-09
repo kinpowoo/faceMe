@@ -69,18 +69,17 @@
 
         <GridView
             android:id="@+id/gv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:numColumns="2"
+            android:verticalSpacing="2dp"
             android:background="@color/GhostWhite"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:layout_marginTop="5dp"
             android:fastScrollEnabled="true"
             android:horizontalSpacing="20dp"
-            android:numColumns="2"
-            android:scrollbars="none"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="20dp">
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         </GridView>
     </in.srain.cube.views.ptr.PtrFrameLayout>
 

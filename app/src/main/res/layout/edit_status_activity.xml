@@ -73,9 +73,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.facebook.drawee.view.SimpleDraweeView
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/sdv_edit_status_statusPhoto"
                 android:layout_width="400dp"
-                android:layout_height="350dp" />
+                android:layout_height="400dp"
+                fresco:progressBarImage="@drawable/loading"
+                fresco:progressBarImageScaleType="centerInside"
+                fresco:progressBarAutoRotateInterval="5000"
+                fresco:failureImage="@drawable/failure"
+                fresco:failureImageScaleType="centerInside"/>
             <View
                 android:background="@color/SlateGray"
                 android:layout_width="match_parent"
