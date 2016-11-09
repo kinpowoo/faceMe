@@ -2,9 +2,13 @@ package com.jinhanyu.jack.faceme;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
+import android.util.Log;
 
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * <a href="http://d.android.com/tools/testing/testing_android.html">Testing Fundamentals</a>
@@ -98,5 +102,36 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+
+    public void testGetFriendLikes(){
+        AllQueries.getFriendsLikes();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for(AllQueries.FriendLikeItem item: AllQueries.items){
+            Log.i("item", item.toString());
+        }
+
+    }
+
+    public void testGetLikeMes(){
+        AllQueries.getLikeMes();
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for(AllQueries.FriendLikeItem item: AllQueries.items2){
+            Log.i("item", item.toString());
+        }
+
     }
 }
