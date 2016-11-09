@@ -1,0 +1,38 @@
+package com.jinhanyu.jack.faceme.entity;
+
+/**
+ * Created by anzhuo on 2016/11/9.
+ */
+
+public class FriendLikeItem {
+
+    private User friend;
+    private Status status;
+
+    public FriendLikeItem(User friend, Status status) {
+        this.friend = friend;
+        this.status = status;
+    }
+
+    public User getFriend() {
+        return friend;
+    }
+
+    public void setFriend(User friend) {
+        this.friend = friend;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+
+    @Override
+    public String toString() {
+        return friend.getNickname() + "  liked  " + status.getText();
+    }
+}

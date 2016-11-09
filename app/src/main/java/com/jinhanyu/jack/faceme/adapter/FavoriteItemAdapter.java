@@ -1,6 +1,7 @@
 package com.jinhanyu.jack.faceme.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +9,9 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.entity.FriendLikeItem;
 import com.jinhanyu.jack.faceme.entity.Status;
+import com.jinhanyu.jack.faceme.ui.SingleStatusActivity;
 
 import java.util.List;
 
@@ -16,10 +19,10 @@ import java.util.List;
  * Created by anzhuo on 2016/11/9.
  */
 
-public class FavoriteItemAdapter extends CommonAdapter<Status> {
+public class FavoriteItemAdapter extends CommonAdapter<FriendLikeItem> {
 
 
-    public FavoriteItemAdapter(List<Status> data, Context context) {
+    public FavoriteItemAdapter(List<FriendLikeItem> data, Context context) {
         super(data, context);
     }
 
@@ -36,7 +39,18 @@ public class FavoriteItemAdapter extends CommonAdapter<Status> {
         }else {
             viewHold= (ViewHold) view.getTag();
         }
-        final Status status=data.get(position);
+        final FriendLikeItem item=data.get(position);
+
+        viewHold.userPortrait.setImageURI(item.getFriend().getPortrait().getUrl());
+        viewHold.username.setText(item.getFriend().getUsername()+"喜欢了");
+        viewHold.statusPhoto.setImageURI(item.getStatus().getPhoto().getUrl());
+        viewHold.statusPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, SingleStatusActivity.class).
+                        putExtra("statusId",item.getStatus().getObjectId()));
+            }
+        });
 
         return view;
     }

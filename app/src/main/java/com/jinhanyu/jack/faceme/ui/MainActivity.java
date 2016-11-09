@@ -60,6 +60,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private PopupWindow popupWindow;
     private TextView camera, photo, cancel;
 
+    private int tap=1;
+    public int getTap(){
+        return tap;
+    }
+    public void setTap(int loc){
+        this.tap=loc;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
