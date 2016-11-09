@@ -20,6 +20,7 @@ public class FavoriteFragment1 extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.favorite_fragment1, null);
+        listView= (ListView) view.findViewById(R.id.listview);
         return view;
     }
 }

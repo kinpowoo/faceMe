@@ -26,9 +26,10 @@ import java.util.List;
  * Created by anzhuo on 2016/10/18.
  */
 public class FavoriteFragment extends Fragment {
-
+    FavoriteFragment1 child_one;
+    FavoriteFragment1 child_two;
     List<Fragment> fragments;
-    String[] titles = {"关注我的","我关注的"};
+    String[] titles = {"Following","Me"};
 
 
     @Override
@@ -43,8 +44,10 @@ public class FavoriteFragment extends Fragment {
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         fragments = new ArrayList<>();
-        fragments.add(new FavoriteFragment1());
-        fragments.add(new FavoriteFragment1());
+        child_one=new FavoriteFragment1();
+        child_two=new FavoriteFragment1();
+        fragments.add(child_one);
+        fragments.add(child_two);
 
         FavoritePagerAdapter favoritePagerAdapter = new FavoritePagerAdapter(getFragmentManager(),fragments,titles);
         viewPager.setAdapter(favoritePagerAdapter);

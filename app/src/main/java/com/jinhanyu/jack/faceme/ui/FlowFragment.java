@@ -37,7 +37,7 @@ public class FlowFragment extends Fragment implements View.OnClickListener {
 
     final private int[] photos= {R.mipmap.start, R.mipmap.popularity, R.mipmap.movie,
             R.mipmap.travel, R.mipmap.belle, R.mipmap.food, R.mipmap.deary, R.mipmap.nearby2};
-    final private String [] tags={"人气","星动态","小电影","旅行","美女","美食","小宝贝","附近动态"};
+     private String [] tags=getResources().getStringArray(R.array.default_tags);
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.flow_fragment, null);

@@ -33,6 +33,7 @@ import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CountListener;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -42,6 +43,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
     User me = User.getCurrentUser(User.class);
     LinearLayout.LayoutParams params;
     Activity activity;
+    private boolean isFavoriteByMe=false;
     public MainFragmentAdapter(List<Status> data, Context context, Activity activity) {
         super(data, context);
         int width= ScreenUtils.getScreenWidth(context);
@@ -56,7 +58,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             view = LayoutInflater.from(context).inflate(R.layout.main_fragment_list_item, null);
             viewHolder = new ViewHolder();
             viewHolder.userPortrait = (SimpleDraweeView) view.findViewById(R.id.sdv_status_userPortrait);
-            viewHolder.username = (TextView) view.findViewById(R.id.tv_status_username);
+            viewHolder.nickname = (TextView) view.findViewById(R.id.tv_status_nickname);
             viewHolder.postPhoto = (SimpleDraweeView) view.findViewById(R.id.iv_status_photo);
             viewHolder.favoriteIcon = (ImageView) view.findViewById(R.id.iv_status_favorite);
             viewHolder.commentIcon = (ImageView) view.findViewById(R.id.iv_status_comment);
@@ -75,11 +77,22 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         }
         final Status status = data.get(position);
 
-        if (status.isFavoritedByMe()) {
-            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
-        } else {
-            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
-        }
+        BmobQuery<User> query=new BmobQuery<>();
+        query.addWhereRelatedTo("likes",new BmobPointer(status));
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+              for(User u:list){
+                  if(u.getObjectId().equals(Utils.getCurrentUser().getObjectId())){
+                      isFavoriteByMe=true;
+                      viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
+                  }
+              }
+                if(!isFavoriteByMe){
+                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
+                }
+            }
+        });
 
 
         viewHolder.favoriteIcon.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +104,6 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                     //取消收藏
                     relation.remove(me);
                     status.setLikes(relation);
-                    status.setFavoritedByMe(false);
                     status.setFavoriteNum(status.getFavoriteNum()-1);
                     status.update(status.getObjectId(),new UpdateListener() {
                         @Override
@@ -105,7 +117,6 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                     //添加收藏
                     relation.add(me);
                     status.setLikes(relation);
-                    status.setFavoritedByMe(true);
                     status.setFavoriteNum(status.getFavoriteNum()+1);
                     status.update(status.getObjectId(),new UpdateListener() {
                         @Override
@@ -144,14 +155,15 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         viewHolder.postPhoto.setLayoutParams(params);
         viewHolder.postPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
         viewHolder.userPortrait.setImageURI(status.getAuthor().getPortrait().getUrl());
-        viewHolder.username.setText(status.getAuthor().getUsername());
+        viewHolder.nickname.setText(status.getAuthor().getNickname());
         viewHolder.postPhoto.setImageURI(status.getPhoto().getUrl());
-        viewHolder.textBy.setText(status.getAuthor().getUsername()+": ");
+        viewHolder.textBy.setText(status.getAuthor().getNickname()+": ");
         viewHolder.text.setText(status.getText());
         int tag_count = status.getTags().size() > 3 ? 3 : status.getTags().size();
         viewHolder.tag_one.setVisibility(View.INVISIBLE);
         viewHolder.tag_two.setVisibility(View.INVISIBLE);
         viewHolder.tag_three.setVisibility(View.INVISIBLE);
+
         if(tag_count>0){
             viewHolder.tag_one.setVisibility(View.VISIBLE);
             viewHolder.tag_one.setText(status.getTags().get(0));
@@ -205,7 +217,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                 MainApplication.showShareRemote(context,status.getPhoto().getUrl(),status.getText());
             }
         });
-        viewHolder.username.setOnClickListener(new View.OnClickListener() {
+        viewHolder.nickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(context, UserProfileActivity.class);
@@ -242,7 +254,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
     }
     class ViewHolder {
         protected SimpleDraweeView userPortrait, postPhoto;
-        protected TextView username, favoriteNum, textBy, text, commentNum, postTime,tag_one,tag_two,tag_three;
+        protected TextView nickname, favoriteNum, textBy, text, commentNum, postTime,tag_one,tag_two,tag_three;
         protected ImageView favoriteIcon, commentIcon, shareIcon;
 
     }

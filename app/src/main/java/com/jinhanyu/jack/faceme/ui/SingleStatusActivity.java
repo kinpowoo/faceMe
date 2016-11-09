@@ -262,7 +262,6 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                     //取消收藏
                     relation.remove(currentUser);
                     status.setLikes(relation);
-                    status.setFavoritedByMe(false);
                     status.setFavoriteNum(status.getFavoriteNum()-1);
                     status.update(new UpdateListener() {
                         @Override
@@ -276,7 +275,6 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                     //添加收藏
                     relation.add(currentUser);
                     status.setLikes(relation);
-                    status.setFavoritedByMe(true);
                     status.setFavoriteNum(status.getFavoriteNum()+1);
                     status.update(new UpdateListener() {
                         @Override
