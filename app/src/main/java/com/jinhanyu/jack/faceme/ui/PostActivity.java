@@ -211,7 +211,6 @@ public class PostActivity extends Activity implements View.OnClickListener {
                         status.setAuthor(User.getCurrentUser(User.class));
                         status.setPhoto(bmobFile);
                         status.setText(content);
-                        status.setFavoritedByMe(false);
                         List<String> tt = getTags();
                         if (tt.size()==0) {
                             tt.add("FaceMe");

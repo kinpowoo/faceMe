@@ -33,6 +33,7 @@ import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CountListener;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -42,6 +43,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
     User me = User.getCurrentUser(User.class);
     LinearLayout.LayoutParams params;
     Activity activity;
+    private boolean isFavoriteByMe=false;
     public MainFragmentAdapter(List<Status> data, Context context, Activity activity) {
         super(data, context);
         int width= ScreenUtils.getScreenWidth(context);
@@ -75,11 +77,22 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         }
         final Status status = data.get(position);
 
-        if (status.isFavoritedByMe()) {
-            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
-        } else {
-            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
-        }
+        BmobQuery<User> query=new BmobQuery<>();
+        query.addWhereRelatedTo("likes",new BmobPointer(status));
+        query.findObjects(new FindListener<User>() {
+            @Override
+            public void done(List<User> list, BmobException e) {
+              for(User u:list){
+                  if(u.getObjectId().equals(Utils.getCurrentUser().getObjectId())){
+                      isFavoriteByMe=true;
+                      viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
+                  }
+              }
+                if(!isFavoriteByMe){
+                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
+                }
+            }
+        });
 
 
         viewHolder.favoriteIcon.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +104,6 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                     //取消收藏
                     relation.remove(me);
                     status.setLikes(relation);
-                    status.setFavoritedByMe(false);
                     status.setFavoriteNum(status.getFavoriteNum()-1);
                     status.update(status.getObjectId(),new UpdateListener() {
                         @Override
@@ -105,7 +117,6 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                     //添加收藏
                     relation.add(me);
                     status.setLikes(relation);
-                    status.setFavoritedByMe(true);
                     status.setFavoriteNum(status.getFavoriteNum()+1);
                     status.update(status.getObjectId(),new UpdateListener() {
                         @Override

@@ -36,6 +36,8 @@ public class FavoriteItemAdapter extends CommonAdapter<Status> {
         }else {
             viewHold= (ViewHold) view.getTag();
         }
+        final Status status=data.get(position);
+
         return view;
     }
 
