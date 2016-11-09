@@ -34,7 +34,6 @@ import java.util.concurrent.Executors;
  * Created by jianbo on 2016/10/19.
  */
 public class Utils {
-    private static User currentUser = User.getCurrentUser(User.class);
     private static ExecutorService threadPool= Executors.newFixedThreadPool(1);
 
     public static String calculTime(String time) throws ParseException {
@@ -70,7 +69,7 @@ public class Utils {
     }
 
     public static User getCurrentUser(){
-        return currentUser;
+        return User.getCurrentUser(User.class);
     }
 
     public static void setETColor(String str ,int start ,int end , int color , EditText tv){

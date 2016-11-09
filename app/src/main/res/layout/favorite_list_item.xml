@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+ <com.facebook.drawee.view.SimpleDraweeView
+     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+     android:id="@+id/sdv_favorite_item_userPortrait"
+     fresco:progressBarImage="@drawable/loading"
+     fresco:progressBarImageScaleType="centerInside"
+     fresco:progressBarAutoRotateInterval="5000"
+     fresco:failureImage="@drawable/failure"
+     fresco:failureImageScaleType="centerInside"
+     fresco:roundAsCircle="true"
+     android:layout_marginTop="14dp"
+     android:layout_marginLeft="20dp"
+     android:layout_width="45dp"
+     android:layout_height="45dp" />
+    <TextView
+        android:layout_alignTop="@+id/sdv_favorite_item_userPortrait"
+        android:layout_toRightOf="@+id/sdv_favorite_item_userPortrait"
+        android:id="@+id/tv_favorite_item_username"
+        android:layout_marginLeft="8dp"
+        android:paddingRight="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <com.facebook.drawee.view.SimpleDraweeView
+        xmlns:fresco="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/sdv_favorite_item_statusPhoto"
+        fresco:progressBarImage="@drawable/loading"
+        fresco:progressBarImageScaleType="centerInside"
+        fresco:progressBarAutoRotateInterval="5000"
+        fresco:failureImage="@drawable/failure"
+        fresco:failureImageScaleType="centerInside"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="8dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+</RelativeLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/WhiteSmoke"
@@ -15,7 +16,6 @@
         android:paddingTop="5dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
-            xmlns:fresco="http://schemas.android.com/apk/res-auto"
             android:id="@+id/sdv_status_userPortrait"
             android:layout_width="60dp"
             android:layout_height="60dp"
@@ -24,13 +24,12 @@
             fresco:roundAsCircle="true" />
 
         <TextView
-            android:id="@+id/tv_status_username"
+            android:id="@+id/tv_status_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
             android:gravity="center"
-            android:text="外星人"
             android:textColor="@color/Black"
             android:textSize="20sp" />
 

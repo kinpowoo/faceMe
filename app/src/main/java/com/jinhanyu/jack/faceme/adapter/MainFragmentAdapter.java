@@ -56,7 +56,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             view = LayoutInflater.from(context).inflate(R.layout.main_fragment_list_item, null);
             viewHolder = new ViewHolder();
             viewHolder.userPortrait = (SimpleDraweeView) view.findViewById(R.id.sdv_status_userPortrait);
-            viewHolder.username = (TextView) view.findViewById(R.id.tv_status_username);
+            viewHolder.nickname = (TextView) view.findViewById(R.id.tv_status_nickname);
             viewHolder.postPhoto = (SimpleDraweeView) view.findViewById(R.id.iv_status_photo);
             viewHolder.favoriteIcon = (ImageView) view.findViewById(R.id.iv_status_favorite);
             viewHolder.commentIcon = (ImageView) view.findViewById(R.id.iv_status_comment);
@@ -144,14 +144,15 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         viewHolder.postPhoto.setLayoutParams(params);
         viewHolder.postPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
         viewHolder.userPortrait.setImageURI(status.getAuthor().getPortrait().getUrl());
-        viewHolder.username.setText(status.getAuthor().getUsername());
+        viewHolder.nickname.setText(status.getAuthor().getNickname());
         viewHolder.postPhoto.setImageURI(status.getPhoto().getUrl());
-        viewHolder.textBy.setText(status.getAuthor().getUsername()+": ");
+        viewHolder.textBy.setText(status.getAuthor().getNickname()+": ");
         viewHolder.text.setText(status.getText());
         int tag_count = status.getTags().size() > 3 ? 3 : status.getTags().size();
         viewHolder.tag_one.setVisibility(View.INVISIBLE);
         viewHolder.tag_two.setVisibility(View.INVISIBLE);
         viewHolder.tag_three.setVisibility(View.INVISIBLE);
+
         if(tag_count>0){
             viewHolder.tag_one.setVisibility(View.VISIBLE);
             viewHolder.tag_one.setText(status.getTags().get(0));
@@ -205,7 +206,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                 MainApplication.showShareRemote(context,status.getPhoto().getUrl(),status.getText());
             }
         });
-        viewHolder.username.setOnClickListener(new View.OnClickListener() {
+        viewHolder.nickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(context, UserProfileActivity.class);
@@ -242,7 +243,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
     }
     class ViewHolder {
         protected SimpleDraweeView userPortrait, postPhoto;
-        protected TextView username, favoriteNum, textBy, text, commentNum, postTime,tag_one,tag_two,tag_three;
+        protected TextView nickname, favoriteNum, textBy, text, commentNum, postTime,tag_one,tag_two,tag_three;
         protected ImageView favoriteIcon, commentIcon, shareIcon;
 
     }

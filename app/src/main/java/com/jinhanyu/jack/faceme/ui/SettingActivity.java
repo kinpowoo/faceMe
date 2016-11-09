@@ -90,7 +90,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onClick(View v) {
                         User.logOut();   //清除缓存用户对象
-                        BmobUser currentUser = User.getCurrentUser(); // 现在的currentUser是null了
+//                        BmobUser currentUser = User.getCurrentUser(); // 现在的currentUser是null了
                         Intent intent1=new Intent(SettingActivity.this,LoginActivity.class);
                         startActivity(intent1);
                     }
