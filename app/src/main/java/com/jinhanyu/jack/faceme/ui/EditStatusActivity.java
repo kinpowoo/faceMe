@@ -6,16 +6,20 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.entity.Status;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.QueryListener;
 import cn.bmob.v3.listener.UpdateListener;
+
 
 /**
  * Created by jianbo on 2016/10/22.
@@ -26,18 +30,22 @@ public class EditStatusActivity extends AppCompatActivity implements View.OnClic
     private EditText statusText;
     private String statusId;
     private Status status;
+    private LinearLayout.LayoutParams params;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_status_activity);
+        int width= ScreenUtils.getScreenWidth(this);
+        params = new LinearLayout.LayoutParams(width,width);
         cancel= (TextView) findViewById(R.id.tv_edit_status_cancel);
         commit= (TextView) findViewById(R.id.tv_edit_status_commit);
         username= (TextView) findViewById(R.id.tv_edit_status_username);
         userPortrait= (SimpleDraweeView) findViewById(R.id.sdv_edit_status_userPortrait);
         statusPhoto= (SimpleDraweeView) findViewById(R.id.sdv_edit_status_statusPhoto);
         statusText= (EditText) findViewById(R.id.et_edit_status_statusText);
-
+        statusPhoto.setLayoutParams(params);
+        statusPhoto.setScaleType(ImageView.ScaleType.FIT_XY);
 
         cancel.setOnClickListener(this);
         commit.setOnClickListener(this);
@@ -84,6 +92,7 @@ public class EditStatusActivity extends AppCompatActivity implements View.OnClic
                     public void done(BmobException e) {
                         startActivity(new Intent(EditStatusActivity.this,
                                 SingleStatusActivity.class).putExtra("statusId",status.getObjectId()));
+                        finish();
                     }
                 });
                 break;

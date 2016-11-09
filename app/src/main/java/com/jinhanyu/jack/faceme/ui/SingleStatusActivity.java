@@ -57,6 +57,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
     private User currentUser=Utils.getCurrentUser();
     private PopupWindow popupWindow;
     private Float alpha=1.0f;
+    private LinearLayout.LayoutParams params;
 
     private Handler mHandler=new Handler() {
         public void handleMessage(Message msg) {
@@ -75,7 +76,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.single_status_activity);
         int width= ScreenUtils.getScreenWidth(this);
-        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(width,width);
+        params=new LinearLayout.LayoutParams(width,width);
 
         back= (ImageView) findViewById(R.id.iv_single_status_back);
         option= (ImageView) findViewById(R.id.iv_single_status_option);
@@ -391,9 +392,8 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
             case R.id.tv_single_status_option_menu_edit:
                 Intent intent6=new Intent(this,EditStatusActivity.class);
                 intent6.putExtra("statusId",status.getObjectId());
-                popupWindow.dismiss();
                 startActivity(intent6);
-
+                finish();
                 break;
         }
     }
@@ -413,6 +413,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onClick(View v) {
                 Utils.downPic(status.getPhoto().getUrl());
+
             }
         });
     }
@@ -424,12 +425,4 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         return false;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(status!=null){
-            fillData(status);
-        }
-
-    }
 }
