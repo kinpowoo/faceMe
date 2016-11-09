@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.jinhanyu.jack.faceme.R;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -203,7 +204,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         File file = new File(dir, str + ".jpg");
         photoPath =file.getAbsolutePath();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT,photoPath);
+        Uri uri=Uri.fromFile(file);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT,uri);
         startActivityForResult(intent, 1);
     }
 
@@ -241,9 +243,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             try {
                 b = new FileOutputStream(file);
-                Bitmap bitmap2 = BitmapFactory.decodeFile(photoPath);
+                Bitmap bitmap2 = BitmapFactory.decodeStream(new FileInputStream(photoPath));
                 Bitmap bitmap = scaleImg(bitmap2,400);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件
+                File file1=new File(photoPath);
+                if(file1.exists()){
+                    file1.delete();
+                }
                 startActivity(new Intent(this, PostActivity.class).putExtra("pic",file.getAbsolutePath()));
             } catch (FileNotFoundException e) {
                 Log.e("msg",e.getMessage());
