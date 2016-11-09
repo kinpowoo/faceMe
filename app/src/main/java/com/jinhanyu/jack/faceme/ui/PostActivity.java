@@ -244,6 +244,7 @@ public class PostActivity extends Activity implements View.OnClickListener {
 
     }
 
+
     public void showPicture() {
         picPath = getIntent().getStringExtra("pic");
         surfaceview.setImageBitmap(BitmapFactory.decodeFile(picPath));

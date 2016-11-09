@@ -1,21 +1,33 @@
 package com.jinhanyu.jack.faceme.ui;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.jinhanyu.jack.faceme.R;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -42,11 +54,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private UserFragment userFragment;
     private ImageView surfaceview;
 
+    //动态加载视图相关
+    private View view;
+    private PopupWindow popupWindow;
+    private TextView camera, photo, cancel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        //pop弹窗控件初始化
+        view = LayoutInflater.from(MainActivity.this).inflate(R.layout.postchoose, null);
+        camera = (TextView) view.findViewById(R.id.camera);
+        photo = (TextView) view.findViewById(R.id.photo);
+        cancel = (TextView) view.findViewById(R.id.cancel);
 
         rb_mainActivity_mainFragment = (RadioButton) findViewById(R.id.rb_mainActivity_mainFragment);
         rb_mainActivity_flowFragment = (RadioButton) findViewById(R.id.rb_mainActivity_flowFragment);
@@ -60,6 +82,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_mainActivity_postFragment.setOnClickListener(this);
         rb_mainActivity_favoriteFragment.setOnClickListener(this);
         rb_mainActivity_userFragment.setOnClickListener(this);
+        camera.setOnClickListener(this);
+        cancel.setOnClickListener(this);
+        photo.setOnClickListener(this);
         ShowFragment(0);
     }
 
@@ -129,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ShowFragment(1);
                 break;
             case R.id.rb_mainActivity_postFragment:
-                gototakephoto();
+                getPost();
                 break;
             case R.id.rb_mainActivity_favoriteFragment:
                 ShowFragment(2);
@@ -137,23 +162,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.rb_mainActivity_userFragment:
                 ShowFragment(3);
                 break;
+            case R.id.camera:
+                popupWindow.dismiss();
+                gototakephoto();
+                break;
+            case R.id.photo:
+                popupWindow.dismiss();
+                getPhotopicture();
+                break;
+            case R.id.cancel:
+                popupWindow.dismiss();
+                break;
         }
     }
 
+    protected Bitmap scaleImg(Bitmap bm, int newWidth) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        // 计算缩放比例
+        float scaleWidth = ((float) newWidth) / width;
+        // 取得想要缩放的matrix参数
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleWidth);
+        // 得到新的图片
+        return Bitmap.createBitmap(bm, 0, 0, width, height, matrix,true);
+    }
+
+    private String photoPath;
 
     //调用手机摄像头
     public void gototakephoto() {
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        String str = null;
+        Date date = null;
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");//获取当前时间，进一步转化为字符串
+        date = new Date();
+        str = format.format(date);
+        File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "myImage");
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        File file = new File(dir, str + ".jpg");
+        photoPath =file.getAbsolutePath();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT,photoPath);
         startActivityForResult(intent, 1);
     }
+
+    //获取手机相册图片
+    public void getPhotopicture() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+        intent.setType("image/*");
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, 2);
+
+    }
+
 
     //重写onActivityResult方法
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            ByteArrayOutputStream outputStream= (ByteArrayOutputStream) data.getExtras().get("data");
-            Bitmap bitmap= BitmapFactory.decodeByteArray(outputStream.toByteArray(),0,outputStream.toByteArray().length);
+
             String sdStatus = Environment.getExternalStorageState();
             if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
                 return;
@@ -164,19 +233,59 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");//获取当前时间，进一步转化为字符串
             date = new Date();
             str = format.format(date);
-            File dir = new File( Environment.getExternalStorageDirectory().getAbsolutePath()+File.separator+"myImage");
-            if(!dir.exists()){
+            File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "myImage");
+            if (!dir.exists()) {
                 dir.mkdirs();
             }
-            File file = new File(dir,str+".jpg");
+            File file = new File(dir, str + ".jpg");
 
             try {
                 b = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG,100, b);// 把数据写入文件
-                startActivity(new Intent(this,PostActivity.class).putExtra("pic",file.getAbsolutePath()));
+                Bitmap bitmap2 = BitmapFactory.decodeFile(photoPath);
+                Bitmap bitmap = scaleImg(bitmap2,400);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, b);// 把数据写入文件
+                startActivity(new Intent(this, PostActivity.class).putExtra("pic",file.getAbsolutePath()));
             } catch (FileNotFoundException e) {
+                Log.e("msg",e.getMessage());
                 e.printStackTrace();
             } finally {
+                try {
+                    b.flush();
+                    b.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } else if (requestCode == 2 && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            ContentResolver cr = this.getContentResolver();
+            String sdStatus = Environment.getExternalStorageState();
+            if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
+                return;
+            }
+            FileOutputStream b = null;
+            String str = null;
+            Date date = null;
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");//获取当前时间，进一步转化为字符串
+            date = new Date();
+            str = format.format(date);
+            File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "myImage");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File file = new File(dir, str + ".jpg");
+
+            try {
+                b = new FileOutputStream(file);
+                Bitmap bitmap2 = BitmapFactory.decodeStream(cr.openInputStream(uri));
+                Bitmap bitmap = scaleImg(bitmap2,400);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 60, b);// 把数据写入文件
+                System.out.println("the bmp toString: " + bitmap);
+                startActivity(new Intent(this, PostActivity.class).putExtra("pic", file.getAbsolutePath()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }finally {
                 try {
                     b.flush();
                     b.close();
@@ -188,4 +297,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    //pop弹窗背景的改变
+    private void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = MainActivity.this.getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        MainActivity.this.getWindow().setAttributes(lp);
+        MainActivity.this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    //拍照、相册
+    public void getPost() {
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.setTouchable(true);
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setAnimationStyle(R.style.PopupWindow_menu);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 90);
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1.0f);
+            }
+        });
+        backgroundAlpha(0.5f);
+    }
+
+    //Uri转换成文件路径
+    public File getFile( Uri uri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+
+        Cursor actualimagecursor = managedQuery(uri, proj, null, null, null);
+
+        int actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+
+        actualimagecursor.moveToFirst();
+
+        String img_path = actualimagecursor.getString(actual_image_column_index);
+
+        File file = new File(img_path);
+        return file;
+    }
 }

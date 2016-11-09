@@ -73,8 +73,6 @@ public class AddFriend extends Activity implements View.OnClickListener {
                     @Override
                     public void run() {
                         iv_frame.refreshComplete();
-                        focus_num.setText("500");
-                        fans_num.setText("9800000");
 
                         //刷新代码写在这
                     }
