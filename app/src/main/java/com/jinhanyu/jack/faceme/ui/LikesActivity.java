@@ -1,8 +1,11 @@
 package com.jinhanyu.jack.faceme.ui;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -44,7 +47,15 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
     private ImageView back;
     private String type;
     private Bundle bundle;
-
+    private ProgressDialog dialog;
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                dialog.dismiss();
+            }
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,11 +73,11 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
 
         bundle=getIntent().getExtras();
         type=bundle.getString("type");
+        dialog=ProgressDialog.show(this,null,"正在加载中...");
         switch (type){
             case "followingNum":
                 title.setText("关注列表");
                String userId=bundle.getString("userId");
-
                 BmobQuery<User> query=new BmobQuery<>();
                 query.getObject(userId, new QueryListener<User>() {
                     @Override
@@ -78,6 +89,7 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
                                 @Override
                                 public void done(List<User> data, BmobException e) {
                                     list.addAll(data);
+                                    handler.sendEmptyMessage(1);
                                     adapter.notifyDataSetChanged();
                                 }
                             });
@@ -98,6 +110,7 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
                     public void done(List<User> data, BmobException e) {
                         list.clear();
                         list.addAll(data);
+                        handler.sendEmptyMessage(1);
                         adapter.notifyDataSetChanged();
                     }
                 });
@@ -128,6 +141,7 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
                         if (e == null) {
                             list.clear();
                             list.addAll(data);
+                            handler.sendEmptyMessage(1);
                             adapter.notifyDataSetChanged();
                         }
                     }
@@ -181,6 +195,7 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
             @Override
             public void done(List<User> data, BmobException e) {
                 list.addAll(data);
+                handler.sendEmptyMessage(1);
                 adapter.notifyDataSetChanged();
             }
         });
