@@ -46,8 +46,9 @@ public class AddFriendNum extends Activity implements View.OnClickListener{
                 if(accountNum==null||accountNum.equals("")){
                     Toast.makeText(AddFriendNum.this,"请输入你要查找的用户名",Toast.LENGTH_SHORT).show();
                 }else {
+
                     BmobQuery<User> query = new BmobQuery<>();
-                    query.addWhereEqualTo("username", accountNum);
+                    query.addWhereEqualTo("nickname", accountNum);
                     query.findObjects(new FindListener<User>() {
                         @Override
                         public void done(List<User> list, BmobException e) {

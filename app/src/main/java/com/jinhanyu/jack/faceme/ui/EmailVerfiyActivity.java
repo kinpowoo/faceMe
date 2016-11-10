@@ -3,14 +3,13 @@ package com.jinhanyu.jack.faceme.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jinhanyu.jack.faceme.ClearEditText;
+import com.jinhanyu.jack.faceme.CustomProgress;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.entity.User;
@@ -57,6 +56,7 @@ public class EmailVerfiyActivity extends Activity implements View.OnClickListene
                 finish();
                 break;
             case R.id.tv_email_verify_commit:
+                CustomProgress.show(this, "正在发送邮件....");
                 final String email=emailAddress.getText().toString();
                 if(emailRecieve.equals(email)){
                     if(currentUser.getEmailVerified()){
@@ -68,6 +68,7 @@ public class EmailVerfiyActivity extends Activity implements View.OnClickListene
                                 Toast.makeText(EmailVerfiyActivity.this, "请求验证邮件成功，请到"
                                         + emailRecieve + "邮箱中进行激活。",Toast.LENGTH_SHORT).show();
                               setResult(RESULT_OK,new Intent().putExtra("email",emailAddress.getText().toString()));
+                                CustomProgress.unshow();
                               finish();
                             }
                         });
