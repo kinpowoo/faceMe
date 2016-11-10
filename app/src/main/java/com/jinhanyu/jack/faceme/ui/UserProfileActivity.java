@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -43,10 +44,11 @@ import cn.bmob.v3.listener.UpdateListener;
 /**
  * Created by jianbo on 2016/10/20.
  */
-public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener{
+public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener,
+        RadioGroup.OnCheckedChangeListener,AbsListView.OnScrollListener{
     private ImageView back,option;
     private TextView username,nickname,statusNum,followingNum,followersNum;
-    private LinearLayout followingParent,followerParent;
+    private LinearLayout followingParent,followerParent,header;
     private RadioGroup radioGroup;
     private Button isFollowing;
     private SimpleDraweeView userPortrait;
@@ -88,6 +90,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         userPortrait= (SimpleDraweeView)findViewById(R.id.sdv_userProfile_userPortrait);
         gridView= (GridView)findViewById(R.id.gv_userProfile_photos);
         listView= (ListView) findViewById(R.id.lv_userProfile_photos);
+        header= (LinearLayout) findViewById(R.id.ll_header);
 
         back.setOnClickListener(this);
         option.setOnClickListener(this);
@@ -223,6 +226,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             case R.id.rb_userProfile_listView:
                 gridView.setVisibility(View.GONE);
                 listView.setVisibility(View.VISIBLE);
+                listView.setOnScrollListener(this);
                 loadStatus(userIncoming,2);
                 break;
         }
@@ -337,5 +341,19 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         if(userIncoming!=null) {
             fillData(userIncoming);
         }
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if(firstVisibleItem==0){
+            header.setVisibility(View.VISIBLE);
+        }else {
+            header.setVisibility(View.GONE);
+        }
+
     }
 }

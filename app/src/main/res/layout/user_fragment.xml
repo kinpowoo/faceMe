@@ -30,6 +30,12 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_header"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:background="@color/White"
         android:layout_marginTop="1dp"
@@ -124,6 +130,7 @@
                 android:layout_height="35dp" />
         </LinearLayout>
     </LinearLayout>
+
     <TextView
         android:id="@+id/tv_userFragment_nickname"
         android:paddingTop="10dp"
@@ -135,6 +142,7 @@
         android:background="@color/White"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <RadioGroup
         android:id="@+id/rg_userFragment"
         android:orientation="horizontal"
@@ -161,7 +169,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RadioGroup>
-
+    </LinearLayout>
        <FrameLayout
            android:layout_marginTop="1dp"
            android:paddingTop="10dp"

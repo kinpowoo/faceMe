@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -38,7 +39,7 @@ import cn.bmob.v3.listener.FindListener;
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class UserFragment extends Fragment implements View.OnClickListener,RadioGroup.OnCheckedChangeListener{
+public class UserFragment extends Fragment implements View.OnClickListener,RadioGroup.OnCheckedChangeListener,AbsListView.OnScrollListener{
     private ImageView addFriend,settings;
     private TextView username,nickname,statusNum,followingNum,followersNum;
     private LinearLayout followingParent,followerParent;
@@ -51,6 +52,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
     private GridViewAdapter adapter;
     private MainFragmentAdapter listAdapter;
     private List<Status> list;
+    private LinearLayout header;
     private User me= Utils.getCurrentUser();
     Handler handler=new Handler(){
         @Override
@@ -77,6 +79,10 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
         userPortrait= (SimpleDraweeView) view.findViewById(R.id.sdv_userFragment_userPortrait);
         gridView= (GridView) view.findViewById(R.id.gv_userFragment_photos);
         listView= (ListView) view.findViewById(R.id.lv_userFragment_photos);
+        header= (LinearLayout) view.findViewById(R.id.ll_header);
+
+
+
 
         bar= (ProgressBar) view.findViewById(R.id.pb_userFragment);
 
@@ -184,6 +190,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
             case R.id.rb_userFragment_listView:
                 gridView.setVisibility(View.GONE);
                 listView.setVisibility(View.VISIBLE);
+                listView.setOnScrollListener(this);
                 loadStatus(2);
                 break;
         }
@@ -214,5 +221,18 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
     @Override
     public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if(firstVisibleItem==0){
+            header.setVisibility(View.VISIBLE);
+        }else {
+            header.setVisibility(View.GONE);
+        }
     }
 }
