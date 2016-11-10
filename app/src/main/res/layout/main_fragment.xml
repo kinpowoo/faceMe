@@ -34,12 +34,19 @@
         cube_ptr:ptr_pull_to_fresh="false"
         cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2"
         cube_ptr:ptr_resistance="1.5">
-
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ProgressBar
+                android:id="@+id/pb_main"
+                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         <ListView
             android:id="@+id/lv_mainFragment"
             android:dividerHeight="5dp"
-
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        </FrameLayout>
     </in.srain.cube.views.ptr.PtrFrameLayout>
 </LinearLayout>

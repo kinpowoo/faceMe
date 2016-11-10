@@ -16,6 +16,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -58,12 +59,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private User userIncoming;
     private User currentUser=Utils.getCurrentUser();
     private PopupMenu optionMenu;
-    private ProgressDialog dialog;
+    private ProgressBar bar;
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1){
-                dialog.dismiss();
+                bar.setVisibility(View.GONE);
             }
         }
     };
@@ -82,11 +83,12 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         followerParent= (LinearLayout) findViewById(R.id.ll_userProfile_followerNum);
         followingParent= (LinearLayout) findViewById(R.id.ll_userProfile_followingNum);
         radioGroup= (RadioGroup)findViewById(R.id.rg_userProfile);
+        bar= (ProgressBar) findViewById(R.id.pb_userProfile);
         isFollowing= (Button)findViewById(R.id.btn_userProfile_isFollowing);
         userPortrait= (SimpleDraweeView)findViewById(R.id.sdv_userProfile_userPortrait);
         gridView= (GridView)findViewById(R.id.gv_userProfile_photos);
         listView= (ListView) findViewById(R.id.lv_userProfile_photos);
-        dialog=ProgressDialog.show(this,null,"正在获取信息...");
+
         back.setOnClickListener(this);
         option.setOnClickListener(this);
         followingParent.setOnClickListener(this);

@@ -1,6 +1,8 @@
 package com.jinhanyu.jack.faceme.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.jinhanyu.jack.faceme.Ptr_refresh;
@@ -40,15 +43,23 @@ public class MainFragment extends Fragment{
     private PtrFrameLayout ptrFrameLayout;
     private Ptr_refresh ptr_refresh;
     private User me= User.getCurrentUser(User.class);
-
+    private ProgressBar bar;
     String lastFetchDate;
-
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==2){
+                bar.setVisibility(View.GONE);
+            }
+        }
+    };
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.main_fragment,null);
         listView= (ListView) view.findViewById(R.id.lv_mainFragment);
         ptrFrameLayout= (PtrFrameLayout) view.findViewById(R.id.iv_mainFragment_ptrFrame);
         ptr_refresh=new Ptr_refresh(getActivity());
+        bar= (ProgressBar) view.findViewById(R.id.pb_main);
         list=new ArrayList<>();
         adapter=new MainFragmentAdapter(list,getActivity(),getActivity());
         listView.setAdapter(adapter);
@@ -142,7 +153,7 @@ public class MainFragment extends Fragment{
             @Override
             public void done(List<Status> data, BmobException e) {
                 lastFetchDate = data.get(0).getCreatedAt();
-                Log.i("lastFetchDate",lastFetchDate);
+                handler.sendEmptyMessage(2);
                 list.addAll(data);
                 adapter.notifyDataSetChanged();
             }

@@ -2,6 +2,7 @@ package com.jinhanyu.jack.faceme.ui;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.adapter.FavoriteItemAdapter;
@@ -32,24 +34,25 @@ public class FavoriteFragment1 extends Fragment {
     private ListView listView;
     private FavoriteItemAdapter adapter;
     public  List<FriendLikeItem> items;
-
+    private ProgressBar bar;
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==3){
+                bar.setVisibility(View.GONE);
+            }
+        }
+    };
 
 
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.favorite_fragment1, null);
         listView= (ListView) view.findViewById(R.id.listview);
-
+        bar= (ProgressBar) view.findViewById(R.id.pb_favorite);
         items= Collections.synchronizedList(new ArrayList<FriendLikeItem>());
         adapter = new FavoriteItemAdapter(items,getActivity());
         listView.setAdapter(adapter);
         changeFragment();
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-////                Log.i("items",items.toString());
-//                adapter.notifyDataSetChanged();
-//            }
-//        },5000);
         return view;
     }
 
@@ -90,11 +93,12 @@ public class FavoriteFragment1 extends Fragment {
                             for(User likeMeUser: likeMeUsers){
                                 FriendLikeItem item = new FriendLikeItem(likeMeUser,status);
                                 items.add(item);
-                                Log.i("item1", item.toString());
+//                                Log.i("item1", item.toString());
                             }
 
                             if(queryCounter>= list.size()){
                                 Collections.sort(items);
+                                handler.sendEmptyMessage(3);
                                 adapter.notifyDataSetChanged();
                             }
                         }
@@ -131,12 +135,12 @@ public class FavoriteFragment1 extends Fragment {
                             queryCounter++;
                             for(Status status: list){
                                 FriendLikeItem item = new FriendLikeItem(friend,status);
-                                Log.i("item",item.toString());
                                 items.add(item);
                             }
 
                             if(queryCounter>= friendList.size()){
                                 Collections.sort(items);
+                                handler.sendEmptyMessage(3);
                                 adapter.notifyDataSetChanged();
                             }
 

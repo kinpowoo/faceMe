@@ -168,6 +168,11 @@
            android:layout_width="match_parent"
            android:background="@color/White"
            android:layout_height="match_parent">
+           <ProgressBar
+               android:id="@+id/pb_userFragment"
+               android:layout_gravity="center_vertical"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
            <GridView
                android:id="@+id/gv_userFragment_photos"
                android:numColumns="3"

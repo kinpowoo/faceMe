@@ -14,6 +14,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
@@ -45,17 +46,17 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
     private Button editProfile;
     private SimpleDraweeView userPortrait;
     private GridView gridView;
+    private ProgressBar bar;
     private ListView listView;
     private GridViewAdapter adapter;
     private MainFragmentAdapter listAdapter;
     private List<Status> list;
     private User me= Utils.getCurrentUser();
-    private ProgressDialog dialog;
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1){
-                dialog.dismiss();
+                bar.setVisibility(View.GONE);
             }
         }
     };
@@ -76,7 +77,9 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
         userPortrait= (SimpleDraweeView) view.findViewById(R.id.sdv_userFragment_userPortrait);
         gridView= (GridView) view.findViewById(R.id.gv_userFragment_photos);
         listView= (ListView) view.findViewById(R.id.lv_userFragment_photos);
-        dialog=ProgressDialog.show(getActivity(),null,"正在获取信息...");
+
+        bar= (ProgressBar) view.findViewById(R.id.pb_userFragment);
+
         addFriend.setOnClickListener(this);
         settings.setOnClickListener(this);
         followingParent.setOnClickListener(this);
@@ -211,6 +214,5 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
     @Override
     public void onResume() {
         super.onResume();
-        fillData();
     }
 }
