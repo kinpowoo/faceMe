@@ -11,17 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jinhanyu.jack.faceme.ClearEditText;
 import com.jinhanyu.jack.faceme.R;
-import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.adapter.LikesAdapter;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
@@ -134,7 +130,7 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
                 title.setText("查询结果");
                 String accountNum=bundle.getString("result");
                 BmobQuery<User> query3 = new BmobQuery<>();
-                query3.addWhereEqualTo("username", accountNum);
+                query3.addWhereEqualTo("nickname", accountNum);
                 query3.findObjects(new FindListener<User>() {
                     @Override
                     public void done(List<User> data, BmobException e) {

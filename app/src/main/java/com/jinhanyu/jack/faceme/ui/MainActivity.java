@@ -2,7 +2,6 @@ package com.jinhanyu.jack.faceme.ui;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -335,21 +334,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         backgroundAlpha(0.5f);
-    }
-
-    //Uri转换成文件路径
-    public File getFile( Uri uri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-
-        Cursor actualimagecursor = managedQuery(uri, proj, null, null, null);
-
-        int actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-
-        actualimagecursor.moveToFirst();
-
-        String img_path = actualimagecursor.getString(actual_image_column_index);
-
-        File file = new File(img_path);
-        return file;
     }
 }

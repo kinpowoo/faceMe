@@ -15,8 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -51,7 +49,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class SingleStatusActivity extends AppCompatActivity implements View.OnClickListener,View.OnLongClickListener{
     private ImageView back,option,favoriteIcon,commentIcon,shareIcon;
     private SimpleDraweeView userPortrait,statusPhoto;
-    private TextView favoriteNum,textBy,text,commentNum,postTime,username;
+    private TextView favoriteNum,textBy,text,commentNum,postTime,nickname;
     private String statusId;
     private Status status;
     private View menuView;
@@ -101,7 +99,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         text= (TextView) findViewById(R.id.tv_single_status_text);
         commentNum= (TextView) findViewById(R.id.tv_single_status_commentNum);
         postTime= (TextView) findViewById(R.id.tv_single_status_postTime);
-        username= (TextView) findViewById(R.id.tv_single_status_username);
+        nickname= (TextView) findViewById(R.id.tv_single_status_username);
 
         menuView= LayoutInflater.from(this).inflate(R.layout.single_status_option_menu,null);
         delete= (TextView) menuView.findViewById(R.id.tv_single_status_option_menu_delete);
@@ -111,7 +109,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
 
 
         userPortrait.setOnClickListener(this);
-        username.setOnClickListener(this);
+        nickname.setOnClickListener(this);
         back.setOnClickListener(this);
         option.setOnClickListener(this);
         favoriteIcon.setOnClickListener(this);
@@ -148,7 +146,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
 
     public void fillData(final Status st){
         userPortrait.setImageURI(st.getAuthor().getPortrait().getUrl());
-        username.setText(st.getAuthor().getUsername());
+        nickname.setText(st.getAuthor().getNickname());
         statusPhoto.setImageURI(st.getPhoto().getUrl());
 
         BmobQuery<Status> statusQuery = new BmobQuery<>();
@@ -214,7 +212,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         }
 
 
-        textBy.setText(st.getAuthor().getUsername()+": ");
+        textBy.setText(st.getAuthor().getNickname()+": ");
         text.setText(st.getText());
 
         try {

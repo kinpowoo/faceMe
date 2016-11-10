@@ -8,13 +8,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jinhanyu.jack.faceme.R;
-import com.jinhanyu.jack.faceme.adapter.DyqAdapter;
-import com.jinhanyu.jack.faceme.entity.DyqItem;
+import com.jinhanyu.jack.faceme.Utils;
+import com.jinhanyu.jack.faceme.adapter.GridViewAdapter;
+import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.exception.BmobException;
+import cn.bmob.v3.listener.FindListener;
 
 /**
  * Created by anzhuo on 2016/10/27.陈礼
@@ -22,12 +26,11 @@ import cn.bmob.v3.BmobQuery;
 public class DyqActivity extends Activity implements View.OnClickListener {
     private ImageView iv_back;//返回
     private TextView icon;//标题
-    List<DyqItem> mlist;
-    DyqAdapter adapter;//适配器
-    DyqItem dyqItem;//数据源
+    private GridViewAdapter adapter;//适配器
     private GridView gv;
     private String type;
-
+    private User user;
+    private List<Status> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,33 +41,24 @@ public class DyqActivity extends Activity implements View.OnClickListener {
         gv = (GridView) findViewById(R.id.gv);
 
         iv_back.setOnClickListener(this);
-
-        BmobQuery<User> bmobQuery = new BmobQuery<>();
-
-
-
-
-
-
+        list = new ArrayList<>();
 
         type =getIntent().getStringExtra("icon");
         switch (type) {
-            case "星客站":
+            case "明星":
                 icon.setText("星客站");
-
-
+                getPic("明星");
                 break;
             case "兴趣推荐":
                 icon.setText("兴趣推荐");
-
-
+                getPic("美女");
                 break;
             case "附近的人":
                 icon.setText("附近的人");
-
+                getPic("附近");
                 break;
         }
-        adapter = new DyqAdapter(mlist, DyqActivity.this);
+        adapter = new GridViewAdapter(list, DyqActivity.this);
         gv.setAdapter(adapter);
 
 
@@ -77,5 +71,20 @@ public class DyqActivity extends Activity implements View.OnClickListener {
                 finish();
                 break;
         }
+    }
+
+    //加载图片
+    public void getPic(String tags){
+        user= Utils.getCurrentUser();
+        BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
+        statusBmobQuery.addWhereEqualTo("tags",tags);
+        statusBmobQuery.include("author");
+        statusBmobQuery.findObjects(new FindListener<Status>() {
+            @Override
+            public void done(List<Status> data, BmobException e) {
+                list.addAll(data);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 }

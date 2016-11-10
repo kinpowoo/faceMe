@@ -1,19 +1,10 @@
 package com.jinhanyu.jack.faceme.adapter;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,7 +12,6 @@ import android.widget.TextView;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
-import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.entity.Comment;
 import com.jinhanyu.jack.faceme.ui.UserProfileActivity;
@@ -75,21 +65,21 @@ public class CommentAdapter extends BaseSwipeAdapter{
 
 
         viewHold.userPortrait.setImageURI(comment.getCommentor().getPortrait().getUrl());
-        viewHold.username.setText(comment.getCommentor().getUsername());
+        viewHold.username.setText(comment.getCommentor().getNickname());
         try {
             viewHold.postTime.setText(Utils.calculTime(comment.getCreatedAt()));
         } catch (ParseException e) {e.printStackTrace();
 
         }
         if(comment.getText().charAt(0)=='@'){
-            Utils.setTVColor(comment.getText(),0,comment.getReplyToUser().getUsername().length()+1,
+            Utils.setTVColor(comment.getText(),0,comment.getReplyToUser().getNickname().length()+1,
                     context.getResources().getColor(R.color.BlueViolet),viewHold.commentContent);
         }else {
             viewHold.commentContent.setText(comment.getText());
         }
 
         viewHold.atPeople.setTag("repost");
-        if(comment.getCommentor().getUsername().equals(Utils.getCurrentUser().getUsername())) {
+        if(comment.getCommentor().getNickname().equals(Utils.getCurrentUser().getNickname())) {
             viewHold.atPeople.setVisibility(View.GONE);
             viewHold.delete.setVisibility(View.VISIBLE);
         }else {

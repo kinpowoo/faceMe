@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="default_tags">
-        <item>人气</item>
-        <item>星动态</item>
-        <item>小电影</item>
+        <item>明星</item>
+        <item>帅哥</item>
+        <item>FaceMe</item>
         <item>旅行</item>
         <item>美女</item>
         <item>美食</item>
         <item>小宝贝</item>
-        <item>附近动态</item>
+        <item>附近</item>
     </string-array>
 </resources>
