@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="default_tags">
+    <string-array name="tags">
         <item>明星</item>
         <item>帅哥</item>
         <item>FaceMe</item>

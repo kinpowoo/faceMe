@@ -231,7 +231,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
     public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
         if(firstVisibleItem==0){
             header.setVisibility(View.VISIBLE);
-        }else {
+        }else{
             header.setVisibility(View.GONE);
         }
     }
