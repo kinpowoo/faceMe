@@ -53,7 +53,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private List<Status> list;
     private String userId;
     private User userIncoming;
-    private boolean following=false;
     private User currentUser=Utils.getCurrentUser();
     private PopupMenu optionMenu;
     @Override
@@ -155,9 +154,6 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         if(currentUser.getObjectId().equals(user.getObjectId())){
             isFollowing.setText("编辑个人主页");
         }else {
-            if (following) {
-                isFollowing.setText("取消关注");
-            } else {
                 BmobQuery<User> followingQuery = new BmobQuery<>();
                 followingQuery.addWhereRelatedTo("following", new BmobPointer(currentUser));
                 followingQuery.findObjects(new FindListener<User>() {
@@ -165,18 +161,19 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     public void done(List<User> list, BmobException e) {
                         for (User user1 : list) {
                             if (user1.getObjectId().equals(userIncoming.getObjectId())) {
-                                userIncoming.setFollowing(true);
+                                userIncoming.setFriend(true);
                                 userIncoming.update();
-                                following = true;
                                 isFollowing.setText("取消关注");
+                                return;
                             }
                         }
+                        if (!userIncoming.isFriend()) {
+                            isFollowing.setText("关注");
+                        }
+
                     }
                 });
-                if (userIncoming.isFollowing() == false) {
-                    isFollowing.setText("关注");
-                }
-            }
+
         }
         loadStatus(user,1);
     }
@@ -272,7 +269,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                     intent1.putExtra("userId",currentUser.getObjectId());
                     startActivity(intent1);
                 }else {
-                    if(following){
+                    if(userIncoming.isFriend()){
                         BmobRelation relation = new BmobRelation();
                         relation.remove(userIncoming);
                         currentUser.setFollowing(relation);
@@ -281,9 +278,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                             @Override
                             public void done(BmobException e) {
                                 isFollowing.setText("关注");
-                                userIncoming.setFollowing(false);
+                                userIncoming.setFriend(false);
                                 userIncoming.update();
-                                following=false;
                             }
                         });
                     }else {
@@ -295,9 +291,8 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
                             @Override
                             public void done(BmobException e) {
                                 isFollowing.setText("取消关注");
-                                userIncoming.setFollowing(true);
+                                userIncoming.setFriend(true);
                                 userIncoming.update();
-                                following=true;
                             }
                         });
                     }

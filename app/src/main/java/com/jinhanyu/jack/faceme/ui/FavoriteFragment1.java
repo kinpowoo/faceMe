@@ -43,13 +43,13 @@ public class FavoriteFragment1 extends Fragment {
         adapter = new FavoriteItemAdapter(items,getActivity());
         listView.setAdapter(adapter);
         changeFragment();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-//                Log.i("items",items.toString());
-                adapter.notifyDataSetChanged();
-            }
-        },5000);
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+////                Log.i("items",items.toString());
+//                adapter.notifyDataSetChanged();
+//            }
+//        },5000);
         return view;
     }
 
@@ -79,17 +79,23 @@ public class FavoriteFragment1 extends Fragment {
         statusQuery.addWhereMatchesQuery("author", "_User", selfQuery);
         statusQuery.findObjects(new FindListener<Status>() {
             @Override
-            public void done(List<Status> list, BmobException e) {
+            public void done(final List<Status> list, BmobException e) {
                 for (final Status status : list) {
                     final BmobQuery<User> likesQuery = new BmobQuery<>();
                     likesQuery.addWhereRelatedTo("likes", new BmobPointer(status));
                     likesQuery.findObjects(new FindListener<User>() {
                         @Override
                         public void done(List<User> likeMeUsers, BmobException e) {
+                            queryCounter++;
                             for(User likeMeUser: likeMeUsers){
                                 FriendLikeItem item = new FriendLikeItem(likeMeUser,status);
                                 items.add(item);
                                 Log.i("item1", item.toString());
+                            }
+
+                            if(queryCounter>= list.size()){
+                                Collections.sort(items);
+                                adapter.notifyDataSetChanged();
                             }
                         }
                     });
@@ -100,6 +106,7 @@ public class FavoriteFragment1 extends Fragment {
     }
 
 
+    int queryCounter =  0;
 
 
     public  void getFriendsLikes() {
@@ -110,34 +117,35 @@ public class FavoriteFragment1 extends Fragment {
         followingQuery.findObjects(new FindListener<User>() {
             @Override
             public void done(final List<User> friendList, BmobException e) {
-                //查询微博
-                BmobQuery<Status> statusQuery = new BmobQuery<>();
-                statusQuery.include("author");
-                statusQuery.addWhereMatchesQuery("likes", "_User", followingQuery);
-                statusQuery.findObjects(new FindListener<Status>() {
-                    @Override
-                    public void done(final List<Status> list, BmobException e) {
-                        for (final Status status : list) {
-                            final BmobQuery<User> likesQuery = new BmobQuery<>();
-                            likesQuery.addWhereRelatedTo("likes", new BmobPointer(status));
-                            likesQuery.findObjects(new FindListener<User>() {
-                                @Override
-                                public void done(List<User> likesUsers, BmobException e) {
-                                    for (User friend : friendList) {
-                                        for (User likesUser : likesUsers) {
-                                            if (friend.getNickname().equals(likesUser.getNickname())) {
-                                                FriendLikeItem item = new FriendLikeItem(friend, status);
-                                                items.add(item);
-                                                Log.i("item", item.toString());
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                        }
 
-                    }
-                });
+                for(final User friend: friendList){
+                    //查询微博
+                    BmobQuery<User> friendQuery = new BmobQuery<User>();
+                    friendQuery.addWhereEqualTo("objectId",friend.getObjectId());
+                    BmobQuery<Status> statusQuery = new BmobQuery<>();
+                    statusQuery.include("author");
+                    statusQuery.addWhereMatchesQuery("likes", "_User", friendQuery);
+                    statusQuery.findObjects(new FindListener<Status>() {
+                        @Override
+                        public void done(List<Status> list, BmobException e) {
+                            queryCounter++;
+                            for(Status status: list){
+                                FriendLikeItem item = new FriendLikeItem(friend,status);
+                                Log.i("item",item.toString());
+                                items.add(item);
+                            }
+
+                            if(queryCounter>= friendList.size()){
+                                Collections.sort(items);
+                                adapter.notifyDataSetChanged();
+                            }
+
+                        }
+                    });
+
+                }
+
+
             }
         });
     }

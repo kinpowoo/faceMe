@@ -16,14 +16,14 @@ public class User extends BmobUser {
     private String gender;
     private Integer followingNum;
     private Integer followerNum;
-    private boolean isFollowing;
+    private boolean isFriend;
 
-    public boolean isFollowing() {
-        return isFollowing;
+    public boolean isFriend() {
+        return isFriend;
     }
 
-    public void setFollowing(boolean following) {
-        isFollowing = following;
+    public void setFriend(boolean friend) {
+        isFriend = friend;
     }
 
     public Integer getFollowerNum() {

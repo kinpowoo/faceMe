@@ -115,6 +115,7 @@
                 android:layout_marginRight="20dp"
                 android:id="@+id/btn_userProfile_isFollowing"
                 android:textStyle="bold"
+                android:text=". . ."
                 android:background="@drawable/edit_profile_button"
                 android:layout_width="match_parent"
                 android:layout_height="35dp" />

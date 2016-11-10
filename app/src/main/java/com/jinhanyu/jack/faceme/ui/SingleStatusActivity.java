@@ -160,17 +160,18 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
             public void done(List<Status> list, BmobException e) {
               for(Status status1:list){
                   if(status1.getObjectId().equals(st.getObjectId())){
-                      st.setFavoritedByMe(true);
+                      status.setFavoritedByMe2(true);
                   }
               }
+                if(status.isFavoritedByMe2()){
+                    favoriteIcon.setImageResource(R.drawable.favorite_red);
+                }else {
+                    favoriteIcon.setImageResource(R.drawable.favorite_light);
+                }
             }
         });
 
-        if(st.isFavoritedByMe()){
-            favoriteIcon.setImageResource(R.drawable.favorite_red);
-        }else {
-            favoriteIcon.setImageResource(R.drawable.favorite_light);
-        }
+
 
 
             BmobQuery<User> userBmobQuery = new BmobQuery<>();
@@ -258,7 +259,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
             case R.id.iv_single_status_favorite:
                 BmobRelation relation = new BmobRelation();
                 favoriteIcon.setEnabled(false);
-                if (status.isFavoritedByMe()) {
+                if (status.isFavoritedByMe2()) {
                     //取消收藏
                     relation.remove(currentUser);
                     status.setLikes(relation);
@@ -266,6 +267,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                     status.update(new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
+                            status.setFavoritedByMe2(false);
                             favoriteNum.setText(status.getFavoriteNum()+"个赞");
                             favoriteIcon.setImageResource(R.drawable.favorite_light);
                             favoriteIcon.setEnabled(true);
@@ -279,6 +281,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                     status.update(new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
+                            status.setFavoritedByMe2(true);
                             favoriteNum.setText(status.getFavoriteNum()+"个赞");
                             favoriteIcon.setImageResource(R.drawable.favorite_red);
                             favoriteIcon.setEnabled(true);

@@ -19,7 +19,7 @@ public class Status extends BmobObject implements Comparable<Status>{
     private BmobRelation likes;
     private List<String> tags;
     private BmobGeoPoint location;
-    private boolean favoritedByMe=false;
+    private boolean favoritedByMe2=false;
     private Integer favoriteNum;
     private Integer commentNum;
 
@@ -39,12 +39,12 @@ public class Status extends BmobObject implements Comparable<Status>{
         this.favoriteNum = favoriteNum;
     }
 
-    public boolean isFavoritedByMe() {
-        return favoritedByMe;
+    public boolean isFavoritedByMe2() {
+        return favoritedByMe2;
     }
 
-    public void setFavoritedByMe(boolean favoritedByMe) {
-        this.favoritedByMe = favoritedByMe;
+    public void setFavoritedByMe2(boolean favoritedByMe) {
+        this.favoritedByMe2 = favoritedByMe;
     }
 
     public BmobGeoPoint getLocation() {

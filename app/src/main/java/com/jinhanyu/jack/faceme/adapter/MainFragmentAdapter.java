@@ -43,7 +43,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
     User me = User.getCurrentUser(User.class);
     LinearLayout.LayoutParams params;
     Activity activity;
-    private boolean isFavoriteByMe=false;
+
     public MainFragmentAdapter(List<Status> data, Context context, Activity activity) {
         super(data, context);
         int width= ScreenUtils.getScreenWidth(context);
@@ -84,11 +84,11 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             public void done(List<User> list, BmobException e) {
               for(User u:list){
                   if(u.getObjectId().equals(Utils.getCurrentUser().getObjectId())){
-                      isFavoriteByMe=true;
+                      status.setFavoritedByMe2(true);
                       viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
                   }
               }
-                if(!isFavoriteByMe){
+                if(!status.isFavoritedByMe2()){
                     viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
                 }
             }
@@ -100,7 +100,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             public void onClick(View v) {
                 BmobRelation relation = new BmobRelation();
                 viewHolder.favoriteIcon.setEnabled(false);
-                if (status.isFavoritedByMe()) {
+                if (status.isFavoritedByMe2()) {
                     //取消收藏
                     relation.remove(me);
                     status.setLikes(relation);
@@ -108,6 +108,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                     status.update(status.getObjectId(),new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
+                            status.setFavoritedByMe2(false);
                             viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
                             viewHolder.favoriteIcon.setEnabled(true);
                             viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
@@ -121,6 +122,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                     status.update(status.getObjectId(),new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
+                            status.setFavoritedByMe2(true);
                             viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
                             viewHolder.favoriteIcon.setEnabled(true);
                             viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");

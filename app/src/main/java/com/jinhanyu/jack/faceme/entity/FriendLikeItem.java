@@ -4,7 +4,7 @@ package com.jinhanyu.jack.faceme.entity;
  * Created by anzhuo on 2016/11/9.
  */
 
-public class FriendLikeItem {
+public class FriendLikeItem implements Comparable<FriendLikeItem>{
 
     private User friend;
     private Status status;
@@ -34,5 +34,10 @@ public class FriendLikeItem {
     @Override
     public String toString() {
         return friend.getNickname() + "  liked  " + status.getText();
+    }
+
+    @Override
+    public int compareTo(FriendLikeItem o) {
+        return status.getCreatedAt().compareTo(o.status.getCreatedAt());
     }
 }

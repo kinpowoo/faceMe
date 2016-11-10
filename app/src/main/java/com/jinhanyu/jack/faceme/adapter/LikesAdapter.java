@@ -26,17 +26,17 @@ import cn.bmob.v3.listener.UpdateListener;
 /**
  * Created by jianbo on 2016/10/20.
  */
-public class LikesAdapter extends CommonAdapter<User>{
-    private User currentUser=Utils.getCurrentUser();
-    private boolean following=false;
-    private String currentUserId=Utils.getCurrentUser().getObjectId();
+public class LikesAdapter extends CommonAdapter<User> {
+    private User currentUser = Utils.getCurrentUser();
+
+    private String currentUserId = Utils.getCurrentUser().getObjectId();
 
     public LikesAdapter(List data, Context context) {
         super(data, context);
     }
 
-    public void refreshDataSource(List<User> newData){
-        data=newData;
+    public void refreshDataSource(List<User> newData) {
+        data = newData;
         notifyDataSetChanged();
     }
 
@@ -64,7 +64,7 @@ public class LikesAdapter extends CommonAdapter<User>{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserProfileActivity.class);
-                intent.putExtra("userId",user.getObjectId());
+                intent.putExtra("userId", user.getObjectId());
                 context.startActivity(intent);
             }
         });
@@ -72,7 +72,7 @@ public class LikesAdapter extends CommonAdapter<User>{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserProfileActivity.class);
-                intent.putExtra("userId",user.getObjectId());
+                intent.putExtra("userId", user.getObjectId());
                 context.startActivity(intent);
             }
         });
@@ -80,71 +80,67 @@ public class LikesAdapter extends CommonAdapter<User>{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserProfileActivity.class);
-                intent.putExtra("userId",user.getObjectId());
+                intent.putExtra("userId", user.getObjectId());
                 context.startActivity(intent);
             }
         });
 
 
-
-        BmobQuery<User> followerQuery=new BmobQuery<>();
-        followerQuery.addWhereRelatedTo("following",new BmobPointer(currentUser));
+        BmobQuery<User> followerQuery = new BmobQuery<>();
+        followerQuery.addWhereRelatedTo("following", new BmobPointer(currentUser));
         followerQuery.findObjects(new FindListener<User>() {
             @Override
             public void done(List<User> list, BmobException e) {
-                for(User user1:list){
-                    if(user1.getObjectId().equals(user.getObjectId())){
-                        following=true;
-                        user.setFollowing(true);
+                for (User friend : list) {
+                    if (friend.getObjectId().equals(user.getObjectId())) {
+                        user.setFriend(true);
                         viewHold.follow.setText("取消关注");
+                        return;
                     }
                 }
-                if(following==false) {
-                    if(user.getObjectId().equals(currentUserId)){
-                        viewHold.follow.setText("不可选");
-                        viewHold.follow.setEnabled(false);
-                    }else {
-                        viewHold.follow.setText("关注");
-                    }
+                if (user.getObjectId().equals(currentUserId)) {
+                    viewHold.follow.setText("不可选");
+                    viewHold.follow.setEnabled(false);
+                } else {
+                    viewHold.follow.setText("关注");
                 }
+
             }
         });
 
 
-            viewHold.follow.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    viewHold.follow.setEnabled(false);
-                    BmobRelation relation = new BmobRelation();
-                    if (following) {
-                        relation.remove(user);
-                        currentUser.setFollowing(relation);
-                        currentUser.increment("followingNum",-1);
-                        currentUser.update(currentUserId, new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                    viewHold.follow.setText("关注");
-                                    user.setFollowing(false);
-                                    following = false;
-                                    viewHold.follow.setEnabled(true);
-                            }
-                        });
-                    } else {
-                        relation.add(user);
-                        currentUser.setFollowing(relation);
-                        currentUser.increment("followingNum");
-                        currentUser.update(currentUserId, new UpdateListener() {
-                            @Override
-                            public void done(BmobException e) {
-                                    viewHold.follow.setText("取消关注");
-                                    user.setFollowing(true);
-                                    following = true;
-                                    viewHold.follow.setEnabled(true);
-                            }
-                        });
-                    }
+        viewHold.follow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewHold.follow.setEnabled(false);
+                BmobRelation relation = new BmobRelation();
+                if (user.isFriend()) {
+                    relation.remove(user);
+                    currentUser.setFollowing(relation);
+                    currentUser.increment("followingNum", -1);
+                    currentUser.update(currentUserId, new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            viewHold.follow.setText("关注");
+                            user.setFriend(false);
+                            viewHold.follow.setEnabled(true);
+                        }
+                    });
+                } else {
+                    relation.add(user);
+                    currentUser.setFollowing(relation);
+                    currentUser.increment("followingNum");
+                    currentUser.update(currentUserId, new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            viewHold.follow.setText("取消关注");
+                            user.setFriend(true);
+                            viewHold.follow.setEnabled(true);
+                        }
+                    });
                 }
-            });
+            }
+        });
 
 
         return view;
