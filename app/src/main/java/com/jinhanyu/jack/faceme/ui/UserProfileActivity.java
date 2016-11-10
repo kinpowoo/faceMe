@@ -1,7 +1,10 @@
 package com.jinhanyu.jack.faceme.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
@@ -55,6 +58,15 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private User userIncoming;
     private User currentUser=Utils.getCurrentUser();
     private PopupMenu optionMenu;
+    private ProgressDialog dialog;
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                dialog.dismiss();
+            }
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +86,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         userPortrait= (SimpleDraweeView)findViewById(R.id.sdv_userProfile_userPortrait);
         gridView= (GridView)findViewById(R.id.gv_userProfile_photos);
         listView= (ListView) findViewById(R.id.lv_userProfile_photos);
-
+        dialog=ProgressDialog.show(this,null,"正在获取信息...");
         back.setOnClickListener(this);
         option.setOnClickListener(this);
         followingParent.setOnClickListener(this);
@@ -187,6 +199,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
             public void done(List<Status> data, BmobException e) {
                  list.clear();
                  list.addAll(data);
+                 handler.sendEmptyMessage(1);
                 if(type==1){
                     adapter.notifyDataSetChanged();
                 }else {

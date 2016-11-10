@@ -1,7 +1,10 @@
 package com.jinhanyu.jack.faceme.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,6 +50,15 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
     private MainFragmentAdapter listAdapter;
     private List<Status> list;
     private User me= Utils.getCurrentUser();
+    private ProgressDialog dialog;
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                dialog.dismiss();
+            }
+        }
+    };
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.user_fragment,null);
@@ -64,7 +76,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
         userPortrait= (SimpleDraweeView) view.findViewById(R.id.sdv_userFragment_userPortrait);
         gridView= (GridView) view.findViewById(R.id.gv_userFragment_photos);
         listView= (ListView) view.findViewById(R.id.lv_userFragment_photos);
-
+        dialog=ProgressDialog.show(getActivity(),null,"正在获取信息...");
         addFriend.setOnClickListener(this);
         settings.setOnClickListener(this);
         followingParent.setOnClickListener(this);
@@ -184,6 +196,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
               if(e==null){
                   list.clear();
                   list.addAll(data);
+                  handler.sendEmptyMessage(1);
                   if(type==1){
                       adapter.notifyDataSetChanged();
                   }else {
