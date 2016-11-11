@@ -9,7 +9,7 @@
     <com.facebook.drawee.view.SimpleDraweeView
         xmlns:fresco="http://schemas.android.com/apk/res-auto"
         fresco:progressBarImage="@drawable/loading"
-        fresco:progressBarImageScaleType="centerInside"
+        fresco:progressBarImageScaleType="centerCrop"
         fresco:progressBarAutoRotateInterval="5000"
         fresco:failureImage="@drawable/failure"
         fresco:failureImageScaleType="centerInside"

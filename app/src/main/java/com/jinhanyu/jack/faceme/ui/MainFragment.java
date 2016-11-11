@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.jinhanyu.jack.faceme.MainApplication;
 import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.adapter.MainFragmentAdapter;
@@ -159,4 +160,5 @@ public class MainFragment extends Fragment{
             }
         });
     }
+
 }

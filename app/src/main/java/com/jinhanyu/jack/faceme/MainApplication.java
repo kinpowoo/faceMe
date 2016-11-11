@@ -14,7 +14,6 @@ import cn.smssdk.SMSSDK;
  * Created by anzhuo on 2016/10/19.
  */
 public class MainApplication extends Application {
-
     @Override
     public void onCreate() {
         super.onCreate();

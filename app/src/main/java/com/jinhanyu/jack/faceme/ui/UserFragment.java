@@ -20,6 +20,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jinhanyu.jack.faceme.MainApplication;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.adapter.GridViewAdapter;
@@ -235,4 +236,5 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
             header.setVisibility(View.GONE);
         }
     }
+
 }

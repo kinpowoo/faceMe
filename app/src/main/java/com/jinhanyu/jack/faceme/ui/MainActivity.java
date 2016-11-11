@@ -2,6 +2,7 @@ package com.jinhanyu.jack.faceme.ui;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -25,6 +26,7 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.jinhanyu.jack.faceme.MainApplication;
 import com.jinhanyu.jack.faceme.R;
 
 import java.io.File;
@@ -59,13 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private PopupWindow popupWindow;
     private TextView camera, photo, cancel;
 
-    private int tap=1;
-    public int getTap(){
-        return tap;
-    }
-    public void setTap(int loc){
-        this.tap=loc;
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -334,5 +330,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         backgroundAlpha(0.5f);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jinhanyu.jack.faceme.MainApplication;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.adapter.FavoritePagerAdapter;
 
@@ -62,6 +63,5 @@ public class FavoriteFragment extends Fragment{
 
 
     }
-
 
 }
