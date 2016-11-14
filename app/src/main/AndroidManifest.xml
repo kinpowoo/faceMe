@@ -46,16 +46,16 @@
 
         <!--导航页-->
         <activity android:name=".ui.LogoActivity">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".ui.SplshActivity"/>
 
         <!--登录注册-->
         <activity android:name=".ui.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
         <activity android:name=".ui.RegisterByPhoneActivity"/>
         <activity android:name=".ui.RegisterByEmailActivity"/>

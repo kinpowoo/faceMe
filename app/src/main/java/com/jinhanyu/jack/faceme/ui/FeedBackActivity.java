@@ -11,9 +11,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jinhanyu.jack.faceme.FaceMePopupWindow;
 import com.jinhanyu.jack.faceme.PassAuthenticator;
 import com.jinhanyu.jack.faceme.R;
 
@@ -23,6 +25,8 @@ import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.event.TransportEvent;
+import javax.mail.event.TransportListener;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -39,15 +43,16 @@ public class FeedBackActivity extends Activity implements View.OnClickListener,T
     private EditText content;
     private TextView count;
     private TextView submit;
-    private ProgressDialog progressDialog;
+    private FaceMePopupWindow popupWindow;
+    private Transport transport;
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(android.os.Message msg) {
             if(msg.what==1){
-                progressDialog.dismiss();
+                popupWindow.dismiss();
                 Toast.makeText(FeedBackActivity.this,"消息发送成功",Toast.LENGTH_SHORT).show();
                 try {
-                    Thread.currentThread().sleep(1000);
+                    Thread.currentThread().sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -103,7 +108,20 @@ public class FeedBackActivity extends Activity implements View.OnClickListener,T
                 }else {
                     submit.setEnabled(false);
                     content.setEnabled(false);
-                    progressDialog=ProgressDialog.show(this,null,"信息正在发送中...");
+                    if(popupWindow==null){
+                        popupWindow=new FaceMePopupWindow(this);
+                        popupWindow.setMessage("信息正在发送中...");
+                        popupWindow.setTitle("是否取消发送？");
+                        popupWindow.hideCancelButton();
+                        popupWindow.setOutsideTouchable(false);
+                    }
+                    popupWindow.setOnConfirmListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                                    finish();
+                            }
+                    });
+                    popupWindow.show(submit);
                     new Thread(){
                         @Override
                         public void run() {
@@ -133,20 +151,19 @@ public class FeedBackActivity extends Activity implements View.OnClickListener,T
              */
             fromAddress = new InternetAddress("kinpowoo@outlook.com","KINPOWOO");
 
-            MimeMessage message = new MimeMessage(session);
+            final MimeMessage message = new MimeMessage(session);
 
             message.setSubject("反馈邮件");
             message.setFrom(fromAddress);
-            message.setContent(content.getText().toString(), "text/html;charset=GBK");
+            message.setContent(content.getText().toString(), "text/html;charset=utf-8");
 //            message.setText(content.getText().toString());
-            message.setRecipients(Message.RecipientType.TO,new Address[]{
-                    new InternetAddress("kinpowoo@outlook.com"),new InternetAddress("547494937@qq.com"),
-                    new InternetAddress("1565771886@qq.com")});
             message.setHeader("Content-Type","text/html");
+            message.setRecipients(Message.RecipientType.TO,new Address[]{
+                    new InternetAddress("kinpowoo@outlook.com"),new InternetAddress("547494937@qq.com")});
             message.saveChanges();
             //连接邮箱并发送
             session.setDebug(true);
-            Transport transport = session.getTransport("smtp");
+            transport = session.getTransport("smtp");
             /**
              * 这个地方需要改称自己的账号和密码
              */

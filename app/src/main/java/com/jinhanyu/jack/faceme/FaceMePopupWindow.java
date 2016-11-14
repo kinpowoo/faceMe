@@ -26,7 +26,8 @@ public class FaceMePopupWindow{
     private LinearLayout ll_message;
     private PopupWindow popupWindow;
     private Activity activity;
-
+    private View bt_confirm;
+    private View bt_cancel;
 
     public FaceMePopupWindow setOnConfirmListener(View.OnClickListener onConfirmListener) {
         this.onConfirmListener = onConfirmListener;
@@ -41,7 +42,7 @@ public class FaceMePopupWindow{
         this.activity  =  activity;
         View contentView = LayoutInflater.from(activity).inflate(R.layout.popw_util,null);
         popupWindow = new PopupWindow(contentView, ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        View bt_confirm =  contentView.findViewById(R.id.tv_confirm);
+        bt_confirm =  contentView.findViewById(R.id.tv_confirm);
         bt_confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +53,7 @@ public class FaceMePopupWindow{
                 popupWindow.dismiss();
             }
         });
-        View bt_cancel =  contentView.findViewById(R.id.tv_cancel);
+        bt_cancel =  contentView.findViewById(R.id.tv_cancel);
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +81,15 @@ public class FaceMePopupWindow{
         return this;
     }
 
+    public FaceMePopupWindow hideConfirmButton(){
+        bt_confirm.setVisibility(View.GONE);
+        return this;
+    }
+    public FaceMePopupWindow hideCancelButton(){
+        bt_cancel.setVisibility(View.GONE);
+        return this;
+    }
+
     private void backgroundAlpha(float bgAlpha)
     {
         WindowManager.LayoutParams lp =activity.getWindow().getAttributes();
@@ -89,14 +99,18 @@ public class FaceMePopupWindow{
     }
 
 
+    public void setOutsideTouchable(boolean flag){
+        popupWindow.setOutsideTouchable(flag);
+        if(flag) {
+            popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        }
+    }
     public void show(View view){
         if(TextUtils.isEmpty(tv_message.getText().toString())){
             ll_message.setVisibility(View.GONE);
         }
         popupWindow.setFocusable(true);
         popupWindow.setTouchable(true);
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -108,6 +122,8 @@ public class FaceMePopupWindow{
         popupWindow.showAtLocation(view, Gravity.CENTER,0,0);
     }
 
-
+    public void dismiss(){
+        popupWindow.dismiss();
+    }
 
 }

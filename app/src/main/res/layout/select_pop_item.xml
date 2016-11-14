@@ -8,8 +8,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:padding="12dp"
-        android:text="回复评论"
-        android:textColor="@color/LightGrey"
+        android:textColor="@color/CadetBlue"
         android:textSize="17sp"
         ></TextView>
     <View
