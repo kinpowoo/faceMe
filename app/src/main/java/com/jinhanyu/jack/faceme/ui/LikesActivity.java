@@ -129,9 +129,18 @@ public class LikesActivity extends AppCompatActivity implements TextWatcher,View
             case "searchResult":
                 title.setText("查询结果");
                 String accountNum=bundle.getString("result");
-                BmobQuery<User> query3 = new BmobQuery<>();
-                query3.addWhereEqualTo("nickname", accountNum);
-                query3.findObjects(new FindListener<User>() {
+                BmobQuery<User> nicknameQuery = new BmobQuery<>();
+                nicknameQuery.addWhereEqualTo("nickname", accountNum);
+                BmobQuery<User> usernameQuery = new BmobQuery<>();
+                usernameQuery.addWhereEqualTo("username", accountNum);
+
+                List<BmobQuery<User>> queries=new ArrayList<>();
+                queries.add(nicknameQuery);
+                queries.add(usernameQuery);
+
+                BmobQuery<User> mainQuery=new BmobQuery<>();
+                mainQuery.or(queries);
+                mainQuery.findObjects(new FindListener<User>() {
                     @Override
                     public void done(List<User> data, BmobException e) {
                         if (e == null) {

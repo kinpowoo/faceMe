@@ -356,4 +356,13 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         }
 
     }
+
+    @Override
+    protected void onRestart() {
+        if(userIncoming!=null){
+            fillData(userIncoming);
+        }
+
+        super.onRestart();
+    }
 }

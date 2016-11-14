@@ -221,6 +221,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
 
     @Override
     public void onResume() {
+        fillData();
         super.onResume();
     }
 
