@@ -35,7 +35,7 @@
             android:background="@drawable/et_bg"
             android:drawableLeft="@drawable/label_user"
             android:drawablePadding="10dp"
-            android:hint="邮箱或手机号"
+            android:hint="邮箱、手机号、用户名"
             android:padding="5dp"
             android:textSize="15sp" />
 
