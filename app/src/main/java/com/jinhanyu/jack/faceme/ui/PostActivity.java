@@ -64,7 +64,7 @@ public class PostActivity extends Activity implements View.OnClickListener {
             switch (msg.what) {
                 case 0:
                     location1 = (Position) msg.obj;
-                    String positionText = location1.getCountry() + " " + location1.getProvince() + " " + location1.getCity();
+                    String positionText = location1.getProvince()+ "." +location1.getCity();
                     location_show.setText(positionText);
                     break;
             }
@@ -82,8 +82,6 @@ public class PostActivity extends Activity implements View.OnClickListener {
         tv_uploading = (TextView) findViewById(R.id.tv_uploading);
         et_content = (EditText) findViewById(R.id.et_content);
         word_number = (TextView) findViewById(R.id.word_number);
-        who_look = (ImageView) findViewById(R.id.who_look);
-        face = (ImageView) findViewById(R.id.face);
         location = (ImageView) findViewById(R.id.location);
         location_show = (TextView) findViewById(R.id.location_show);
         gl = (GridLayout) findViewById(R.id.gl);
@@ -149,7 +147,7 @@ public class PostActivity extends Activity implements View.OnClickListener {
         if (tv_travel.isChecked())
             tags.add("旅行");
         if (tv_baby.isChecked())
-            tags.add("小宝贝");
+            tags.add("宝贝");
         if (tv_start.isChecked())
             tags.add("明星");
         if (tv_boy.isChecked())
@@ -212,9 +210,6 @@ public class PostActivity extends Activity implements View.OnClickListener {
                         status.setPhoto(bmobFile);
                         status.setText(content);
                         List<String> tt = getTags();
-                        if (tt.size()==0) {
-                            tt.add("FaceMe");
-                        }
                         status.setTags(tt);
                         status.setLocation(new BmobGeoPoint(location1.getLongitude(), location1.getLatitude()));
                         status.save(new SaveListener<String>() {
@@ -234,8 +229,12 @@ public class PostActivity extends Activity implements View.OnClickListener {
 
                 break;
             case R.id.tv_add:
-                if(tag_count>=3 || custom_tag_count>=2){
+                if(custom_tag_count>=2){
                     Toast.makeText(PostActivity.this, "只能添加两个自定义标签", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(tag_count>=3){
+                    Toast.makeText(PostActivity.this, "最多添加三个标签", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 startActivityForResult(new Intent(PostActivity.this, CustomTag.class), MGQ);

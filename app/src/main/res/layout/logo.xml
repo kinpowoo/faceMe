@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/aaa"
+    android:background="@mipmap/init_logo"
     android:orientation="vertical">
 
     <ImageView
@@ -11,26 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:background="@drawable/pop_util" />
-
-    <TextView
-        android:id="@+id/tv_version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_copyright"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="5dp"
-        android:text="v1.0.1"
-        android:textColor="@color/White" />
-
-    <TextView
-        android:id="@+id/tv_copyright"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="30dp"
-        android:text="\@ 2015-2016 JinHanYu  All Rights Reserved"
-        android:textColor="@color/White" />
-
+        android:background="@drawable/pop_util"
+        />
 </RelativeLayout>

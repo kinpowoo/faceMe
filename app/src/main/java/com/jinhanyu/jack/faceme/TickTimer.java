@@ -17,7 +17,7 @@ public class TickTimer extends Timer {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
 
-            if (totalTime == 0) {     //时间到还未投票就直接谁都不投，发消息给服务器
+            if (totalTime == 0) {
                 cancel();
                 onTimeEnd();
             } else {

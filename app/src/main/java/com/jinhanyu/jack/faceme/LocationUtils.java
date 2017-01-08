@@ -18,7 +18,6 @@ import com.jinhanyu.jack.faceme.entity.Position;
 
 public class LocationUtils implements AMapLocationListener {
     Handler handler;
-    String city = "";
     Context mcontent;
     AMapLocationClient mlocationClient = null;
     AMapLocationClientOption mLocationOption = null;
@@ -31,7 +30,6 @@ public class LocationUtils implements AMapLocationListener {
     public void guide() {
         mlocationClient = new AMapLocationClient(mcontent);
 
-        mlocationClient = new AMapLocationClient(mcontent);
 //初始化定位参数
         mLocationOption = new AMapLocationClientOption();
 //设置返回地址信息，默认为true
@@ -41,7 +39,7 @@ public class LocationUtils implements AMapLocationListener {
 //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
 //设置定位间隔,单位毫秒,默认为2000ms
-        mLocationOption.setInterval(2000);
+        mLocationOption.setInterval(200000);
 //设置定位参数
         mlocationClient.setLocationOption(mLocationOption);
 
@@ -51,7 +49,6 @@ public class LocationUtils implements AMapLocationListener {
 
     @Override
     public void onLocationChanged(AMapLocation amapLocation) {
-
 
         if (amapLocation != null) {
             if (amapLocation.getErrorCode() == 0) {

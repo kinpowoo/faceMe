@@ -152,5 +152,5 @@
     <color name="location_shape">#cfcfcf</color>
     <color name="register_activity_bg">#e7e7e7</color>
     <color name="logo">#52a8fc</color>
-
+    <color name="tinyBlue">#436EEE</color>
 </resources>

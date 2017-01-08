@@ -24,7 +24,7 @@ import java.util.List;
  * Created by anzhuo on 2016/11/1.
  */
 
-public class SplshActivity extends AppCompatActivity {
+public class GuideActivity extends AppCompatActivity {
     private ViewPager flipper;
     private TextView title;
     private RadioGroup rg;
@@ -36,17 +36,16 @@ public class SplshActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splsh);
+        setContentView(R.layout.guide_activity);
 
         getSharedPreferences("logo",MODE_APPEND).edit().putBoolean("first",false).commit();
-        animation = AnimationUtils.loadAnimation(SplshActivity.this, R.anim.animationset);
+        animation = AnimationUtils.loadAnimation(GuideActivity.this, R.anim.animationset);
         flipper = (ViewPager) this.findViewById(R.id.ViewFlipper1);
         rg = (RadioGroup) findViewById(R.id.rg);
         title = (TextView) findViewById(R.id.title);
         final List<ImageView> viewList = new ArrayList<>();
-        viewList.add(addImageView(R.mipmap.one));
-        viewList.add(addImageView(R.mipmap.two));
-        viewList.add(addImageView(R.mipmap.therr));
+        viewList.add(addImageView(R.mipmap.init_page1));
+        viewList.add(addImageView(R.mipmap.init_page2));
 
         flipper.setAdapter(new PagerAdapter() {
             @Override
@@ -84,9 +83,6 @@ public class SplshActivity extends AppCompatActivity {
                         break;
                     case R.id.rb1:
                         flipper.setCurrentItem(1);
-                        break;
-                    case R.id.rb2:
-                        flipper.setCurrentItem(2);
                         title.setVisibility(View.VISIBLE);
                         title.startAnimation(animation);
                         break;
@@ -110,9 +106,6 @@ public class SplshActivity extends AppCompatActivity {
                         break;
                     case 1:
                         rg.check(R.id.rb1);
-                        break;
-                    case 2:
-                        rg.check(R.id.rb2);
                         title.setVisibility(View.VISIBLE);
                         title.startAnimation(animation);
                         break;
@@ -138,7 +131,7 @@ public class SplshActivity extends AppCompatActivity {
                 title.startAnimation(translateAnimation);//变化开始
                 try {
                     Thread.sleep(1200);
-                    startActivity(new Intent(SplshActivity.this, LoginActivity.class));
+                    startActivity(new Intent(GuideActivity.this, LoginActivity.class));
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {

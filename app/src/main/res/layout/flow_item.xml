@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/picture"
         android:layout_alignRight="@+id/picture"
-        android:background="@color/Text_bg"
+        android:background="@color/test_color_a"
         android:padding="3dp"
         android:text="@string/scenery"
         android:textColor="@color/White" />

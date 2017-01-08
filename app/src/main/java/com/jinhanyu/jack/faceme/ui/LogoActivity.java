@@ -25,7 +25,7 @@ public class LogoActivity extends Activity{
             @Override
             public void run() {
                 if(isFirstLaunch){
-                    startActivity(new Intent(LogoActivity.this,SplshActivity.class));
+                    startActivity(new Intent(LogoActivity.this,GuideActivity.class));
                 }else{
                     if(User.getCurrentUser(User.class)==null){
                         startActivity(new Intent(LogoActivity.this,LoginActivity.class));
@@ -35,7 +35,7 @@ public class LogoActivity extends Activity{
                 }
                 finish();
             }
-        },2000);
+        },1000);
 
 
     }

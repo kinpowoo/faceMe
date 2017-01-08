@@ -28,7 +28,7 @@ public class FavoriteFragment extends Fragment{
     FavoriteFragment1 child_one;
     FavoriteFragment1 child_two;
     List<Fragment> fragments;
-    String[] titles = {"Following","Me"};
+    String[] titles = {"好友动态","谁赞了我"};
     FragmentManager manager;
 
     @Override

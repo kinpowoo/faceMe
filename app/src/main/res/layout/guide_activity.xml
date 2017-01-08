@@ -9,21 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <TextView
-        android:id="@+id/title"
-        android:visibility="invisible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingRight="30dp"
-        android:text="FaceMe"
-        android:layout_gravity="center_horizontal"
-        android:textSize="50sp"
-        android:textStyle="italic|bold"
-        android:shadowColor="@color/SlateGray"
-        android:shadowDx="30"
-        android:shadowDy="-5"
-        android:shadowRadius="15"/>
-
 
     <RadioGroup
         android:id="@+id/rg"
@@ -50,17 +35,24 @@
             android:layout_width="wrap_content"
             android:layout_height="8dp"
             android:checked="false"/>
-
-        <RadioButton
-            android:id="@+id/rb2"
-            android:layout_width="wrap_content"
-            android:layout_height="8dp"
-            android:background="@drawable/scrollbar"
-            android:button="@null"
-            android:layout_marginLeft="10dp"
-            android:checked="false"/>
-
-
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/title"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="enter"
+        android:textColor="@color/DeepSkyBlue"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="65dp"
+        android:textSize="30sp"
+        android:textStyle="italic|bold"
+        android:shadowColor="@color/SlateGray"
+        android:shadowDx="10"
+        android:shadowDy="-5"
+        android:layout_marginLeft="5dp"
+        android:shadowRadius="10"/>
 
 </FrameLayout>

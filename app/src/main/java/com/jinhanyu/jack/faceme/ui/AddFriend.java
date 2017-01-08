@@ -28,7 +28,7 @@ public class AddFriend extends Activity implements View.OnClickListener {
     private Ptr_refresh refresh;//刷新类
     private in.srain.cube.views.ptr.PtrFrameLayout iv_frame;
     private LinearLayout seart_name;
-    private LinearLayout focus_show, fans_show, add_friend, start_stand, interest_recommend, nearby_person;
+    private LinearLayout focus_show, fans_show,add_friend, start_stand;
     private TextView focus_num, fans_num;
     private User userIncoming = Utils.getCurrentUser();
     private String userId;
@@ -49,9 +49,6 @@ public class AddFriend extends Activity implements View.OnClickListener {
         fans_show = (LinearLayout) findViewById(R.id.fans_show);
         add_friend = (LinearLayout) findViewById(R.id.add_friend);
         start_stand = (LinearLayout) findViewById(R.id.start_stand);
-        interest_recommend = (LinearLayout) findViewById(R.id.interest_recommend);
-        nearby_person = (LinearLayout) findViewById(R.id.nearby_person);
-
         refresh = new Ptr_refresh(this);
         iv_back.setOnClickListener(this);
 
@@ -59,8 +56,6 @@ public class AddFriend extends Activity implements View.OnClickListener {
         fans_show.setOnClickListener(this);
         add_friend.setOnClickListener(this);
         start_stand.setOnClickListener(this);
-        interest_recommend.setOnClickListener(this);
-        nearby_person.setOnClickListener(this);
         seart_name.setOnClickListener(this);
         iv_frame.setHeaderView(refresh);
         iv_frame.addPtrUIHandler(refresh);
@@ -132,14 +127,8 @@ public class AddFriend extends Activity implements View.OnClickListener {
             case R.id.add_friend://添加好友
                 startActivity(new Intent(AddFriend.this, AddFriendNum.class));
                 break;
-            case R.id.interest_recommend://兴趣推荐
-                startActivity(new Intent(AddFriend.this, DyqActivity.class).putExtra("icon", "兴趣推荐"));
-                break;
-            case R.id.nearby_person://附近的人
-                startActivity(new Intent(AddFriend.this, DyqActivity.class).putExtra("icon", "附近的人"));
-                break;
             case R.id.start_stand://星客站
-                startActivity(new Intent(AddFriend.this, DyqActivity.class).putExtra("icon", "明星"));
+                startActivity(new Intent(AddFriend.this, FlowActivity.class).putExtra("icon", "明星"));
                 break;
             case R.id.search_name:
                 startActivity(new Intent(AddFriend.this, AddFriendNum.class));

@@ -10,17 +10,12 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.jinhanyu.jack.faceme.MainApplication;
-import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.adapter.FlowFragmentAdapter;
 import com.jinhanyu.jack.faceme.entity.SingleFavoriteItem;
 import java.util.ArrayList;
 import java.util.List;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
 
 
 /**
@@ -29,15 +24,13 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 public class FlowFragment extends Fragment implements View.OnClickListener {
     private GridView gv;
     private FlowFragmentAdapter adapter;
-    private in.srain.cube.views.ptr.PtrFrameLayout iv_frame;
-    private Ptr_refresh ptr_refresh;
-    private ImageView NearbyActivity;
+
     private ImageView AddFriend;
     private TextView SearchTag;
     private List<SingleFavoriteItem> database;
 
-    final private int[] photos= {R.mipmap.start, R.mipmap.popularity, R.mipmap.movie,
-            R.mipmap.travel, R.mipmap.belle, R.mipmap.food, R.mipmap.deary, R.mipmap.nearby2};
+    final private int[] photos= {R.mipmap.stars, R.mipmap.handsome_boy, R.mipmap.faceme,
+            R.mipmap.travel, R.mipmap.beauty, R.mipmap.food, R.mipmap.baby, R.mipmap.nearby_big};
      private String [] tags;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,41 +38,18 @@ public class FlowFragment extends Fragment implements View.OnClickListener {
         tags=getResources().getStringArray(R.array.tags);
         //控件初始化
         gv = (GridView) view.findViewById(R.id.gv);
-        iv_frame = (PtrFrameLayout) view.findViewById(R.id.iv_ptrFrame);
-        NearbyActivity = (ImageView) view.findViewById(R.id.NearbyActivity);
         AddFriend = (ImageView) view.findViewById(R.id.AddFriend);
         SearchTag = (TextView) view.findViewById(R.id.SearchTag);
 
         SearchTag.setOnClickListener(this);
-        NearbyActivity.setOnClickListener(this);
         AddFriend.setOnClickListener(this);
 
 
         database=new ArrayList<>();
-        ptr_refresh = new Ptr_refresh(getActivity());
 
         adapter = new FlowFragmentAdapter(database, getActivity());
         gv.setAdapter(adapter);
         addPic();
-
-        //下拉刷新
-        iv_frame.setHeaderView(ptr_refresh);
-        iv_frame.addPtrUIHandler(ptr_refresh);
-        iv_frame.setPtrHandler(new PtrDefaultHandler() {
-            @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                iv_frame.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getActivity(), "已是最新", Toast.LENGTH_SHORT).show();
-                        adapter.notifyDataSetChanged();
-                        iv_frame.refreshComplete();
-                        //这里加入刷新代码
-
-                    }
-                }, 2000);
-            }
-        });
 
 
 
@@ -120,9 +90,6 @@ public class FlowFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.AddFriend:
                 startActivity(new Intent(getActivity(), AddFriend.class));
-                break;
-            case R.id.NearbyActivity:
-                startActivity(new Intent(getActivity(), NearbyActivity.class));
                 break;
             case R.id.SearchTag:
                 startActivity(new Intent(getActivity(), SearchPicture.class));

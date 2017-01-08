@@ -28,7 +28,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/test_color_b"
+        android:background="@color/WhiteSmoke"
         android:clickable="false"
         android:padding="8dp">
 

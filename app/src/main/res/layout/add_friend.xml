@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/location_shape"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -21,16 +20,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="钉友圈"
-            android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:text="互动中心"
+            android:textColor="@color/Blue"
+            android:textSize="19dp" />
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/search_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/test_color_b"
+        android:background="@color/WhiteSmoke"
         android:padding="8dp"
         android:orientation="horizontal">
 
@@ -206,72 +205,6 @@
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
                     android:text="星客站"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="5dp"
-                    android:src="@mipmap/to_right" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/interest_recommend"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0.1dp"
-                android:background="@color/White"
-                android:padding="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/add_friend_shape"
-                    android:padding="2dp"
-                    android:src="@mipmap/interest" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"
-                    android:layout_weight="1"
-                    android:text="兴趣推荐"
-                    android:textColor="@color/black"
-                    android:textSize="15sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="5dp"
-                    android:src="@mipmap/to_right" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/nearby_person"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0.1dp"
-                android:background="@color/White"
-                android:padding="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/add_friend_shape"
-                    android:padding="2dp"
-                    android:src="@mipmap/nearby" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="15dp"
-                    android:layout_weight="1"
-                    android:text="附近的人"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 

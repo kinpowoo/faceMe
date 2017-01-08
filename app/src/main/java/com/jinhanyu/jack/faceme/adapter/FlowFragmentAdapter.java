@@ -26,7 +26,7 @@ public class FlowFragmentAdapter extends CommonAdapter<SingleFavoriteItem> {
          ViewHolder viewHolder;
         if (convertView==null){
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.fiow_item, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.flow_item, null);
             viewHolder.picture = (SimpleDraweeView) convertView.findViewById(R.id.picture);
             viewHolder.picture_test = (TextView) convertView.findViewById(R.id.picture_text);
             convertView.setTag(viewHolder);

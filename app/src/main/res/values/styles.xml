@@ -58,4 +58,21 @@
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
     </style>
+
+    <!-- 定义标签形状-->
+    @TargetApi(11)
+    <style name="custrom_Tag">
+        <item name="android:layout_width">90dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/tag_custom</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:paddingLeft">15dp</item>
+        <item name="android:paddingRight">15dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+        <item name="android:layout_marginTop">7dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
 </resources>

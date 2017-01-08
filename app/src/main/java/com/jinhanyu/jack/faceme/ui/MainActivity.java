@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //动态加载视图相关
     private View view;
     private PopupWindow popupWindow;
-    private TextView camera, photo, cancel;
+    private ImageView camera, photo;
 
 
 
@@ -70,9 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //pop弹窗控件初始化
         view = LayoutInflater.from(MainActivity.this).inflate(R.layout.postchoose, null);
-        camera = (TextView) view.findViewById(R.id.camera);
-        photo = (TextView) view.findViewById(R.id.photo);
-        cancel = (TextView) view.findViewById(R.id.cancel);
+        camera = (ImageView) view.findViewById(R.id.camera);
+        photo = (ImageView) view.findViewById(R.id.photo);
 
         rb_mainActivity_mainFragment = (RadioButton) findViewById(R.id.rb_mainActivity_mainFragment);
         rb_mainActivity_flowFragment = (RadioButton) findViewById(R.id.rb_mainActivity_flowFragment);
@@ -87,7 +86,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_mainActivity_favoriteFragment.setOnClickListener(this);
         rb_mainActivity_userFragment.setOnClickListener(this);
         camera.setOnClickListener(this);
-        cancel.setOnClickListener(this);
         photo.setOnClickListener(this);
         ShowFragment(0);
     }
@@ -173,9 +171,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.photo:
                 popupWindow.dismiss();
                 getPhotopicture();
-                break;
-            case R.id.cancel:
-                popupWindow.dismiss();
                 break;
         }
     }
@@ -322,14 +317,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         popupWindow.setOutsideTouchable(true);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setAnimationStyle(R.style.PopupWindow_menu);
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 90);
+        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 150);
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
                 backgroundAlpha(1.0f);
             }
         });
-        backgroundAlpha(0.5f);
+        backgroundAlpha(0.2f);
     }
 
     @Override

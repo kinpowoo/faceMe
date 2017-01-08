@@ -67,13 +67,13 @@ public class LoginActivity extends Activity {
 
         new SelectableFaceMePopupWindow(this)
                 .setTitle("请选择")
-                .addOption("电子邮箱注册用户", new View.OnClickListener() {
+                .addOption("电子邮箱找回密码", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         startActivity(new Intent(LoginActivity.this, FindPasswordByEmailActivity.class));
                     }
                 })
-                .addOption("手机号码注册用户", new View.OnClickListener() {
+                .addOption("手机号码找回密码", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         startActivity(new Intent(LoginActivity.this, FindPasswordByPhoneActivity.class));

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/Silver"
+    android:background="@color/WhiteSmoke"
     android:orientation="vertical">
 
     <LinearLayout
@@ -25,7 +25,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="分享"
-            android:textSize="23sp" />
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/tv_uploading"
@@ -33,8 +33,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="上传"
+            android:layout_marginRight="10dp"
             android:textColor="@color/test_color_a"
-            android:textSize="20sp" />
+            android:textSize="20dp" />
 
     </LinearLayout>
 
@@ -59,13 +60,16 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -74,188 +78,139 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="添加标签"
-                android:textSize="22sp" />
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:text="添加标签:"
+                android:layout_alignParentLeft="true"
+                android:textStyle="bold"
+                android:textSize="17dp" />
 
                 <CheckedTextView
                     android:id="@+id/custom_type_one"
-                    android:layout_width="100dp"
+                    style="@style/custrom_Tag"
                     android:visibility="invisible"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
                     android:singleLine="true"
+                    android:layout_centerInParent="true"
                     android:ellipsize="end"
-                    android:background="@drawable/custom_type_shape"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
-                    android:text=""
-                    android:textColor="@color/test_color_a" />
+                    android:layout_marginBottom="5dp"
+                    android:checked="true"
+                    />
 
                 <CheckedTextView
                     android:id="@+id/custom_type_two"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
+                    style="@style/custrom_Tag"
                     android:visibility="invisible"
-                    android:background="@drawable/custom_type_shape"
-                    android:paddingBottom="5dp"
                     android:singleLine="true"
+                    android:layout_alignParentRight="true"
                     android:ellipsize="end"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
-                    android:text=""
-                    android:textColor="@color/test_color_a" />
+                    android:layout_marginBottom="5dp"
+                    android:checked="true"
+                    />
 
-            </LinearLayout>
+            </RelativeLayout>
+
             <GridLayout
                 android:id="@+id/gl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:alignmentMode="alignBounds"
-                android:columnCount="4"
+                android:columnCount="3"
                 android:padding="5dp"
-                android:rowCount="4">
+                android:layout_marginBottom="5dp"
+                >
 
                 <CheckedTextView
                     android:id="@+id/tv_FaceMe"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/type_bg"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
-                    android:text="FaceMe"
-                    android:textColor="@drawable/test_color" />
-
-                <CheckedTextView
-                    android:id="@+id/tv_travel"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/type_bg"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="5dp"
-                    android:text="旅行"
-                    android:textColor="@drawable/test_color" />
+                    style="@style/custrom_Tag"
+                    android:text="faceme"
+                    />
 
                 <CheckedTextView
                     android:id="@+id/tv_baby"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_columnSpan="2"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/type_bg"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
-                    android:text="小宝贝"
-                    android:textColor="@drawable/test_color" />
+                    style="@style/custrom_Tag"
+                    android:text="宝贝"
+                   />
 
                 <CheckedTextView
                     android:id="@+id/tv_nearby"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/type_bg"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
+                    style="@style/custrom_Tag"
                     android:text="附近"
-                    android:textColor="@drawable/test_color" />
+                    />
 
                 <CheckedTextView
                     android:id="@+id/tv_start"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/type_bg"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
+                    style="@style/custrom_Tag"
                     android:text="明星"
-                    android:textColor="@drawable/test_color" />
+                    />
 
                 <CheckedTextView
                     android:id="@+id/tv_boy"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_columnSpan="2"
-                    android:background="@drawable/type_bg"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
+                    style="@style/custrom_Tag"
                     android:text="帅哥"
-                    android:textColor="@drawable/test_color"/>
+                    />
 
                 <CheckedTextView
                     android:id="@+id/tv_belle"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/type_bg"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="20dp"
-                    android:layout_marginTop="10dp"
-                    android:paddingTop="5dp"
+                    style="@style/custrom_Tag"
                     android:text="美女"
-                    android:textColor="@drawable/test_color" />
+                   />
 
                 <CheckedTextView
                     android:id="@+id/tv_food"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/type_bg"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="2dp"
-                    android:paddingRight="30dp"
-                    android:paddingTop="5dp"
+                    style="@style/custrom_Tag"
                     android:text="美食"
-                    android:textColor="@drawable/test_color" />
+                    />
 
+                <CheckedTextView
+                    android:id="@+id/tv_travel"
+                    style="@style/custrom_Tag"
+                    android:text="旅行"
+                    />
 
                 <ImageView
                     android:id="@+id/tv_add"
-                    android:layout_width="45dp"
+                    android:layout_width="78dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/custom_type_shape"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="7dp"
                     android:layout_marginLeft="10dp"
-                    android:background="@drawable/type_bg"
-                    android:paddingBottom="4dp"
-                    android:paddingTop="4dp"
+                    android:layout_marginTop="7dp"
                     android:src="@mipmap/add" />
-            </GridLayout>
 
+
+            </GridLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/WhiteSmoke"
+            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="10dp"
+            >
             <TextView
+                android:id="@+id/tv_post_activity_share"
                 android:clickable="true"
                 android:onClick="share"
+                android:layout_alignParentLeft="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="35dp"
-                android:text="分享到"
-                android:textSize="22sp" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center_horizontal"
+                android:drawableRight="@mipmap/share_blue"
+                 />
 
-        </LinearLayout>
-    </ScrollView>
 
-    <LinearLayout
+
+
+  <!--  <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/White"
@@ -279,38 +234,38 @@
             android:background="@drawable/share_shape"
             android:padding="3dp"
             android:src="@mipmap/face_1" />
-
+-->
         <ImageView
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/share_shape"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="40dp"
+            android:layout_toRightOf="@+id/tv_post_activity_share"
             android:padding="3dp"
-            android:src="@mipmap/location_1" />
+            android:src="@mipmap/location" />
 
         <TextView
             android:id="@+id/location_show"
+            android:layout_toRightOf="@+id/location"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/location_shape"
-            android:paddingBottom="2dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="2dp"
-            android:text="未知"
+            android:background="@drawable/custom_type_shape"
+            android:padding="2dp"
             android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/word_number"
-            android:layout_width="match_parent"
+            android:layout_width="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="end"
             android:text="100"
-            android:textSize="21sp" />
+            android:textSize="18dp" />
+    </RelativeLayout>
     </LinearLayout>
-
+    </ScrollView>
 </LinearLayout>

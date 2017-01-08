@@ -23,7 +23,7 @@ import cn.bmob.v3.listener.FindListener;
 /**
  * Created by anzhuo on 2016/10/27.陈礼
  */
-public class DyqActivity extends Activity implements View.OnClickListener {
+public class FlowActivity extends Activity implements View.OnClickListener {
     private ImageView iv_back;//返回
     private TextView icon;//标题
     private GridViewAdapter adapter;//适配器
@@ -58,7 +58,7 @@ public class DyqActivity extends Activity implements View.OnClickListener {
                 getPic("附近");
                 break;
         }
-        adapter = new GridViewAdapter(list, DyqActivity.this);
+        adapter = new GridViewAdapter(list, FlowActivity.this);
         gv.setAdapter(adapter);
 
 

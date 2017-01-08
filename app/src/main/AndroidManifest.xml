@@ -42,7 +42,7 @@
         android:windowSoftInputMode="adjustResize"
         android:theme="@style/AppTheme">
         <!--高德地图 -->
-        <meta-data android:name="com.amap.api.v2.apikey" android:value="e6f34afa50824eda807c6ff7e25282ac"/>
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="0fbf9f12be443e5ba57204bfe896abb8"/>
 
         <!--导航页-->
         <activity android:name=".ui.LogoActivity">
@@ -51,7 +51,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SplshActivity"/>
+        <activity android:name=".ui.GuideActivity"/>
 
         <!--登录注册-->
         <activity android:name=".ui.LoginActivity">
@@ -86,9 +86,8 @@
         <activity android:name=".ui.EditStatusActivity" />
         <activity android:name=".ui.EditProfileActivity" />
         <activity android:name=".ui.AddFriend" />
-        <activity android:name=".ui.NearbyActivity" />
         <activity android:name=".ui.WonderfulActivities" />
-        <activity android:name=".ui.DyqActivity" />
+        <activity android:name=".ui.FlowActivity" />
         <activity android:name=".ui.CustomTag"/>
         <activity android:name=".ui.SearchResultActivity"/>
         <activity android:name=".ui.PostActivity"/>

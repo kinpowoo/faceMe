@@ -27,9 +27,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/test_color_b"
+        android:background="@color/AntiqueWhite"
         android:clickable="false"
-        android:padding="8dp">
+        android:padding="5dp">
 
         <EditText
             android:id="@+id/search_content"
@@ -37,8 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/edittext_shape"
-            android:hint="搜索标签"
-            android:padding="3dp" />
+            android:hint="自定义标签名"
+            android:textSize="17dp"
+            android:padding="4dp" />
 
         <TextView
             android:id="@+id/tv_search"
