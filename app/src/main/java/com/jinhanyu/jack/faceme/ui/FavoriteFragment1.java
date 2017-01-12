@@ -86,6 +86,7 @@ public class FavoriteFragment1 extends Fragment {
                 for (final Status status : list) {
                     final BmobQuery<User> likesQuery = new BmobQuery<>();
                     likesQuery.addWhereRelatedTo("likes", new BmobPointer(status));
+                    likesQuery.setLimit(5);
                     likesQuery.findObjects(new FindListener<User>() {
                         @Override
                         public void done(List<User> likeMeUsers, BmobException e) {
@@ -129,6 +130,7 @@ public class FavoriteFragment1 extends Fragment {
                     BmobQuery<Status> statusQuery = new BmobQuery<>();
                     statusQuery.include("author");
                     statusQuery.addWhereMatchesQuery("likes", "_User", friendQuery);
+                    statusQuery.setLimit(5);
                     statusQuery.findObjects(new FindListener<Status>() {
                         @Override
                         public void done(List<Status> list, BmobException e) {

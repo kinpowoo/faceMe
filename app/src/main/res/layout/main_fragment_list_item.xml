@@ -3,7 +3,7 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/WhiteSmoke"
+    android:background="@color/White"
     android:orientation="vertical">
 
     <LinearLayout
@@ -53,7 +53,6 @@
     </LinearLayout>
 
     <com.facebook.drawee.view.SimpleDraweeView
-        xmlns:fresco="http://schemas.android.com/apk/res-auto"
         android:id="@+id/iv_status_photo"
         android:layout_width="350dp"
         android:layout_height="400dp"
@@ -84,8 +83,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/Black"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textSize="18dp"
+            />
 
         <TextView
             android:id="@+id/tv_status_text"
@@ -113,37 +112,29 @@
         <TextView
             android:visibility="invisible"
             android:id="@+id/tag_one"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="@color/test_color_a"
-            android:padding="5dp"
-            android:background="@drawable/custom_type_shape"/>
+            style="@style/custom_tag_main"/>
 
         <TextView
             android:visibility="invisible"
             android:id="@+id/tag_two"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="@color/test_color_a"
-            android:padding="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/custom_type_shape"/>
+            style="@style/custom_tag_main"/>
 
         <TextView
             android:visibility="invisible"
             android:id="@+id/tag_three"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="@color/test_color_a"
-            android:padding="5dp"
-            android:background="@drawable/custom_type_shape"/>
+            style="@style/custom_tag_main"/>
 
     </LinearLayout>
-
+    <TextView
+        android:id="@+id/tv_location"
+        android:textSize="18dp"
+        android:textColor="@color/SlateGray"
+        android:gravity="center"
+        android:layout_marginLeft="15dp"
+        android:padding="6dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"

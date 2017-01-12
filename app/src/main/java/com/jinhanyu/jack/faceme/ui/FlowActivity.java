@@ -28,8 +28,7 @@ public class FlowActivity extends Activity implements View.OnClickListener {
     private TextView icon;//标题
     private GridViewAdapter adapter;//适配器
     private GridView gv;
-    private String type;
-    private User user;
+    private String type;;
     private List<Status> list;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +48,6 @@ public class FlowActivity extends Activity implements View.OnClickListener {
                 icon.setText("星客站");
                 getPic("明星");
                 break;
-            case "兴趣推荐":
-                icon.setText("兴趣推荐");
-                getPic("美女");
-                break;
-            case "附近的人":
-                icon.setText("附近的人");
-                getPic("附近");
-                break;
         }
         adapter = new GridViewAdapter(list, FlowActivity.this);
         gv.setAdapter(adapter);
@@ -75,7 +66,6 @@ public class FlowActivity extends Activity implements View.OnClickListener {
 
     //加载图片
     public void getPic(String tags){
-        user= Utils.getCurrentUser();
         BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
         statusBmobQuery.addWhereEqualTo("tags",tags);
         statusBmobQuery.include("author");

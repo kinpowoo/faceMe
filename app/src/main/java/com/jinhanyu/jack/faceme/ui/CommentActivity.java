@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
@@ -24,13 +26,17 @@ import com.jinhanyu.jack.faceme.entity.Comment;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
@@ -45,7 +51,10 @@ import static com.jinhanyu.jack.faceme.R.id.et_comment_content;
  */
 public class CommentActivity extends AppCompatActivity implements View.OnClickListener,
         CompoundButton.OnCheckedChangeListener,AdapterView.OnItemLongClickListener,
-        TextWatcher,AdapterView.OnItemClickListener{
+        TextWatcher,AdapterView.OnItemClickListener,AbsListView.OnScrollListener{
+    private final int SKIPMOUNT=20;
+    private int pageno=0;
+    private int refreshCount=0;
     private ImageView back,send;
     private CheckBox atPeople;
     private EditText commentContent;
@@ -63,6 +72,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     private String commentorName;
     private String name;
     private LinearLayout statusInfo;
+    private String lastFetchDate;
 
 
     @Override
@@ -95,6 +105,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
+        listView.setOnScrollListener(this);
 
         statusId=getIntent().getStringExtra("statusId");
         if(statusId!=null) {
@@ -116,7 +127,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 
     public void getFollowingList(){
         followingList=new ArrayList<>();
-     BmobQuery<User> query=new BmobQuery<>();
+        BmobQuery<User> query=new BmobQuery<>();
         query.addWhereRelatedTo("following",new BmobPointer(Utils.getCurrentUser()));
         query.findObjects(new FindListener<User>() {
             @Override
@@ -183,6 +194,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                               status.update(status.getObjectId(), new UpdateListener() {
                                   @Override
                                   public void done(BmobException e) {
+                                      refreshComment(status);
                                   }
                               });
                           }
@@ -205,6 +217,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                             status.update(status.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
+                                    refreshComment(status);
                                 }
                             });
                         }
@@ -216,18 +229,49 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    public void refreshComment(Status status){
+        BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
+        commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
+        commentBmobQuery.include("commentor,replyToUser");
+        commentBmobQuery.order("-createdAt");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date= null;
+        try {
+            date = sdf.parse(lastFetchDate);
+            date.setTime(date.getTime()+1000);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        commentBmobQuery.addWhereGreaterThan("createdAt",new BmobDate(date));
+        commentBmobQuery.findObjects(new FindListener<Comment>() {
+            @Override
+            public void done(List<Comment> data, BmobException e) {
+                if(e==null&data.size()>0){
+                    refreshCount+=data.size();
+                    lastFetchDate = data.get(0).getCreatedAt();
+                    list.addAll(0,data);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
 
    public void loadComment(Status status){
        BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
        commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
        commentBmobQuery.include("commentor,replyToUser");
+       commentBmobQuery.order("-createdAt");
+       commentBmobQuery.setSkip(SKIPMOUNT*pageno+refreshCount);
+       commentBmobQuery.setLimit(20);
        commentBmobQuery.findObjects(new FindListener<Comment>() {
            @Override
            public void done(List<Comment> data, BmobException e) {
-               list.clear();
-               list.addAll(data);
-               Collections.sort(list);
-               adapter.notifyDataSetChanged();
+               if(data!=null&&e==null){
+                   pageno++;
+                   lastFetchDate=data.get(0).getCreatedAt();
+                   list.addAll(data);
+                   adapter.notifyDataSetChanged();
+               }
            }
        });
    }
@@ -344,5 +388,18 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     protected void onRestart() {
         getFollowingList();
         super.onRestart();
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+        if(i==SCROLL_STATE_FLING){
+            if(absListView.getLastVisiblePosition()==absListView.getCount()-1){
+                loadComment(status);
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
     }
 }

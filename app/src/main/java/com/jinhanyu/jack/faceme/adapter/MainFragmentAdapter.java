@@ -71,6 +71,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             viewHolder.tag_one = (TextView) view.findViewById(R.id.tag_one);
             viewHolder.tag_two = (TextView) view.findViewById(R.id.tag_two);
             viewHolder.tag_three = (TextView) view.findViewById(R.id.tag_three);
+            viewHolder.location= (TextView) view.findViewById(R.id.tv_location);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
@@ -161,6 +162,11 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         viewHolder.postPhoto.setImageURI(status.getPhoto().getUrl());
         viewHolder.textBy.setText(status.getAuthor().getNickname()+": ");
         viewHolder.text.setText(status.getText());
+        if(status.getLocName()!=null) {
+            viewHolder.location.setText(status.getLocName());
+        }else{
+            viewHolder.location.setVisibility(View.GONE);
+        }
         int tag_count = status.getTags().size() > 3 ? 3 : status.getTags().size();
         viewHolder.tag_one.setVisibility(View.INVISIBLE);
         viewHolder.tag_two.setVisibility(View.INVISIBLE);
@@ -256,7 +262,8 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
     }
     class ViewHolder {
         protected SimpleDraweeView userPortrait, postPhoto;
-        protected TextView nickname, favoriteNum, textBy, text, commentNum, postTime,tag_one,tag_two,tag_three;
+        protected TextView nickname, favoriteNum, textBy, text, commentNum,
+                postTime,tag_one,tag_two,tag_three,location;
         protected ImageView favoriteIcon, commentIcon, shareIcon;
 
     }

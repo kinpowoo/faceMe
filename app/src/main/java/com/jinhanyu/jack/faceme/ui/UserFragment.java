@@ -201,6 +201,7 @@ public class UserFragment extends Fragment implements View.OnClickListener,Radio
         BmobQuery<Status> query=new BmobQuery<>();
         query.addWhereEqualTo("author",new BmobPointer(me));
         query.include("author");
+        query.order("createdAt");
         query.findObjects(new FindListener<Status>() {
             @Override
             public void done(List<Status> data, BmobException e) {

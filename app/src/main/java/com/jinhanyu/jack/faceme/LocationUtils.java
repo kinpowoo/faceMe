@@ -34,6 +34,7 @@ public class LocationUtils implements AMapLocationListener {
         mLocationOption = new AMapLocationClientOption();
 //设置返回地址信息，默认为true
         mLocationOption.setNeedAddress(true);
+        mLocationOption.setHttpTimeOut(30000);
 //设置定位监听
         mlocationClient.setLocationListener(this);
 //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
@@ -55,13 +56,13 @@ public class LocationUtils implements AMapLocationListener {
                 //定位成功回调信息，设置相关消息
                 Position position  = new Position();
                 position.setLatitude(amapLocation.getLatitude());//获取纬度
-                position.setLongitude(amapLocation.getLongitude());//获取经度
-                position.setCountry(amapLocation.getCountry());//国家信息
+                position.setLongitude(amapLocation.getLongitude());//获取经
                 position.setProvince(amapLocation.getProvince());//省信息
                 position.setCity(amapLocation.getCity());//城市信息
                 handler.sendMessage(Message.obtain(handler,0,position));
-//                amapLocation.getDistrict();//城区信息
-//                amapLocation.getStreet();//街道信息
+                amapLocation.getDistrict();//城区信息
+                amapLocation.getStreet();//街道信息
+                amapLocation.getAoiName();
 //                amapLocation.getStreetNum();//街道门牌号信息
 
             } else {

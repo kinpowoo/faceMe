@@ -49,7 +49,7 @@ import cn.bmob.v3.listener.UpdateListener;
 public class SingleStatusActivity extends AppCompatActivity implements View.OnClickListener,View.OnLongClickListener{
     private ImageView back,option,favoriteIcon,commentIcon,shareIcon;
     private SimpleDraweeView userPortrait,statusPhoto;
-    private TextView favoriteNum,textBy,text,commentNum,postTime,nickname;
+    private TextView favoriteNum,textBy,text,commentNum,postTime,nickname,location;
     private String statusId;
     private Status status;
     private View menuView;
@@ -100,6 +100,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         commentNum= (TextView) findViewById(R.id.tv_single_status_commentNum);
         postTime= (TextView) findViewById(R.id.tv_single_status_postTime);
         nickname= (TextView) findViewById(R.id.tv_single_status_username);
+        location= (TextView) findViewById(R.id.tv_single_status_location);
 
         menuView= LayoutInflater.from(this).inflate(R.layout.single_status_option_menu,null);
         delete= (TextView) menuView.findViewById(R.id.tv_single_status_option_menu_delete);
@@ -214,6 +215,10 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
 
         textBy.setText(st.getAuthor().getNickname()+": ");
         text.setText(st.getText());
+        if(st.getLocName()!=null) {
+            location.setVisibility(View.VISIBLE);
+            location.setText(st.getLocName());
+        }
 
         try {
             postTime.setText(Utils.calculTime(st.getCreatedAt()));

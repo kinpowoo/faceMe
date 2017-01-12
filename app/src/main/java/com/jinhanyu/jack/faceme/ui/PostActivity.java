@@ -45,13 +45,11 @@ public class PostActivity extends Activity implements View.OnClickListener {
     private TextView tv_uploading;//发表
     private EditText et_content;//发表的内容
     private TextView word_number;//内容的字数限定（上限140）
-    private ImageView who_look;//@谁，给谁看
-    private ImageView face;//表情
-    private ImageView location, surfaceview;//定位
+    private ImageView surfaceview;//定位
     private TextView location_show;//具体位置
     private GridLayout gl;
     private String picPath;
-    private Position location1 = new Position();
+    private Position location= new Position();
     private CheckedTextView tv_FaceMe, tv_travel, tv_baby, tv_nearby, tv_start, tv_boy, tv_belle, tv_food, custom_type_one, custom_type_two;
     private ImageView tv_add;
     private int tag_count = 0;//计数器
@@ -63,9 +61,14 @@ public class PostActivity extends Activity implements View.OnClickListener {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0:
-                    location1 = (Position) msg.obj;
-                    String positionText = location1.getProvince()+ "." +location1.getCity();
-                    location_show.setText(positionText);
+                    location = (Position) msg.obj;
+                    if(location.getStreet()!=null) {
+                        String positionText = location.getDistrict() + "." + location.getStreet() + "." + location.getAoiName();
+                        location_show.setText(positionText);
+                    }else {
+                        location_show.setText(location.getProvince()+"."+location.getCity());
+                    }
+
                     break;
             }
         }
@@ -82,7 +85,6 @@ public class PostActivity extends Activity implements View.OnClickListener {
         tv_uploading = (TextView) findViewById(R.id.tv_uploading);
         et_content = (EditText) findViewById(R.id.et_content);
         word_number = (TextView) findViewById(R.id.word_number);
-        location = (ImageView) findViewById(R.id.location);
         location_show = (TextView) findViewById(R.id.location_show);
         gl = (GridLayout) findViewById(R.id.gl);
         tv_FaceMe = (CheckedTextView) findViewById(R.id.tv_FaceMe);//FaceMe
@@ -143,7 +145,7 @@ public class PostActivity extends Activity implements View.OnClickListener {
 
     private List<String> getTags() {
         if (tv_FaceMe.isChecked())
-            tags.add("FaceMe");
+            tags.add("自拍");
         if (tv_travel.isChecked())
             tags.add("旅行");
         if (tv_baby.isChecked())
@@ -157,7 +159,7 @@ public class PostActivity extends Activity implements View.OnClickListener {
         if (tv_food.isChecked())
             tags.add("美食");
         if (tv_nearby.isChecked())
-            tags.add("附近");
+            tags.add("风景");
 
         return tags;
 
@@ -209,9 +211,14 @@ public class PostActivity extends Activity implements View.OnClickListener {
                         status.setAuthor(User.getCurrentUser(User.class));
                         status.setPhoto(bmobFile);
                         status.setText(content);
+                        if(location.getStreet()!=null){
+                            status.setLocName(location.getDistrict()+"."+location.getStreet()+"."+location.getAoiName());
+                        }else {
+                            status.setLocName(location.getProvince() + "." + location.getCity());
+                        }
                         List<String> tt = getTags();
                         status.setTags(tt);
-                        status.setLocation(new BmobGeoPoint(location1.getLongitude(), location1.getLatitude()));
+                        status.setLocation(new BmobGeoPoint(location.getLongitude(), location.getLatitude()));
                         status.save(new SaveListener<String>() {
                             @Override
                             public void done(String s, BmobException e) {

@@ -14,7 +14,7 @@ import cn.bmob.v3.datatype.BmobRelation;
  */
 public class Status extends BmobObject implements Comparable<Status>{
     private User author;
-    private String text;
+    private String text,locName;
     private BmobFile photo;
     private BmobRelation likes;
     private List<String> tags;
@@ -29,6 +29,14 @@ public class Status extends BmobObject implements Comparable<Status>{
 
     public void setCommentNum(Integer commentNum) {
         this.commentNum = commentNum;
+    }
+
+    public String getLocName() {
+        return locName;
+    }
+
+    public void setLocName(String locName) {
+        this.locName = locName;
     }
 
     public Integer getFavoriteNum() {

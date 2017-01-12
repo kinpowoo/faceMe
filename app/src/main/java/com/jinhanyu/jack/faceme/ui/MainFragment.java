@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -37,33 +38,27 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class MainFragment extends Fragment{
+public class MainFragment extends Fragment implements AbsListView.OnScrollListener{
+    private int COUNT=0;
+    private final int SKIPMOUNT=20;
+    private int refreshCount=0;
     private ListView listView;
     private List<Status> list;
     private MainFragmentAdapter adapter;
     private PtrFrameLayout ptrFrameLayout;
     private Ptr_refresh ptr_refresh;
     private User me= User.getCurrentUser(User.class);
-    private ProgressBar bar;
-    String lastFetchDate;
-    Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            if(msg.what==2){
-                bar.setVisibility(View.GONE);
-            }
-        }
-    };
+    private String lastFetchDate;
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.main_fragment,null);
         listView= (ListView) view.findViewById(R.id.lv_mainFragment);
         ptrFrameLayout= (PtrFrameLayout) view.findViewById(R.id.iv_mainFragment_ptrFrame);
         ptr_refresh=new Ptr_refresh(getActivity());
-        bar= (ProgressBar) view.findViewById(R.id.pb_main);
         list=new ArrayList<>();
         adapter=new MainFragmentAdapter(list,getActivity(),getActivity());
         listView.setAdapter(adapter);
+        listView.setOnScrollListener(this);
 
         ptrFrameLayout.setHeaderView(ptr_refresh);
         ptrFrameLayout.addPtrUIHandler(ptr_refresh);
@@ -116,6 +111,7 @@ public class MainFragment extends Fragment{
             @Override
             public void done(List<Status> data, BmobException e) {
                 if(data.size()> 0 ){
+                    refreshCount+=data.size();
                     lastFetchDate = data.get(0).getCreatedAt();
                     list.addAll(0,data);
                     adapter.notifyDataSetChanged();
@@ -150,15 +146,40 @@ public class MainFragment extends Fragment{
         statusQuery.order("-createdAt");
         statusQuery.addWhereMatchesQuery("author", "_User", innerQuery);
         statusQuery.include("author");
+        statusQuery.setSkip(COUNT*SKIPMOUNT+refreshCount);
+        statusQuery.setLimit(20);
+        //判断是否有缓存，该方法必须放在查询条件（如果有的话）都设置完之后再来调用才有效，就像这里一样。
+        boolean isCache = statusQuery.hasCachedResult(Status.class);
+        if(isCache){  //此为举个例子，并不一定按这种方式来设置缓存策略
+            statusQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);    // 如果有缓存的话，则设置策略为CACHE_ELSE_NETWORK
+        }else{
+            statusQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);    // 如果没有缓存的话，则设置策略为NETWORK_ELSE_CACHE
+        }
         statusQuery.findObjects(new FindListener<Status>() {
             @Override
             public void done(List<Status> data, BmobException e) {
-                lastFetchDate = data.get(0).getCreatedAt();
-                handler.sendEmptyMessage(2);
-                list.addAll(data);
-                adapter.notifyDataSetChanged();
+                if(data!=null&&e==null) {
+                    COUNT++;
+                    lastFetchDate = data.get(0).getCreatedAt();
+                    list.addAll(data);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
     }
 
+
+    @Override
+    public void onScrollStateChanged(AbsListView absListView, int i) {
+        if(i==SCROLL_STATE_FLING) {
+            if (absListView.getLastVisiblePosition() == absListView.getCount()-1) {
+                loadData();
+            }
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+    }
 }

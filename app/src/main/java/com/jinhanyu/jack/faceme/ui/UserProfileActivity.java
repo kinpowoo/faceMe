@@ -199,6 +199,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
         statusBmobQuery.addWhereEqualTo("author",new BmobPointer(user));
         statusBmobQuery.include("author");
+        statusBmobQuery.order("createdAt");
         statusBmobQuery.findObjects(new FindListener<Status>() {
             @Override
             public void done(List<Status> data, BmobException e) {

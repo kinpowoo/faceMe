@@ -61,7 +61,7 @@
 
     <!-- 定义标签形状-->
     @TargetApi(11)
-    <style name="custrom_Tag">
+    <style name="custom_Tag">
         <item name="android:layout_width">90dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@drawable/tag_custom</item>
@@ -74,5 +74,18 @@
         <item name="android:layout_marginTop">7dp</item>
         <item name="android:textAlignment">center</item>
         <item name="android:layout_marginLeft">10dp</item>
+    </style>
+    <style name="custom_tag_main">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/tag_custom_light</item>
+        <item name="android:textColor">@color/White</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginLeft">5dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
     </style>
 </resources>

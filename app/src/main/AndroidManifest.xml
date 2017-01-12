@@ -86,7 +86,6 @@
         <activity android:name=".ui.EditStatusActivity" />
         <activity android:name=".ui.EditProfileActivity" />
         <activity android:name=".ui.AddFriend" />
-        <activity android:name=".ui.WonderfulActivities" />
         <activity android:name=".ui.FlowActivity" />
         <activity android:name=".ui.CustomTag"/>
         <activity android:name=".ui.SearchResultActivity"/>

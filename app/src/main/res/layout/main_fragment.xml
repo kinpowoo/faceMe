@@ -22,10 +22,6 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-    <ProgressBar
-        android:id="@+id/pb_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
     <in.srain.cube.views.ptr.PtrFrameLayout
         android:id="@+id/iv_mainFragment_ptrFrame"
         android:layout_width="match_parent"
@@ -45,4 +41,5 @@
             android:layout_height="match_parent" />
 
     </in.srain.cube.views.ptr.PtrFrameLayout>
+
 </LinearLayout>

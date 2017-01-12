@@ -9,8 +9,10 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.entity.FriendLikeItem;
 import com.jinhanyu.jack.faceme.entity.Status;
+import com.jinhanyu.jack.faceme.entity.User;
 import com.jinhanyu.jack.faceme.ui.SingleStatusActivity;
 
 import java.util.List;
@@ -42,7 +44,12 @@ public class FavoriteItemAdapter extends CommonAdapter<FriendLikeItem> {
         final FriendLikeItem item=data.get(position);
 
         viewHold.userPortrait.setImageURI(item.getFriend().getPortrait().getUrl());
-        viewHold.username.setText(item.getFriend().getUsername()+"喜欢了");
+        if(item.getStatus().getAuthor().getObjectId().equals(Utils.getCurrentUser().getObjectId())){
+            viewHold.username.setText(item.getFriend().getUsername()+" 赞了你的");
+        }else{
+            viewHold.username.setText(item.getFriend().getUsername()+" 赞了“"+item.getStatus().getAuthor().getUsername()+"”的");
+        }
+
         viewHold.statusPhoto.setImageURI(item.getStatus().getPhoto().getUrl());
         viewHold.statusPhoto.setOnClickListener(new View.OnClickListener() {
             @Override

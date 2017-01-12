@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/White"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -133,42 +134,35 @@
 
                 <TextView
                     android:id="@+id/tag_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/custom_type_shape"
-                    android:padding="5dp"
-                    android:text=""
-                    android:textColor="@color/test_color_a"
+                    style="@style/custom_tag_main"
                     android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/tag_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/custom_type_shape"
-                    android:padding="5dp"
-                    android:text=""
-                    android:textColor="@color/test_color_a"
+                    style="@style/custom_tag_main"
                     android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/tag_three"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/custom_type_shape"
-                    android:padding="5dp"
-                    android:text=""
-                    android:textColor="@color/test_color_a"
+                    style="@style/custom_tag_main"
                     android:visibility="invisible" />
 
             </LinearLayout>
+            <TextView
+                android:id="@+id/tv_single_status_location"
+                android:paddingLeft="17dp"
+                android:paddingTop="5dp"
+                android:visibility="gone"
+                android:paddingBottom="5dp"
+                android:textColor="@color/test_color_a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:background="@color/SlateGray" />
 
             <TextView
@@ -185,6 +179,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:background="@color/SlateGray" />
 
             <LinearLayout
@@ -239,7 +234,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/White"
-                    android:paddingBottom="1dp"
+                    android:paddingBottom="5dp"
                     android:paddingLeft="20dp"
                     android:paddingTop="1dp" />
             </LinearLayout>

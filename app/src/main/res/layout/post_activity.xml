@@ -88,7 +88,7 @@
 
                 <CheckedTextView
                     android:id="@+id/custom_type_one"
-                    style="@style/custrom_Tag"
+                    style="@style/custom_Tag"
                     android:visibility="invisible"
                     android:singleLine="true"
                     android:layout_centerInParent="true"
@@ -99,7 +99,7 @@
 
                 <CheckedTextView
                     android:id="@+id/custom_type_two"
-                    style="@style/custrom_Tag"
+                    style="@style/custom_Tag"
                     android:visibility="invisible"
                     android:singleLine="true"
                     android:layout_alignParentRight="true"
@@ -121,49 +121,49 @@
 
                 <CheckedTextView
                     android:id="@+id/tv_FaceMe"
-                    style="@style/custrom_Tag"
-                    android:text="faceme"
+                    style="@style/custom_Tag"
+                    android:text="自拍"
                     />
 
                 <CheckedTextView
                     android:id="@+id/tv_baby"
-                    style="@style/custrom_Tag"
+                    style="@style/custom_Tag"
                     android:text="宝贝"
                    />
 
                 <CheckedTextView
                     android:id="@+id/tv_nearby"
-                    style="@style/custrom_Tag"
-                    android:text="附近"
+                    style="@style/custom_Tag"
+                    android:text="风景"
                     />
 
                 <CheckedTextView
                     android:id="@+id/tv_start"
-                    style="@style/custrom_Tag"
+                    style="@style/custom_Tag"
                     android:text="明星"
                     />
 
                 <CheckedTextView
                     android:id="@+id/tv_boy"
-                    style="@style/custrom_Tag"
+                    style="@style/custom_Tag"
                     android:text="帅哥"
                     />
 
                 <CheckedTextView
                     android:id="@+id/tv_belle"
-                    style="@style/custrom_Tag"
+                    style="@style/custom_Tag"
                     android:text="美女"
                    />
 
                 <CheckedTextView
                     android:id="@+id/tv_food"
-                    style="@style/custrom_Tag"
+                    style="@style/custom_Tag"
                     android:text="美食"
                     />
 
                 <CheckedTextView
                     android:id="@+id/tv_travel"
-                    style="@style/custrom_Tag"
+                    style="@style/custom_Tag"
                     android:text="旅行"
                     />
 

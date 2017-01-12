@@ -2,15 +2,20 @@ package com.jinhanyu.jack.faceme.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jinhanyu.jack.faceme.LocationUtils;
 import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.adapter.GridViewAdapter;
+import com.jinhanyu.jack.faceme.entity.Position;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
@@ -18,8 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.datatype.BmobQueryResult;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.SQLQueryListener;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
@@ -33,9 +40,37 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
     private GridView gv;//九宫格图片显示
     private Ptr_refresh refresh;//下拉刷新类对象
     private List<Status> list = new ArrayList<>();
-    private User user;
     private GridViewAdapter adapter;
-
+    private Position location;
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what==0){
+                location= (Position) msg.obj;
+                String bql="select * from Status where location near ["+
+                        location.getLongitude()+","+location.getLatitude()+"] order by createdAt";
+                BmobQuery<Status> query=new BmobQuery<Status>();
+                query.doSQLQuery(bql, new SQLQueryListener<Status>() {
+                    @Override
+                    public void done(BmobQueryResult<Status> result, BmobException e) {
+                        if(e ==null){
+                            List<Status> data = (List<Status>) result.getResults();
+                            if(data!=null && data.size()>0){
+                                list.clear();
+                                list.addAll(data);
+                                adapter.notifyDataSetChanged();
+                            }else{
+                                Log.i("smile", "查询成功，无数据返回");
+                            }
+                        }else{
+                            Log.i("smile", "错误码："+e.getErrorCode()+"，错误描述："+e.getMessage());
+                        }
+                    }
+                });
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,21 +82,31 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
         iv_ptrFrame = (PtrFrameLayout) findViewById(R.id.iv_ptrFrame);
         gv = (GridView) findViewById(R.id.gv);
         refresh = new Ptr_refresh(SearchResultActivity.this);
-
-        //加载图片
-        user= Utils.getCurrentUser();
-        BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
-        statusBmobQuery.addWhereEqualTo("tags",getIntent().getStringExtra("search_text"));
-        statusBmobQuery.include("author");
-        statusBmobQuery.findObjects(new FindListener<Status>() {
-            @Override
-            public void done(List<Status> data, BmobException e) {
-                list.addAll(data);
-                adapter.notifyDataSetChanged();
-            }
-        });
         adapter = new GridViewAdapter(list, this);
         gv.setAdapter(adapter);
+
+        //加载图片
+
+        switch (getIntent().getStringExtra("search_text")){
+            case "附近":
+                new LocationUtils(this,handler).guide();
+                break;
+            default:
+                BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
+                statusBmobQuery.addWhereEqualTo("tags",getIntent().getStringExtra("search_text"));
+                statusBmobQuery.include("author");
+                statusBmobQuery.findObjects(new FindListener<Status>() {
+                    @Override
+                    public void done(List<Status> data, BmobException e) {
+                        list.clear();
+                        list.addAll(data);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+                break;
+        }
+
+
 
         //控件的监听
         iv_back.setOnClickListener(this);
