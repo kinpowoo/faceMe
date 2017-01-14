@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/location_shape"
+    android:background="@color/WhiteSmoke"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -23,7 +23,7 @@
             android:layout_centerInParent="true"
             android:text="查找好友"
             android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:textSize="20dp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -40,7 +40,7 @@
         android:layout_margin="10dp"
         android:layout_gravity="center_vertical"
         android:textColor="@color/black"
-        android:textSize="20sp"/>
+        android:textSize="18dp"/>
 
         <com.jinhanyu.jack.faceme.ClearEditText
             android:id="@+id/cet_addFriend_account"
