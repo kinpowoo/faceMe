@@ -33,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:layout_marginBottom="5dp"
         cube_ptr:ptr_duration_to_close="300"
         cube_ptr:ptr_duration_to_close_header="1500"
         cube_ptr:ptr_keep_header_when_refresh="true"
@@ -49,6 +50,7 @@
         android:paddingRight="10dp"
         android:fastScrollEnabled="true"
         android:horizontalSpacing="10dp"
+
         android:scrollbars="none"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp" />

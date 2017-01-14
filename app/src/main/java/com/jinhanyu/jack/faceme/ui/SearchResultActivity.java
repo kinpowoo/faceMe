@@ -40,7 +40,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Created by anzhuo on 2016/10/28.陈礼
  */
 public class SearchResultActivity extends Activity implements View.OnClickListener,AbsListView.OnScrollListener{
-    private final int SKIPNUM=20;
+    private final int SKIPNUM=10;
     private int count=0;
     private int refreshCount=0;
     private ImageView iv_back;//返回
@@ -78,6 +78,7 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
         adapter = new GridViewAdapter(list, this);
         gv.setAdapter(adapter);
 
+        list.clear();
         //加载图片
 
         switch (tagIncoming){
@@ -136,6 +137,7 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
             @Override
             public void done(List<Status> data, BmobException e) {
                 if(data.size()>0 && e==null) {
+                    count+=1;
                     lastFetchDate=data.get(0).getCreatedAt();
                     list.addAll(data);
                     adapter.notifyDataSetChanged();
@@ -146,8 +148,7 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
 
     public void loadDataGeo(Position loc){
         String bql="select * from Status where location near ["+
-        loc.getLongitude()+","+loc.getLatitude()+"] order by -createdAt skip "+
-                (SKIPNUM*count+refreshCount)+" limit 10";
+        loc.getLongitude()+","+loc.getLatitude()+"] order by -createdAt limit "+(SKIPNUM*count+refreshCount)+" ,10";
         BmobQuery<Status> query=new BmobQuery<Status>();
         query.doSQLQuery(bql, new SQLQueryListener<Status>() {
             @Override
@@ -155,6 +156,8 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
                 if(e ==null){
                     List<Status> data = (List<Status>) result.getResults();
                     if(data!=null && data.size()>0){
+                        Log.i("status","have been load "+count+" time");
+                        count+=1;
                         lastFetchDate=data.get(0).getCreatedAt();
                         list.addAll(data);
                         adapter.notifyDataSetChanged();
@@ -181,18 +184,19 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
         switch (tagIncoming){
             case "附近":
         String bql="select * from Status where location near ["+
-                location.getLongitude()+","+location.getLatitude()+"] and createdAt > date("+lastFetchDate+") order by -createdAt";
+                location.getLongitude()+","+location.getLatitude()+"] and createdAt > date("+lastFetchDate+") order by -createdAt limit 10";
         BmobQuery<Status> query=new BmobQuery<Status>();
         query.doSQLQuery(bql, new SQLQueryListener<Status>() {
             public void done(BmobQueryResult<Status> result, BmobException e) {
                 if(e ==null){
                     List<Status> data = (List<Status>) result.getResults();
                     if(data!=null && data.size()>0){
+                        refreshCount+=data.size();
                         lastFetchDate=data.get(0).getCreatedAt();
                         list.addAll(0,data);
                         adapter.notifyDataSetChanged();
                     }else{
-                       Toast.makeText(SearchResultActivity.this,"刷新失败",Toast.LENGTH_SHORT).show();
+                       Toast.makeText(SearchResultActivity.this,"没有更多数据",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -213,26 +217,23 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
                     list.addAll(0,data);
                     adapter.notifyDataSetChanged();
                 }else{
-                    Toast.makeText(SearchResultActivity.this,"刷新失败",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchResultActivity.this,"没有更多数据",Toast.LENGTH_SHORT).show();
                 }
             }
         });
                 break;
         }
     }
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        finish();
-    }
+
 
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
         if(i==SCROLL_STATE_FLING) {
-            if (absListView.getLastVisiblePosition() == absListView.getCount() - 1){
+            if (absListView.getLastVisiblePosition() == list.size()){
               switch (tagIncoming){
                   case "附近":
                       loadDataGeo(location);
+                      Log.i("status","have been load "+count+" time");
                       break;
                   default:
                       loadDataNormal();
@@ -245,6 +246,12 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
     @Override
     public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        list.clear();
     }
 }
 
