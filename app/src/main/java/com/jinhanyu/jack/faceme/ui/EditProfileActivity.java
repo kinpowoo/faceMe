@@ -137,7 +137,6 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             case R.id.tv_edit_profile_commit:
-
                 final BmobFile bmobFile = new BmobFile(file);
                 if (file != null) {
                     CustomProgress.show(this,"正在提交修改...");

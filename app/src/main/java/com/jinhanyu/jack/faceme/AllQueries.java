@@ -48,7 +48,6 @@ public class AllQueries {
             @Override
             public void done(Integer num, BmobException e) {
                 Log.i("favoriteNum", num + "");
-
             }
         });
 

@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="互动中心"
-            android:textColor="@color/Blue"
+            android:textColor="@color/CadetBlue"
             android:textSize="19dp" />
     </RelativeLayout>
 
@@ -196,7 +196,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/add_friend_shape"
                     android:padding="2dp"
-                    android:src="@mipmap/star" />
+                    android:src="@drawable/nearby_people" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -204,7 +204,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1"
-                    android:text="星客站"
+                    android:text="附近的人"
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 

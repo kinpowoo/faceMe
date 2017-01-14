@@ -126,7 +126,7 @@
 
 
         <service android:name="com.amap.api.location.APSService"></service>
-
+        <service android:name=".RealTimeService"></service>
 
     </application>
 

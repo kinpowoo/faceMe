@@ -4,6 +4,7 @@ import com.jinhanyu.jack.faceme.R;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
+import cn.bmob.v3.datatype.BmobGeoPoint;
 import cn.bmob.v3.datatype.BmobRelation;
 
 /**
@@ -14,9 +15,18 @@ public class User extends BmobUser {
     private String nickname;
     private BmobRelation following;
     private String gender;
+    private BmobGeoPoint realTimeLoc;
     private Integer followingNum;
     private Integer followerNum;
     private boolean isFriend;
+
+    public BmobGeoPoint getRealTimeLoc() {
+        return realTimeLoc;
+    }
+
+    public void setRealTimeLoc(BmobGeoPoint realTimeLoc) {
+        this.realTimeLoc = realTimeLoc;
+    }
 
     public boolean isFriend() {
         return isFriend;
@@ -50,8 +60,6 @@ public class User extends BmobUser {
     public void setGender(String gender) {
         this.gender = gender;
     }
-
-
 
     public String getNickname() {
         return nickname;

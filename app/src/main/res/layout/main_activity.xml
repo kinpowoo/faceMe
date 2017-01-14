@@ -47,10 +47,4 @@
             style="@style/RadioButtonStyle"
             android:drawableTop="@drawable/user_button" />
     </RadioGroup>
-
-    <ImageView
-        android:id="@+id/surfaceview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"/>
 </LinearLayout>

@@ -1,20 +1,13 @@
 package com.jinhanyu.jack.faceme.ui;
-
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.jinhanyu.jack.faceme.MainApplication;
 import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.adapter.MainFragmentAdapter;
@@ -49,6 +42,9 @@ public class MainFragment extends Fragment implements AbsListView.OnScrollListen
     private Ptr_refresh ptr_refresh;
     private User me= User.getCurrentUser(User.class);
     private String lastFetchDate;
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container,Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.main_fragment,null);

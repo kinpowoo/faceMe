@@ -1,7 +1,9 @@
 package com.jinhanyu.jack.faceme.ui;
 
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +12,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -28,6 +31,7 @@ import android.widget.TextView;
 
 import com.jinhanyu.jack.faceme.MainApplication;
 import com.jinhanyu.jack.faceme.R;
+import com.jinhanyu.jack.faceme.RealTimeService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,7 +48,7 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private FragmentManager fragmentManager;
     private FragmentTransaction transaction;
-
+    private RealTimeService myService;
     private RadioButton rb_mainActivity_mainFragment;
     private RadioButton rb_mainActivity_flowFragment;
     private Button rb_mainActivity_postFragment;
@@ -54,20 +58,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FlowFragment flowFragment;
     private FavoriteFragment favoriteFragment;
     private UserFragment userFragment;
-    private ImageView surfaceview;
+    private Intent intent;
 
     //动态加载视图相关
     private View view;
     private PopupWindow popupWindow;
     private ImageView camera, photo;
 
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            myService = ((RealTimeService.MyBinder) service).getService();
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
+        intent = new Intent(MainActivity.this, RealTimeService.class);
+        bindService(intent, connection, BIND_AUTO_CREATE);
         //pop弹窗控件初始化
         view = LayoutInflater.from(MainActivity.this).inflate(R.layout.postchoose, null);
         camera = (ImageView) view.findViewById(R.id.camera);
@@ -78,7 +93,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_mainActivity_postFragment = (Button) findViewById(R.id.rb_mainActivity_postFragment);
         rb_mainActivity_favoriteFragment = (RadioButton) findViewById(R.id.rb_mainActivity_favoriteFragment);
         rb_mainActivity_userFragment = (RadioButton) findViewById(R.id.rb_mainActivity_userFragment);
-        surfaceview = (ImageView) findViewById(R.id.surfaceview);
 
         rb_mainActivity_mainFragment.setOnClickListener(this);
         rb_mainActivity_flowFragment.setOnClickListener(this);
@@ -330,5 +344,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbindService(connection);
+        super.onDestroy();
     }
 }

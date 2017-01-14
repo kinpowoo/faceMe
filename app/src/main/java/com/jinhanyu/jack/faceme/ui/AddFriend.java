@@ -28,19 +28,16 @@ public class AddFriend extends Activity implements View.OnClickListener {
     private Ptr_refresh refresh;//刷新类
     private in.srain.cube.views.ptr.PtrFrameLayout iv_frame;
     private LinearLayout seart_name;
-    private LinearLayout focus_show, fans_show,add_friend, start_stand;
+    private LinearLayout focus_show, fans_show,add_friend,nearby;
     private TextView focus_num, fans_num;
     private User userIncoming = Utils.getCurrentUser();
-    private String userId;
     private User user = Utils.getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_friend);
-
         iv_back = (ImageView) findViewById(R.id.iv_back);
-
         iv_frame = (PtrFrameLayout) findViewById(R.id.iv_ptrFrame);
         seart_name = (LinearLayout) findViewById(R.id.search_name);
         focus_num = (TextView) findViewById(R.id.focus_num);
@@ -48,14 +45,14 @@ public class AddFriend extends Activity implements View.OnClickListener {
         focus_show = (LinearLayout) findViewById(R.id.focus_show);
         fans_show = (LinearLayout) findViewById(R.id.fans_show);
         add_friend = (LinearLayout) findViewById(R.id.add_friend);
-        start_stand = (LinearLayout) findViewById(R.id.start_stand);
+        nearby = (LinearLayout) findViewById(R.id.start_stand);
         refresh = new Ptr_refresh(this);
         iv_back.setOnClickListener(this);
 
         focus_show.setOnClickListener(this);
         fans_show.setOnClickListener(this);
         add_friend.setOnClickListener(this);
-        start_stand.setOnClickListener(this);
+        nearby.setOnClickListener(this);
         seart_name.setOnClickListener(this);
         iv_frame.setHeaderView(refresh);
         iv_frame.addPtrUIHandler(refresh);
@@ -127,8 +124,10 @@ public class AddFriend extends Activity implements View.OnClickListener {
             case R.id.add_friend://添加好友
                 startActivity(new Intent(AddFriend.this, AddFriendNum.class));
                 break;
-            case R.id.start_stand://星客站
-                startActivity(new Intent(AddFriend.this, FlowActivity.class).putExtra("icon", "明星"));
+            case R.id.start_stand://附近的人
+                Bundle bundle3=new Bundle();
+                bundle3.putString("type","nearby");
+                startActivity(new Intent(AddFriend.this, LikesActivity.class).putExtras(bundle3));
                 break;
             case R.id.search_name:
                 startActivity(new Intent(AddFriend.this, AddFriendNum.class));

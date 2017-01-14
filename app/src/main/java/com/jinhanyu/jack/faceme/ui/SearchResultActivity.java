@@ -77,7 +77,6 @@ public class SearchResultActivity extends Activity implements View.OnClickListen
         refresh = new Ptr_refresh(SearchResultActivity.this);
         adapter = new GridViewAdapter(list, this);
         gv.setAdapter(adapter);
-
         list.clear();
         //加载图片
 
