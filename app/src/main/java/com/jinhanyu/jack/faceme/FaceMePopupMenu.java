@@ -85,9 +85,12 @@ public class FaceMePopupMenu extends PopupWindow {
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         //添加弹出、弹入的动画
         popupWindow.setAnimationStyle(R.style.PopupWindow_menu);
+        popupWindow.showAtLocation(view,Gravity.BOTTOM,0,0);
+        /**
         int[] location = new int[2];
         view.getLocationOnScreen(location);
         popupWindow.showAtLocation(view, Gravity.LEFT | Gravity.BOTTOM,0,-location[1]);
+         */
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {

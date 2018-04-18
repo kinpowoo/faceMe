@@ -242,7 +242,8 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             }
         });
 
-         viewHolder.postPhoto.setOnLongClickListener(new View.OnLongClickListener() {
+        final View finalView = view;
+        viewHolder.postPhoto.setOnLongClickListener(new View.OnLongClickListener() {
              @Override
              public boolean onLongClick(View v) {
                  FaceMePopupMenu popupMenu=new FaceMePopupMenu(activity);
@@ -253,7 +254,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                          Toast.makeText(context,"图片已保存到本地",Toast.LENGTH_SHORT).show();
                      }
                  });
-                 popupMenu.show(parent);
+                 popupMenu.show(finalView);
                  return false;
              }
          });

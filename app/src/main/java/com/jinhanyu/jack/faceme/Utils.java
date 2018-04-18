@@ -116,9 +116,12 @@ public class Utils {
                         OutputStream out = new FileOutputStream(loc);
                         Bitmap bitmap = BitmapFactory.decodeByteArray(outputStream.toByteArray(), 0, outputStream.toByteArray().length);
                         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-                        Message message=new Message();
-                        handler.obtainMessage(1,loc.getAbsolutePath());
-                        message.sendToTarget();
+
+                        if(handler!=null) {
+                            Message message=handler.obtainMessage();
+                            handler.obtainMessage(1, loc.getAbsolutePath());
+                            message.sendToTarget();
+                        }
                     }
                 } catch (java.io.IOException e) {
                     e.printStackTrace();

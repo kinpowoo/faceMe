@@ -4,7 +4,7 @@ android {
         config {
             keyAlias 'faceme'
             keyPassword 'kinpowoo'
-            storeFile file('D:/Android/Project/faceMe-master/keystore.jks')
+            storeFile file('D:/Android/Project/faceMe/keystore.jks')
             storePassword 'kinpowoo'
         }
     }
@@ -61,7 +61,6 @@ dependencies {
     compile 'cn.bmob.android:bmob-sdk:3.5.0'
     //bmob-push：Bmob的推送包
     compile 'cn.bmob.android:bmob-push:0.8'
-
     //bmob-sms ：Bmob单独为短信服务提供的包
     compile 'cn.bmob.android:bmob-sms:1.0.1'
     //material design
@@ -72,9 +71,7 @@ dependencies {
     compile 'com.zcw:togglebutton-library:1.0.0'
     compile 'com.sun.mail:android-mail:1.5.5'
     compile 'com.sun.mail:android-activation:1.5.5'
-
     compile files('libs/MobTools-2016.0830.1940.jar')
-
     //mob 短信验证
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
 }

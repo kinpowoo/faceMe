@@ -79,10 +79,9 @@
 
         <!--主页面-->
         <activity android:name=".ui.MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            >
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
 
-        </activity>
         <activity android:name=".ui.UserProfileActivity" />
         <activity android:name=".ui.SingleStatusActivity">
 
