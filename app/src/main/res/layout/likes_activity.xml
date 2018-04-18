@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/SlateGray"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/GhostWhite">
+
+        <ImageView
+            android:id="@+id/iv_likes_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/tv_likes_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="10dp"
+            android:textSize="25dp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+            <com.jinhanyu.jack.faceme.ClearEditText
+                android:id="@+id/cet_likes_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:gravity="center_vertical"
+                android:drawablePadding="5dp"
+                android:background="@drawable/search_rect"
+                android:drawableLeft="@drawable/search_small" />
+
+            <ListView
+                android:background="@color/White"
+                android:divider="@color/register_activity_bg"
+                android:dividerHeight="3dp"
+                android:id="@+id/lv_likes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+
+
+</LinearLayout>

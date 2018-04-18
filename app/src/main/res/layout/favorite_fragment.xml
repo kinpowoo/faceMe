@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+   <RadioGroup
+       android:id="@+id/radio_group"
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+       <RadioButton
+           android:id="@+id/friend_tab"
+           android:padding="10dp"
+           android:textAlignment="center"
+           android:textSize="20sp"
+           android:button="@null"
+           android:textColor="@color/tab_radio_color"
+           android:background="@drawable/tab_radio_bg"
+           android:text="好友动态"
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:layout_height="wrap_content" />
+       <RadioButton
+           android:id="@+id/me_tab"
+           android:padding="10dp"
+           android:textAlignment="center"
+           android:textSize="20sp"
+           android:button="@null"
+           android:textColor="@color/tab_radio_color"
+           android:background="@drawable/tab_radio_bg"
+           android:text="谁赞了我"
+           android:layout_width="0dp"
+           android:layout_weight="1"
+           android:layout_height="wrap_content" />
+   </RadioGroup>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/no_status_notice"
+            android:text="无任何动态"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ListView
+            android:visibility="visible"
+            android:id="@+id/friends_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <ListView
+            android:visibility="gone"
+            android:id="@+id/about_me_status"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </FrameLayout>
+</LinearLayout>

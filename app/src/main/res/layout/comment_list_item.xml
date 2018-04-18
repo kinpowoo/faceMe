@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <com.daimajia.swipe.SwipeLayout
+        android:id="@+id/swipe"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_comment_item_delete"
+            android:layout_gravity="right"
+            android:background="@color/Red"
+            android:padding="8dp"
+            android:src="@mipmap/delete_comment"
+            android:layout_width="90dp"
+            android:layout_height="match_parent" />
+            <ImageView
+                android:id="@+id/iv_comment_item_atPeople"
+                android:layout_gravity="right"
+                android:background="@color/Gray"
+                android:padding="5dp"
+                android:onClick="onClick"
+                android:visibility="gone"
+                android:src="@drawable/at_people"
+                android:layout_width="90dp"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <RelativeLayout
+            android:padding="5dp"
+            android:id="@+id/rl_comment_item_topLayer"
+            android:background="@color/White"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:layout_marginLeft="18dp"
+                android:layout_alignParentLeft="true"
+                xmlns:fresco="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/sdv_comment_item_userPortrait"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                fresco:roundAsCircle="true" />
+            <TextView
+                android:id="@+id/tv_comment_item_username"
+                android:layout_toRightOf="@+id/sdv_comment_item_userPortrait"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:paddingLeft="2dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/tv_comment_item_postTime"
+                android:gravity="center_vertical"
+                android:layout_alignParentRight="true"
+                android:paddingRight="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:layout_below="@+id/tv_comment_item_username"
+                android:layout_alignLeft="@+id/tv_comment_item_username"
+                android:id="@+id/tv_comment_item_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+    </com.daimajia.swipe.SwipeLayout>
