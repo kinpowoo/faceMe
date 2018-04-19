@@ -73,6 +73,8 @@ public class FavoriteFragment extends BaseFragment implements RadioGroup.OnCheck
                         aboutMeAdapter.updateAdapter(aboutMeStatusList);
                     }else {
                         if(noStatus.getVisibility()==View.GONE){
+                            friendsStatus.setVisibility(View.GONE);
+                            aboutMeStatus.setVisibility(View.GONE);
                             noStatus.setVisibility(View.VISIBLE);
                         }
                     }
@@ -93,6 +95,8 @@ public class FavoriteFragment extends BaseFragment implements RadioGroup.OnCheck
                         friendAdapter.updateAdapter(friendStatusList);
                     }else {
                         if(noStatus.getVisibility()==View.GONE){
+                            friendsStatus.setVisibility(View.GONE);
+                            aboutMeStatus.setVisibility(View.GONE);
                             noStatus.setVisibility(View.VISIBLE);
                         }
                     }

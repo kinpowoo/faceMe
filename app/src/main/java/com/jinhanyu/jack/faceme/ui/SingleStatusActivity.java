@@ -315,9 +315,8 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                         popupWindow.setBackgroundDrawable(new BitmapDrawable());
                         //添加弹出、弹入的动画
                         popupWindow.setAnimationStyle(R.style.PopupWindow_menu);
-                        int[] location = new int[2];
-                        option.getLocationOnScreen(location);
-                        popupWindow.showAtLocation(option, Gravity.LEFT | Gravity.BOTTOM, 0, -location[1]);
+
+                        popupWindow.showAtLocation(option, Gravity.BOTTOM, 0,0);
                         //添加pop窗口关闭事件，主要是实现关闭时改变背景的透明度
                         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
                             @Override

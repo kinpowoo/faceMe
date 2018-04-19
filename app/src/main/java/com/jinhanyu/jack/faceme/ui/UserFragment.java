@@ -84,11 +84,17 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
                     if(loading!=null&&loading.isShowing()){
                         loading.dismiss();
                     }
+                    if(ptrFrameLayout!=null){
+                        ptrFrameLayout.refreshComplete();
+                    }
                     changeView(0);
                     break;
                 case 2:
                     if(loading!=null&&loading.isShowing()){
                         loading.dismiss();
+                    }
+                    if(ptrFrameLayout!=null){
+                        ptrFrameLayout.refreshComplete();
                     }
                     Toast.makeText(getActivity(),"拉取数据失败",Toast.LENGTH_SHORT).show();
                     break;
@@ -153,6 +159,9 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
 
         fillData();
 
+        if(loading!=null&&!loading.isShowing()){
+            loading.show();
+        }
         loadStatus();
         return view;
     }
@@ -263,9 +272,6 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
     }
 
     public void loadStatus(){
-        if(loading!=null&&!loading.isShowing()){
-            loading.show();
-        }
         BmobQuery<Status> query=new BmobQuery<>();
         query.addWhereEqualTo("author",new BmobPointer(me));
         query.include("author");
