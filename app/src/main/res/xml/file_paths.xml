@@ -2,3 +2,5 @@
 <path xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path name="my_images" path=""/>
 </path>
+
+    <!--在resource文件夹下新建xml folder-->

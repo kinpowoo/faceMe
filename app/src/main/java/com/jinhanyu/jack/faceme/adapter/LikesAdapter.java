@@ -49,7 +49,6 @@ public class LikesAdapter extends CommonAdapter<User> {
             viewHold = new ViewHolder3();
             viewHold.userPortrait = (SimpleDraweeView) view.findViewById(R.id.sdv_likes_item_userPortrait);
             viewHold.username = (TextView) view.findViewById(R.id.tv_likes_item_username);
-            viewHold.nickname = (TextView) view.findViewById(R.id.tv_likes_item_nickname);
             viewHold.follow = (Button) view.findViewById(R.id.btn_likes_item_follow);
             view.setTag(viewHold);
         } else {
@@ -57,7 +56,6 @@ public class LikesAdapter extends CommonAdapter<User> {
         }
         final User user = data.get(position);
         viewHold.username.setText(user.getUsername());
-        viewHold.nickname.setText(user.getNickname());
         viewHold.userPortrait.setImageURI(user.getPortrait().getUrl());
 
         viewHold.userPortrait.setOnClickListener(new View.OnClickListener() {
@@ -69,14 +67,6 @@ public class LikesAdapter extends CommonAdapter<User> {
             }
         });
         viewHold.username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, UserProfileActivity.class);
-                intent.putExtra("userId", user.getObjectId());
-                context.startActivity(intent);
-            }
-        });
-        viewHold.nickname.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, UserProfileActivity.class);
@@ -149,7 +139,7 @@ public class LikesAdapter extends CommonAdapter<User> {
 
     class ViewHolder3 {
         protected SimpleDraweeView userPortrait;
-        protected TextView username, nickname;
+        protected TextView username;
         protected Button follow;
     }
 }

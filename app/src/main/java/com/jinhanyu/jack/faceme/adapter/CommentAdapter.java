@@ -61,80 +61,88 @@ public class CommentAdapter extends BaseSwipeAdapter{
             viewHold.topLayer= (RelativeLayout) view.findViewById(R.id.rl_comment_item_topLayer);
             viewHold.atPeople= (ImageView) view.findViewById(R.id.iv_comment_item_atPeople);
 
-        final Comment comment = data.get(position);
+        if (data.size()>0) {
+
+            final Comment comment = data.get(position);
+
+            if(comment!=null) {
+
+                viewHold.userPortrait.setImageURI(comment.getCommentor().getPortrait().getUrl());
+                viewHold.username.setText(comment.getCommentor().getNickname());
+                try {
+                    viewHold.postTime.setText(Utils.calculTime(comment.getCreatedAt()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+
+                }
+                if (comment.getText().charAt(0) == '@') {
+                    Utils.setTVColor(comment.getText(), 0, comment.getReplyToUser().getNickname().length() + 1,
+                            context.getResources().getColor(R.color.BlueViolet), viewHold.commentContent);
+                } else {
+                    viewHold.commentContent.setText(comment.getText());
+                }
+
+                viewHold.atPeople.setTag("repost");
+                if(comment.getCommentor()!=null&&comment.getCommentor().getNickname()!=null
+                        &&Utils.getCurrentUser().getNickname()!=null) {
+                    if (comment.getCommentor().getNickname().equals(Utils.getCurrentUser().getNickname())) {
+                        viewHold.atPeople.setVisibility(View.GONE);
+                        viewHold.delete.setVisibility(View.VISIBLE);
+                    } else {
+                        viewHold.delete.setVisibility(View.GONE);
+                        viewHold.atPeople.setVisibility(View.VISIBLE);
+                    }
+                }
 
 
-        viewHold.userPortrait.setImageURI(comment.getCommentor().getPortrait().getUrl());
-        viewHold.username.setText(comment.getCommentor().getNickname());
-        try {
-            viewHold.postTime.setText(Utils.calculTime(comment.getCreatedAt()));
-        } catch (ParseException e) {e.printStackTrace();
+                viewHold.delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        viewHold.delete.setVisibility(View.GONE);  //点击删除按钮后，影藏按钮
+                        deleteItem(position);   //删除数据，加动画
+                    }
+                });
 
+
+                viewHold.userPortrait.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent intent = new Intent(context, UserProfileActivity.class);
+                        intent.putExtra("userId", comment.getCommentor().getObjectId());
+                        context.startActivity(intent);
+
+                    }
+                });
+                viewHold.username.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent intent = new Intent(context, UserProfileActivity.class);
+                        intent.putExtra("userId", comment.getCommentor().getObjectId());
+                        context.startActivity(intent);
+
+                    }
+                });
+                viewHold.commentContent.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String text = comment.getText();
+                        Pattern pattern = Pattern.compile("@.+?\0\\s");
+                        Matcher matcher = pattern.matcher(text);
+                        if (matcher.find()) {
+                            context.startActivity(new Intent(context, UserProfileActivity.class)
+                                    .putExtra("userId", comment.getReplyToUser().getObjectId()));
+                        } else {
+                            Intent intent = new Intent(context, UserProfileActivity.class);
+                            intent.putExtra("userId", comment.getCommentor().getObjectId());
+                            context.startActivity(intent);
+                        }
+
+                    }
+                });
+            }
         }
-        if(comment.getText().charAt(0)=='@'){
-            Utils.setTVColor(comment.getText(),0,comment.getReplyToUser().getNickname().length()+1,
-                    context.getResources().getColor(R.color.BlueViolet),viewHold.commentContent);
-        }else {
-            viewHold.commentContent.setText(comment.getText());
-        }
-
-        viewHold.atPeople.setTag("repost");
-        if(comment.getCommentor().getNickname().equals(Utils.getCurrentUser().getNickname())) {
-            viewHold.atPeople.setVisibility(View.GONE);
-            viewHold.delete.setVisibility(View.VISIBLE);
-        }else {
-            viewHold.delete.setVisibility(View.GONE);
-            viewHold.atPeople.setVisibility(View.VISIBLE);
-        }
-
-        viewHold.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                viewHold.delete.setVisibility(View.GONE);  //点击删除按钮后，影藏按钮
-                deleteItem(position);   //删除数据，加动画
-            }
-        });
-
-
-        viewHold.userPortrait.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                    Intent intent = new Intent(context, UserProfileActivity.class);
-                    intent.putExtra("userId", comment.getCommentor().getObjectId());
-                    context.startActivity(intent);
-
-            }
-        });
-        viewHold.username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                    Intent intent = new Intent(context, UserProfileActivity.class);
-                    intent.putExtra("userId", comment.getCommentor().getObjectId());
-                    context.startActivity(intent);
-
-            }
-        });
-        viewHold.commentContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    String text=comment.getText();
-                   Pattern pattern = Pattern.compile("@.+?\0\\s");
-                   Matcher matcher = pattern.matcher(text);
-                   if(matcher.find()){
-                        context.startActivity(new Intent(context,UserProfileActivity.class)
-                                .putExtra("userId",comment.getReplyToUser().getObjectId()));
-                   }else {
-                       Intent intent = new Intent(context, UserProfileActivity.class);
-                       intent.putExtra("userId", comment.getCommentor().getObjectId());
-                       context.startActivity(intent);
-                   }
-
-            }
-        });
-
-
     }
 
     @Override
