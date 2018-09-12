@@ -26,6 +26,7 @@ import com.jinhanyu.jack.faceme.ui.LikesActivity;
 import com.jinhanyu.jack.faceme.ui.UserProfileActivity;
 
 import java.text.ParseException;
+import java.util.Iterator;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -46,9 +47,9 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
 
     public MainFragmentAdapter(List<Status> data, Context context, Activity activity) {
         super(data, context);
-        int width= ScreenUtils.getScreenWidth(context);
-        params = new LinearLayout.LayoutParams(width,width);
-        this.activity=activity;
+        int width = ScreenUtils.getScreenWidth(context);
+        params = new LinearLayout.LayoutParams(width, width);
+        this.activity = activity;
     }
 
     @Override
@@ -70,90 +71,82 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             viewHolder.tag_one = (TextView) view.findViewById(R.id.tag_one);
             viewHolder.tag_two = (TextView) view.findViewById(R.id.tag_two);
             viewHolder.tag_three = (TextView) view.findViewById(R.id.tag_three);
-            viewHolder.location= (TextView) view.findViewById(R.id.tv_location);
+            viewHolder.location = (TextView) view.findViewById(R.id.tv_location);
             view.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) view.getTag();
         }
         final Status status = data.get(position);
 
-        BmobQuery<User> query=new BmobQuery<>();
-        query.addWhereRelatedTo("likes",new BmobPointer(status));
-        query.findObjects(new FindListener<User>() {
-            @Override
-            public void done(List<User> list, BmobException e) {
-                if(list!=null) {
-                    for (User u : list) {
-                        if (u.getObjectId().equals(Utils.getCurrentUser().getObjectId())) {
-                            status.setFavoritedByMe2(true);
-                            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
-                        }
-                    }
-                }
-                if(!status.isFavoritedByMe2()){
-                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
-                }
-            }
-        });
+
+        if (!status.isFavoritedByMe2()) {
+            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
+        } else {
+            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
+        }
 
 
         viewHolder.favoriteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BmobRelation relation = new BmobRelation();
                 viewHolder.favoriteIcon.setEnabled(false);
-                if (status.isFavoritedByMe2()) {
-                    //取消收藏
-                    relation.remove(me);
-                    status.setLikes(relation);
-                    status.setFavoriteNum(status.getFavoriteNum()-1);
-                    status.update(status.getObjectId(),new UpdateListener() {
-                        @Override
-                        public void done(BmobException e) {
-                            status.setFavoritedByMe2(false);
-                            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
-                            viewHolder.favoriteIcon.setEnabled(true);
-                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
-                        }
-                    });
-                } else {
-                    //添加收藏
-                    relation.add(me);
-                    status.setLikes(relation);
-                    status.setFavoriteNum(status.getFavoriteNum()+1);
-                    status.update(status.getObjectId(),new UpdateListener() {
-                        @Override
-                        public void done(BmobException e) {
-                            status.setFavoritedByMe2(true);
-                            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
-                            viewHolder.favoriteIcon.setEnabled(true);
-                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
-                        }
-                    });
+
+                BmobRelation relation1 = status.getLikes();
+                List<BmobPointer> followers = relation1.getObjects();
+                Iterator<BmobPointer> iterator = followers.iterator();
+                boolean isSelfIn = false;
+                while (iterator.hasNext()) {
+                    BmobPointer p = iterator.next();
+                    if (p.getObjectId().equals(me.getObjectId())) {
+                        isSelfIn = true;
+                        relation1.remove(me);
+                        status.setFavoritedByMe2(false);
+                        status.setFavoriteNum(status.getFavoriteNum() - 1);
+                    }
                 }
+                if (!isSelfIn) {
+                    relation1.add(me);
+                    status.setFavoritedByMe2(true);
+                    status.setFavoriteNum(status.getFavoriteNum() + 1);
+                }
+                status.setLikes(relation1);
+                status.update(status.getObjectId(), new UpdateListener() {
+                    @Override
+                    public void done(BmobException e) {
+                        status.setFavoritedByMe2(false);
+
+                    }
+                });
+                if (status.isFavoritedByMe2()) {
+                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
+                } else {
+                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
+                }
+                viewHolder.favoriteIcon.setEnabled(true);
+                viewHolder.favoriteNum.setText(status.getFavoriteNum() + "个赞");
             }
         });
 
-            BmobQuery<User> userBmobQuery = new BmobQuery<>();
-            userBmobQuery.addWhereRelatedTo("likes", new BmobPointer(status));
-            userBmobQuery.count(User.class, new CountListener() {
-                @Override
-                public void done(Integer num, BmobException e) {
-                    status.setFavoriteNum(num);
-                    viewHolder.favoriteNum.setText(num + " 个赞");
-                }
-            });
+        BmobQuery<User> userBmobQuery = new BmobQuery<>();
+        userBmobQuery.addWhereRelatedTo("likes", new BmobPointer(status));
+        userBmobQuery.count(User.class, new CountListener() {
+            @Override
+            public void done(Integer num, BmobException e) {
+                status.setFavoriteNum(num);
+                viewHolder.favoriteNum.setText(num + " 个赞");
+            }
+        });
 
 
-            BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
-            commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
-            commentBmobQuery.count(Comment.class, new CountListener() {
-                @Override
-                public void done(Integer integer, BmobException e) {
-                    status.setCommentNum(integer);
-                    viewHolder.commentNum.setText(integer + " 条评论");
-                }
-            });
+        BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
+        commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
+        commentBmobQuery.count(Comment.class, new CountListener() {
+            @Override
+            public void done(Integer integer, BmobException e) {
+                status.setCommentNum(integer);
+                viewHolder.commentNum.setText(integer + " 条评论");
+            }
+        });
 
 
         viewHolder.postPhoto.setLayoutParams(params);
@@ -162,28 +155,30 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         viewHolder.nickname.setText(status.getAuthor().getNickname());
         viewHolder.postPhoto.setImageURI(status.getPhoto().getUrl());
         viewHolder.text.setText(status.getText());
-        if(status.getLocName()!=null) {
+        if (status.getLocName() != null) {
             viewHolder.location.setText(status.getLocName());
-        }else{
+        } else {
             viewHolder.location.setVisibility(View.GONE);
         }
-        int tag_count = status.getTags().size() > 3 ? 3 : status.getTags().size();
+
+        if (status.getTags() != null) {
+            int tag_count = status.getTags().size() > 3 ? 3 : status.getTags().size();
+            if (tag_count > 0) {
+                viewHolder.tag_one.setVisibility(View.VISIBLE);
+                viewHolder.tag_one.setText(status.getTags().get(0));
+            }
+            if (tag_count > 1) {
+                viewHolder.tag_two.setVisibility(View.VISIBLE);
+                viewHolder.tag_two.setText(status.getTags().get(1));
+            }
+            if (tag_count > 2) {
+                viewHolder.tag_three.setVisibility(View.VISIBLE);
+                viewHolder.tag_three.setText(status.getTags().get(2));
+            }
+        }
         viewHolder.tag_one.setVisibility(View.INVISIBLE);
         viewHolder.tag_two.setVisibility(View.INVISIBLE);
         viewHolder.tag_three.setVisibility(View.INVISIBLE);
-
-        if(tag_count>0){
-            viewHolder.tag_one.setVisibility(View.VISIBLE);
-            viewHolder.tag_one.setText(status.getTags().get(0));
-        }
-        if(tag_count>1){
-            viewHolder.tag_two.setVisibility(View.VISIBLE);
-            viewHolder.tag_two.setText(status.getTags().get(1));
-        }
-        if(tag_count>2){
-            viewHolder.tag_three.setVisibility(View.VISIBLE);
-            viewHolder.tag_three.setText(status.getTags().get(2));
-        }
 
 
         try {
@@ -222,7 +217,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         viewHolder.shareIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainApplication.showShareRemote(context,status.getPhoto().getUrl(),status.getText());
+                MainApplication.showShareRemote(context, status.getPhoto().getUrl(), status.getText());
             }
         });
         viewHolder.nickname.setOnClickListener(new View.OnClickListener() {
@@ -244,27 +239,28 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
 
         final View finalView = view;
         viewHolder.postPhoto.setOnLongClickListener(new View.OnLongClickListener() {
-             @Override
-             public boolean onLongClick(View v) {
-                 FaceMePopupMenu popupMenu=new FaceMePopupMenu(activity);
-                 popupMenu.setOnConfirmListener(new View.OnClickListener() {
-                     @Override
-                     public void onClick(View v) {
-                         Utils.downPic(status.getPhoto().getUrl(),null);
-                         Toast.makeText(context,"图片已保存到本地",Toast.LENGTH_SHORT).show();
-                     }
-                 });
-                 popupMenu.show(finalView);
-                 return false;
-             }
-         });
+            @Override
+            public boolean onLongClick(View v) {
+                FaceMePopupMenu popupMenu = new FaceMePopupMenu(activity);
+                popupMenu.setOnConfirmListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Utils.downPic(status.getPhoto().getUrl(), null);
+                        Toast.makeText(context, "图片已保存到本地", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                popupMenu.show(finalView);
+                return false;
+            }
+        });
 
         return view;
     }
+
     class ViewHolder {
         protected SimpleDraweeView userPortrait, postPhoto;
         protected TextView nickname, favoriteNum, text, commentNum,
-                postTime,tag_one,tag_two,tag_three,location;
+                postTime, tag_one, tag_two, tag_three, location;
         protected ImageView favoriteIcon, commentIcon, shareIcon;
 
     }

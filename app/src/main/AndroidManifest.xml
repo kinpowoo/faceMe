@@ -68,6 +68,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.TestActivity">
+
+        </activity>
+
 
         <activity android:name=".ui.RegisterByPhoneActivity"/>
         <activity android:name=".ui.RegisterByEmailActivity"/>

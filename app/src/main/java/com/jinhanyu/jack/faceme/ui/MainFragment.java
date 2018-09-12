@@ -34,7 +34,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  */
 public class MainFragment extends BaseFragment implements AbsListView.OnScrollListener{
     private int COUNT=0;
-    private final int SKIPMOUNT=20;
+    private final int SKIP_COUNT=20;
     private int refreshCount=0;
     private ListView listView;
     private List<Status> list;
@@ -153,7 +153,7 @@ public class MainFragment extends BaseFragment implements AbsListView.OnScrollLi
         statusQuery.order("-createdAt");
         statusQuery.addWhereMatchesQuery("author", "_User", innerQuery);
         statusQuery.include("author");
-        statusQuery.setSkip(COUNT*SKIPMOUNT+refreshCount);
+        statusQuery.setSkip(COUNT*SKIP_COUNT+refreshCount);
         statusQuery.setLimit(20);
         //判断是否有缓存，该方法必须放在查询条件（如果有的话）都设置完之后再来调用才有效，就像这里一样。
         boolean isCache = statusQuery.hasCachedResult(Status.class);

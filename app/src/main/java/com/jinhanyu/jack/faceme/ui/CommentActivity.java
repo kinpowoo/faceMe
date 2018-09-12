@@ -237,8 +237,13 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date= null;
         try {
-            date = sdf.parse(lastFetchDate);
-            date.setTime(date.getTime()+1000);
+            if(lastFetchDate == null){
+                long time = System.currentTimeMillis()-3600;
+                date = new Date(time);
+            }else {
+                date = sdf.parse(lastFetchDate);
+                date.setTime(date.getTime() + 1000);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

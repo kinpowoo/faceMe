@@ -17,6 +17,8 @@ android {
         versionCode 2
         versionName "2.0"
         signingConfig signingConfigs.config
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -64,14 +66,20 @@ android {
     }
     productFlavors {
     }
+
+
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    compile 'com.android.support:multidex:1.0.0'
     compile 'com.android.support:appcompat-v7:24.2.0'
     //fresco ：图片管理
-    compile 'com.facebook.fresco:fresco:0.14.1'
+    compile 'com.facebook.fresco:fresco:1.10.0'
+    compile "com.facebook.fresco:imagepipeline-okhttp3:0.12.0+"
+
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
     //下拉刷新
     compile 'in.srain.cube:ultra-ptr:1.0.11'
     //bmob-sdk: bmob基本数据服务

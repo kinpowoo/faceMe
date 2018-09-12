@@ -107,7 +107,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void showCacheSize(){
-        long cacheSize = Fresco.getImagePipelineFactory().getMainDiskStorageCache().getSize();
+        long cacheSize = Fresco.getImagePipelineFactory().getMainFileCache().getSize();
         if(cacheSize<=0){
             clearCache.setText("0.0B");
         }else{
