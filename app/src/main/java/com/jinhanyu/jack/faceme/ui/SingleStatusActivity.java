@@ -434,4 +434,11 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         return false;
     }
 
+    @Override
+    protected void onDestroy() {
+        if(popupWindow!=null){
+            popupWindow.dismiss();
+        }
+        super.onDestroy();
+    }
 }

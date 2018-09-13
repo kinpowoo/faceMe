@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.datatype.BmobRelation;
 import cn.bmob.v3.exception.BmobException;
@@ -44,6 +46,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
     User me = User.getCurrentUser(User.class);
     LinearLayout.LayoutParams params;
     Activity activity;
+    boolean isSelfIn;
 
     public MainFragmentAdapter(List<Status> data, Context context, Activity activity) {
         super(data, context);
@@ -91,52 +94,39 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             public void onClick(View v) {
                 viewHolder.favoriteIcon.setEnabled(false);
 
-                BmobRelation relation1 = status.getLikes();
-                List<BmobPointer> followers = relation1.getObjects();
-                Iterator<BmobPointer> iterator = followers.iterator();
-                boolean isSelfIn = false;
-                while (iterator.hasNext()) {
-                    BmobPointer p = iterator.next();
-                    if (p.getObjectId().equals(me.getObjectId())) {
-                        isSelfIn = true;
-                        relation1.remove(me);
-                        status.setFavoritedByMe2(false);
-                        status.setFavoriteNum(status.getFavoriteNum() - 1);
-                    }
-                }
-                if (!isSelfIn) {
+                BmobRelation relation1 = new BmobRelation();
+                if(status.isFavoritedByMe2()) {
+                    relation1.remove(me);
+                    status.setFavoritedByMe2(false);
+                    status.increment("favoriteNum",-1);
+                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
+                    status.setFavoriteNum(status.getFavoriteNum()-1);
+                }else {
                     relation1.add(me);
                     status.setFavoritedByMe2(true);
-                    status.setFavoriteNum(status.getFavoriteNum() + 1);
+                    status.increment("favoriteNum");
+                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
+                    status.setFavoriteNum(status.getFavoriteNum()+1);
                 }
+
                 status.setLikes(relation1);
-                status.update(status.getObjectId(), new UpdateListener() {
+                status.update(new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
-                        status.setFavoritedByMe2(false);
-
+                        if(e == null) {
+                            viewHolder.favoriteIcon.setEnabled(true);
+                            viewHolder.favoriteNum.setText(status.getFavoriteNum() + "个赞");
+                        }
                     }
                 });
-                if (status.isFavoritedByMe2()) {
-                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
-                } else {
-                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
-                }
-                viewHolder.favoriteIcon.setEnabled(true);
-                viewHolder.favoriteNum.setText(status.getFavoriteNum() + "个赞");
+
             }
         });
 
-        BmobQuery<User> userBmobQuery = new BmobQuery<>();
-        userBmobQuery.addWhereRelatedTo("likes", new BmobPointer(status));
-        userBmobQuery.count(User.class, new CountListener() {
-            @Override
-            public void done(Integer num, BmobException e) {
-                status.setFavoriteNum(num);
-                viewHolder.favoriteNum.setText(num + " 个赞");
-            }
-        });
-
+        if(status.getFavoriteNum() == null){
+            status.setFavoriteNum(0);
+        }
+        viewHolder.favoriteNum.setText(status.getFavoriteNum() + " 个赞");
 
         BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
         commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
@@ -162,23 +152,25 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         }
 
         if (status.getTags() != null) {
-            int tag_count = status.getTags().size() > 3 ? 3 : status.getTags().size();
-            if (tag_count > 0) {
+            int tag_count = status.getTags().size();
+            if (tag_count >0) {
                 viewHolder.tag_one.setVisibility(View.VISIBLE);
                 viewHolder.tag_one.setText(status.getTags().get(0));
             }
-            if (tag_count > 1) {
+            if (tag_count >1) {
                 viewHolder.tag_two.setVisibility(View.VISIBLE);
                 viewHolder.tag_two.setText(status.getTags().get(1));
             }
-            if (tag_count > 2) {
+            if (tag_count >2) {
                 viewHolder.tag_three.setVisibility(View.VISIBLE);
                 viewHolder.tag_three.setText(status.getTags().get(2));
             }
+        }else {
+            viewHolder.tag_one.setVisibility(View.VISIBLE);
+            viewHolder.tag_one.setText("无");
+            viewHolder.tag_two.setVisibility(View.INVISIBLE);
+            viewHolder.tag_three.setVisibility(View.INVISIBLE);
         }
-        viewHolder.tag_one.setVisibility(View.INVISIBLE);
-        viewHolder.tag_two.setVisibility(View.INVISIBLE);
-        viewHolder.tag_three.setVisibility(View.INVISIBLE);
 
 
         try {

@@ -1,7 +1,10 @@
 package com.jinhanyu.jack.faceme.ui;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.MediaSync;
 import android.os.Bundle;
 import android.os.Handler;
@@ -63,7 +66,6 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
     private Button editProfile;
     private SimpleDraweeView userPortrait;
     private NoScrollGridView gridView;
-    private ScrollView scrollView;
     private PtrFrameLayout ptrFrameLayout;
     private Ptr_refresh ptr_refresh;
 
@@ -75,6 +77,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
     private User me= Utils.getCurrentUser();
 
     private VerticalLoading loading;
+
 
     Handler handler=new Handler(){
         @Override
@@ -156,13 +159,16 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
         listView.setAdapter(listAdapter);
 
 
-
         fillData();
 
         if(loading!=null&&!loading.isShowing()){
             loading.show();
         }
         loadStatus();
+
+        //注册广播
+
+
         return view;
     }
 
@@ -296,6 +302,12 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
         fillData();
         super.onResume();
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
 
 
 

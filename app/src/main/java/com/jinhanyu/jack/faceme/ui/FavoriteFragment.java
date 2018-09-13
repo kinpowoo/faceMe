@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.jinhanyu.jack.faceme.BaseFragment;
 import com.jinhanyu.jack.faceme.MainApplication;
+import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.adapter.FavoriteItemAdapter;
 import com.jinhanyu.jack.faceme.adapter.FavoritePagerAdapter;
@@ -39,25 +40,23 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
 
 
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class FavoriteFragment extends BaseFragment implements RadioGroup.OnCheckedChangeListener{
+public class FavoriteFragment extends BaseFragment{
 
-    ListView friendsStatus;
     ListView aboutMeStatus;
-    RadioGroup radioGroup;
     TextView noStatus;
-
-
-    List<FriendLikeItem> friendStatusList = new ArrayList<>();
     List<FriendLikeItem> aboutMeStatusList = new ArrayList<>();
-    private FavoriteItemAdapter friendAdapter;
     private FavoriteItemAdapter aboutMeAdapter;
 
     private VerticalLoading loading;
+    private PtrFrameLayout ptrFrameLayout;
+    private Ptr_refresh ptr_refresh;
 
     Handler handler = new Handler() {
         @Override
@@ -68,42 +67,23 @@ public class FavoriteFragment extends BaseFragment implements RadioGroup.OnCheck
                         loading.dismiss();
                     }
                     if(aboutMeStatusList.size()>0) {
-                        friendsStatus.setVisibility(View.GONE);
-                        aboutMeStatus.setVisibility(View.VISIBLE);
-                        aboutMeAdapter.updateAdapter(aboutMeStatusList);
+                        noStatus.setVisibility(View.GONE);
                     }else {
-                        if(noStatus.getVisibility()==View.GONE){
-                            friendsStatus.setVisibility(View.GONE);
-                            aboutMeStatus.setVisibility(View.GONE);
-                            noStatus.setVisibility(View.VISIBLE);
-                        }
+                        noStatus.setVisibility(View.VISIBLE);
+                    }
+                    aboutMeAdapter.updateAdapter(aboutMeStatusList);
+                    if(ptrFrameLayout!=null){
+                        ptrFrameLayout.refreshComplete();
                     }
                     break;
                 case 4:
                     if (loading != null && loading.isShowing()) {
                         loading.dismiss();
                     }
-                    Toast.makeText(getActivity(), "没有相关动态", Toast.LENGTH_SHORT).show();
-                    break;
-                case 5:
-                    if (loading != null && loading.isShowing()) {
-                        loading.dismiss();
-                    }
-                    if(friendStatusList.size()>0){
-                        aboutMeStatus.setVisibility(View.GONE);
-                        friendsStatus.setVisibility(View.VISIBLE);
-                        friendAdapter.updateAdapter(friendStatusList);
-                    }else {
-                        if(noStatus.getVisibility()==View.GONE){
-                            friendsStatus.setVisibility(View.GONE);
-                            aboutMeStatus.setVisibility(View.GONE);
-                            noStatus.setVisibility(View.VISIBLE);
-                        }
-                    }
-                    break;
-                case 6:
-                    if (loading != null && loading.isShowing()) {
-                        loading.dismiss();
+
+                    noStatus.setVisibility(View.VISIBLE);
+                    if(ptrFrameLayout!=null){
+                        ptrFrameLayout.refreshComplete();
                     }
                     Toast.makeText(getActivity(), "没有相关动态", Toast.LENGTH_SHORT).show();
                     break;
@@ -115,25 +95,13 @@ public class FavoriteFragment extends BaseFragment implements RadioGroup.OnCheck
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.favorite_fragment, null);
-        friendsStatus = (ListView) view.findViewById(R.id.friends_status);
         aboutMeStatus = (ListView) view.findViewById(R.id.about_me_status);
-        radioGroup = (RadioGroup) view.findViewById(R.id.radio_group);
         noStatus = (TextView) view.findViewById(R.id.no_status_notice);
-        radioGroup.setOnCheckedChangeListener(this);
 
         loading = new VerticalLoading(getActivity(), "加载中...");
 
-        radioGroup.check(R.id.friend_tab);
-
-        friendAdapter = new FavoriteItemAdapter(friendStatusList, getActivity());
-        friendsStatus.setAdapter(friendAdapter);
-
         aboutMeAdapter = new FavoriteItemAdapter(aboutMeStatusList, getActivity());
         aboutMeStatus.setAdapter(aboutMeAdapter);
-
-
-
-
         return view;
     }
 
@@ -141,50 +109,26 @@ public class FavoriteFragment extends BaseFragment implements RadioGroup.OnCheck
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-    }
+        getLikeMes();
 
-
-    public void getLikeMes() {
-        ConstantFunc.hint("fav","getLikesMe被 执行");
-        if (loading != null && !loading.isShowing()) {
-            loading.show();
-        }
-        aboutMeStatusList.clear();
-        //子查询之二： 查询自己
-        BmobQuery<User> selfQuery = new BmobQuery<>();
-        selfQuery.addWhereEqualTo("objectId", User.getCurrentUser(User.class).getObjectId());
-        //最终查询
-        BmobQuery<Status> statusQuery = new BmobQuery<>();
-        statusQuery.addWhereMatchesQuery("author", "_User", selfQuery);
-        statusQuery.findObjects(new FindListener<Status>() {
+        ptrFrameLayout = (PtrFrameLayout) view.findViewById(R.id.refresh_layout);
+        ptr_refresh=new Ptr_refresh(getActivity());
+        ptrFrameLayout.setHeaderView(ptr_refresh);
+        ptrFrameLayout.addPtrUIHandler(ptr_refresh);
+        ptrFrameLayout.setPtrHandler(new PtrDefaultHandler() {
             @Override
-            public void done(final List<Status> list, BmobException e) {
-                if (list != null && list.size() > 0) {
-                    for (final Status status : list) {
-                        final BmobQuery<User> likesQuery = new BmobQuery<>();
-                        likesQuery.addWhereRelatedTo("likes", new BmobPointer(status));
-                        likesQuery.setLimit(5);
-                        likesQuery.findObjects(new FindListener<User>() {
-                            @Override
-                            public void done(List<User> likeMeUsers, BmobException e) {
-                                if(likeMeUsers!=null&&likeMeUsers.size()>0) {
-                                    for (User likeMeUser : likeMeUsers) {
-                                        FriendLikeItem item = new FriendLikeItem(likeMeUser, status);
-                                        aboutMeStatusList.add(item);
-                                        //Log.i("item1", item.toString());
-                                    }
-                                }
-                            }
-                        });
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                ptrFrameLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        getLikeMes();
                     }
-                    handler.sendEmptyMessage(3);
-                } else {
-                handler.sendEmptyMessage(4);
-            }
-
+                },200);
             }
         });
     }
+
+
 
 
     public void getFriendsLikes() {
@@ -194,7 +138,7 @@ public class FavoriteFragment extends BaseFragment implements RadioGroup.OnCheck
         if (loading != null && !loading.isShowing()) {
             loading.show();
         }
-        friendStatusList.clear();
+        aboutMeStatusList.clear();
 
         //子查询之一： 查询朋友
         final BmobQuery<User> followingQuery = new BmobQuery<>();
@@ -217,7 +161,7 @@ public class FavoriteFragment extends BaseFragment implements RadioGroup.OnCheck
                                 if (list != null && list.size() > 0) {
                                     for (Status status : list) {
                                         FriendLikeItem item = new FriendLikeItem(friend, status);
-                                        friendStatusList.add(item);
+                                        aboutMeStatusList.add(item);
                                     }
                                 }
                             }
@@ -225,37 +169,62 @@ public class FavoriteFragment extends BaseFragment implements RadioGroup.OnCheck
 
                     }
 
-                    handler.sendEmptyMessage(5);
+                    handler.sendEmptyMessage(3);
                 }else {
-                    handler.sendEmptyMessage(6);
+                    handler.sendEmptyMessage(4);
                 }
 
             }
         });
     }
 
-    @Override
-    public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId){
-            case R.id.friend_tab:
-                if(friendStatusList.size()==0){
-                    getFriendsLikes();
-                }else {
-                    aboutMeStatus.setVisibility(View.GONE);
-                    friendsStatus.setVisibility(View.VISIBLE);
-                    friendAdapter.updateAdapter(friendStatusList);
-                }
-                break;
-            case R.id.me_tab:
-                if(aboutMeStatusList.size()==0){
-                    getLikeMes();
-                }else {
-                    friendsStatus.setVisibility(View.GONE);
-                    aboutMeStatus.setVisibility(View.VISIBLE);
-                    aboutMeAdapter.updateAdapter(aboutMeStatusList);
-                }
 
-                break;
+
+
+
+    public void getLikeMes() {
+        ConstantFunc.hint("fav","getLikesMe被 执行");
+        if (loading != null && !loading.isShowing()) {
+            loading.show();
         }
+        aboutMeStatusList.clear();
+        //子查询之二： 查询自己
+        BmobQuery<User> selfQuery = new BmobQuery<>();
+        selfQuery.addWhereEqualTo("objectId", User.getCurrentUser(User.class).getObjectId());
+        //最终查询
+        BmobQuery<Status> statusQuery = new BmobQuery<>();
+        statusQuery.addWhereMatchesQuery("author", "_User", selfQuery);
+        statusQuery.findObjects(new FindListener<Status>() {
+            @Override
+            public void done(final List<Status> list, BmobException e) {
+                if (list != null && list.size() > 0) {
+                    for (int i=0;i<list.size();i++) {
+                        final Status status = list.get(i);
+                        final BmobQuery<User> likesQuery = new BmobQuery<>();
+                        final int index = i;
+                        likesQuery.addWhereRelatedTo("likes", new BmobPointer(status));
+                        likesQuery.setLimit(5);
+                        likesQuery.findObjects(new FindListener<User>() {
+                            @Override
+                            public void done(List<User> likeMeUsers, BmobException e) {
+                                if(likeMeUsers!=null&&likeMeUsers.size()>0) {
+                                    for (User likeMeUser : likeMeUsers) {
+                                        FriendLikeItem item = new FriendLikeItem(likeMeUser, status);
+                                        aboutMeStatusList.add(item);
+                                    }
+                                }
+                                if(index == list.size()-1) {
+                                    Log.i("item1", "about me size:" + aboutMeStatusList.size());
+                                    handler.sendEmptyMessage(3);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                handler.sendEmptyMessage(4);
+            }
+            }
+        });
     }
+
 }

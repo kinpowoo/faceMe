@@ -187,6 +187,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 currentId = cachedId;
             }
             switchFragment(currentId);
+        }else{
+            switchFragment(0);
         }
     }
 
