@@ -1,6 +1,7 @@
 package com.jinhanyu.jack.faceme.ui;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.jinhanyu.jack.faceme.BaseFragment;
 import com.jinhanyu.jack.faceme.Ptr_refresh;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.adapter.MainFragmentAdapter;
+import com.jinhanyu.jack.faceme.aidl.StatusInterface;
 import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.entity.User;
 
@@ -21,18 +23,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class MainFragment extends BaseFragment implements AbsListView.OnScrollListener{
+public class MainFragment extends BaseFragment implements AbsListView.OnScrollListener,StatusInterface{
     private int COUNT=0;
     private final int SKIP_COUNT=20;
     private int refreshCount=0;
@@ -79,6 +83,7 @@ public class MainFragment extends BaseFragment implements AbsListView.OnScrollLi
     }
 
     public void refreshData(){
+        /*8
         //子查询(主查询)
         BmobQuery<User> innerQuery = new BmobQuery<>();
         //子查询之一： 查询朋友
@@ -93,11 +98,13 @@ public class MainFragment extends BaseFragment implements AbsListView.OnScrollLi
         addonQueries.add(followingQuery);
         //添加到主查询中
         innerQuery.or(addonQueries);
+        */
 
         //最终查询
         BmobQuery<Status> statusQuery = new BmobQuery<>();
+        statusQuery.addWhereEqualTo("author",new BmobPointer(me));
         statusQuery.order("-createdAt");
-        statusQuery.addWhereMatchesQuery("author", "_User", innerQuery);
+        //statusQuery.addWhereMatchesQuery("author", "_User", innerQuery);
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date= null;
         try {
@@ -133,6 +140,7 @@ public class MainFragment extends BaseFragment implements AbsListView.OnScrollLi
     }
 
     public void loadData(){
+        /**
         //子查询(主查询)
         BmobQuery<User> innerQuery = new BmobQuery<>();
         //子查询之一： 查询朋友
@@ -147,14 +155,16 @@ public class MainFragment extends BaseFragment implements AbsListView.OnScrollLi
         addonQueries.add(followingQuery);
         //添加到主查询中
         innerQuery.or(addonQueries);
+         */
 
         //最终查询
         BmobQuery<Status> statusQuery = new BmobQuery<>();
         statusQuery.order("-createdAt");
-        statusQuery.addWhereMatchesQuery("author", "_User", innerQuery);
+        statusQuery.addWhereEqualTo("author",new BmobPointer(me));
+        //statusQuery.addWhereMatchesQuery("author", "_User", innerQuery);
         statusQuery.include("author");
         statusQuery.setSkip(COUNT*SKIP_COUNT+refreshCount);
-        statusQuery.setLimit(20);
+        statusQuery.setLimit(SKIP_COUNT);
         //判断是否有缓存，该方法必须放在查询条件（如果有的话）都设置完之后再来调用才有效，就像这里一样。
         boolean isCache = statusQuery.hasCachedResult(Status.class);
         if(isCache){  //此为举个例子，并不一定按这种方式来设置缓存策略
@@ -188,5 +198,41 @@ public class MainFragment extends BaseFragment implements AbsListView.OnScrollLi
     @Override
     public void onScroll(AbsListView absListView, int i, int i1, int i2) {
 
+    }
+
+
+
+    @Override
+    public void updateStatus(final int indexPath) {
+        BmobObject status = list.get(indexPath);
+        BmobQuery<Status> query = new BmobQuery<>("Status");
+        query.include("author");
+        query.getObject(status.getObjectId(), new QueryListener<Status>() {
+            @Override
+            public void done(Status status, BmobException e) {
+                list.set(indexPath,status);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void deleteStatus(int indexPath) {
+        list.remove(indexPath);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void addStatus(Date createDate) {
+        BmobQuery<Status> query = new BmobQuery<>("Status");
+        query.include("author");
+        query.addWhereGreaterThanOrEqualTo("createdAt",new BmobDate(createDate));
+        query.findObjects(new FindListener<Status>() {
+            @Override
+            public void done(List<Status> resList, BmobException e) {
+                list.addAll(0,resList);
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 }

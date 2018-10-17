@@ -2,6 +2,7 @@ package com.jinhanyu.jack.faceme.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,6 +59,8 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
     private PopupWindow popupWindow;
     private Float alpha=1.0f;
     private LinearLayout.LayoutParams params;
+
+    int itemIndex;
 
     private Handler mHandler=new Handler() {
         public void handleMessage(Message msg) {
@@ -126,8 +129,9 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         share.setOnClickListener(this);
         cancel.setOnClickListener(this);
 
-
-        statusId=getIntent().getStringExtra("statusId");
+        Intent comeIntent = getIntent();
+        statusId = comeIntent.getStringExtra("statusId");
+        itemIndex = comeIntent.getIntExtra("statusIndex",-1);
         if(statusId!=null){
             BmobQuery<Status> query=new BmobQuery<>();
             query.include("author");
@@ -150,6 +154,7 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
         nickname.setText(st.getAuthor().getNickname());
         statusPhoto.setImageURI(st.getPhoto().getUrl());
 
+        /**
         BmobQuery<Status> statusQuery = new BmobQuery<>();
         BmobQuery<User> innerQuery = new BmobQuery<>();
         innerQuery.addWhereEqualTo("objectId",st.getObjectId());
@@ -162,38 +167,27 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                       status.setFavoritedByMe2(true);
                   }
               }
-                if(status.isFavoritedByMe2()){
-                    favoriteIcon.setImageResource(R.drawable.favorite_red);
-                }else {
-                    favoriteIcon.setImageResource(R.drawable.favorite_light);
-                }
+
             }
-        });
+        });*/
 
 
+        if(st.isFavoritedByMe2()){
+            favoriteIcon.setImageResource(R.drawable.favorite_red);
+        }else {
+            favoriteIcon.setImageResource(R.drawable.favorite_light);
+        }
 
+        if(st.getFavoriteNum() == null){
+            st.setFavoriteNum(0);
+        }
+        if(st.getCommentNum() == null){
+            st.setCommentNum(0);
+        }
 
-            BmobQuery<User> userBmobQuery = new BmobQuery<>();
-            userBmobQuery.addWhereRelatedTo("likes", new BmobPointer(st));
-            userBmobQuery.count(User.class, new CountListener() {
-                @Override
-                public void done(Integer num, BmobException e) {
-                    Log.i("favoriteNum",num+"");
-                    st.setFavoriteNum(num);
-                    favoriteNum.setText(num + " 个赞");
-                }
-            });
+        favoriteNum.setText(st.getFavoriteNum() + " 个赞");
+        commentNum.setText(st.getCommentNum()+" 条评论");
 
-
-            BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
-            commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(st));
-            commentBmobQuery.count(Comment.class, new CountListener() {
-                @Override
-                public void done(Integer integer, BmobException e) {
-                    st.setCommentNum(integer);
-                   commentNum.setText(integer+" 条评论");
-                }
-            });
 
         int tag_count = st.getTags().size() > 3 ? 3 : st.getTags().size();
         tag_one.setVisibility(View.INVISIBLE);
@@ -260,17 +254,20 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                 finish();
                 break;
             case R.id.iv_single_status_favorite:
+                Status updateStatus = new Status();
                 BmobRelation relation = new BmobRelation();
                 favoriteIcon.setEnabled(false);
                 if (status.isFavoritedByMe2()) {
                     //取消收藏
                     relation.remove(currentUser);
-                    status.setLikes(relation);
-                    status.setFavoriteNum(status.getFavoriteNum()-1);
-                    status.update(new UpdateListener() {
+                    updateStatus.setLikes(relation);
+                    updateStatus.setFavoritedByMe2(new Boolean(false));
+                    updateStatus.increment("favoriteNum",new Integer(-1));
+                    updateStatus.update(new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             status.setFavoritedByMe2(false);
+                            status.setFavoriteNum(status.getFavoriteNum()-1);
                             favoriteNum.setText(status.getFavoriteNum()+"个赞");
                             favoriteIcon.setImageResource(R.drawable.favorite_light);
                             favoriteIcon.setEnabled(true);
@@ -279,18 +276,23 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                 } else {
                     //添加收藏
                     relation.add(currentUser);
-                    status.setLikes(relation);
-                    status.setFavoriteNum(status.getFavoriteNum()+1);
-                    status.update(new UpdateListener() {
+                    updateStatus.setLikes(relation);
+                    updateStatus.setFavoritedByMe2(new Boolean(true));
+                    updateStatus.increment("favoriteNum");
+                    updateStatus.update(new UpdateListener() {
                         @Override
                         public void done(BmobException e) {
                             status.setFavoritedByMe2(true);
+                            status.setFavoriteNum(status.getFavoriteNum()+1);
                             favoriteNum.setText(status.getFavoriteNum()+"个赞");
                             favoriteIcon.setImageResource(R.drawable.favorite_red);
                             favoriteIcon.setEnabled(true);
                         }
                     });
                 }
+                Intent updateIntent = new Intent("updateStatus");
+                updateIntent.putExtra("updateIndex",itemIndex);
+                sendBroadcast(updateIntent);
 
                 break;
             case R.id.sdv_single_status_userPortrait:
@@ -380,6 +382,9 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
                                 @Override
                                 public void done(BmobException e) {
                                     if(e==null){
+                                        Intent intent = new Intent("deleteStatus");
+                                        intent.putExtra("deleteIndex",itemIndex);
+                                        sendBroadcast(intent);
                                         finish();
                                     }
                                 }
@@ -401,9 +406,17 @@ public class SingleStatusActivity extends AppCompatActivity implements View.OnCl
             case R.id.tv_single_status_option_menu_edit:
                 Intent intent6=new Intent(this,EditStatusActivity.class);
                 intent6.putExtra("statusId",status.getObjectId());
-                startActivity(intent6);
-                finish();
+                startActivityForResult(intent6,0x22);
                 break;
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 0x22 && resultCode == RESULT_OK){
+            String content = data.getStringExtra("content");
+            text.setText(content);
         }
     }
 

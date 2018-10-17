@@ -31,6 +31,7 @@ import com.jinhanyu.jack.faceme.entity.User;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.bmob.v3.datatype.BmobFile;
@@ -214,6 +215,7 @@ public class PostActivity extends Activity implements View.OnClickListener {
                     return;
                 }
 
+                final Date current = new Date();
                 final String content = et_content.getText().toString();//发表的内容
                 final BmobFile bmobFile = new BmobFile(new File(picPath));
                 CustomProgress.show(this, "正在发表...");
@@ -237,6 +239,11 @@ public class PostActivity extends Activity implements View.OnClickListener {
                             public void done(String s, BmobException e) {
                                 CustomProgress.unshow();
                                 if (e == null) {
+                                    Intent addIntent = new Intent("addStatus");
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("createDate",current);
+                                    addIntent.putExtra("bundle",bundle);
+                                    sendBroadcast(addIntent);
                                     finish();
                                 } else {
                                     Toast.makeText(PostActivity.this, "发表失败", Toast.LENGTH_SHORT).show();

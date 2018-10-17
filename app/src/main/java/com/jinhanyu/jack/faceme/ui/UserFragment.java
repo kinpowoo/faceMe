@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,6 +36,7 @@ import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.adapter.GridViewAdapter;
 import com.jinhanyu.jack.faceme.adapter.MainFragmentAdapter;
+import com.jinhanyu.jack.faceme.aidl.StatusInterface;
 import com.jinhanyu.jack.faceme.comparator.StatusComparator;
 import com.jinhanyu.jack.faceme.cutsom_view.NoScrollGridView;
 import com.jinhanyu.jack.faceme.cutsom_view.NoScrollListView;
@@ -44,21 +46,26 @@ import com.jinhanyu.jack.faceme.entity.User;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
+import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BatchResult;
+import cn.bmob.v3.datatype.BmobDate;
 import cn.bmob.v3.datatype.BmobPointer;
 import cn.bmob.v3.exception.BmobException;
 import cn.bmob.v3.listener.CountListener;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.QueryListener;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * Created by anzhuo on 2016/10/18.
  */
-public class UserFragment extends BaseFragment implements View.OnClickListener,RadioGroup.OnCheckedChangeListener{
+public class UserFragment extends BaseFragment implements View.OnClickListener,
+                RadioGroup.OnCheckedChangeListener,StatusInterface{
     private ImageView addFriend,settings;
     private TextView username,nickname,statusNum,followingNum,followersNum;
     private LinearLayout followingParent,followerParent;
@@ -175,7 +182,6 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-
         super.onViewCreated(view, savedInstanceState);
     }
 
@@ -183,7 +189,10 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
         userPortrait.setImageURI(me.getPortrait().getUrl());
         username.setText(me.getUsername());
         nickname.setText(me.getNickname());
+        followersNum.setText(me.getFollowerNum()+"");
+        followingNum.setText(me.getFollowingNum()+"");
 
+        /**
             BmobQuery<User> followerQuery=new BmobQuery<>();
             BmobQuery<User> innerQuery=new BmobQuery<>();
             innerQuery.addWhereEqualTo("objectId",me.getObjectId());
@@ -192,7 +201,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
                 @Override
                 public void done(Integer integer, BmobException e) {
                     me.setFollowerNum(integer);
-                    followersNum.setText(integer+"");
+
                 }
             });
 
@@ -205,7 +214,7 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
                     followingNum.setText(integer+"");
                 }
             });
-
+         */
 
             BmobQuery<Status> statusBmobQuery = new BmobQuery<>();
             statusBmobQuery.addWhereEqualTo("author",new BmobPointer(me));
@@ -281,14 +290,14 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
         BmobQuery<Status> query=new BmobQuery<>();
         query.addWhereEqualTo("author",new BmobPointer(me));
         query.include("author");
-        query.order("updatedAt");
+        query.order("-createdAt");
         query.findObjects(new FindListener<Status>() {
             @Override
             public void done(List<Status> data, BmobException e) {
               if(e==null){
                   list.clear();
                   list.addAll(data);
-                  Collections.reverse(list);
+                  //Collections.reverse(list);
                   handler.sendEmptyMessage(1);
               }else {
                   handler.sendEmptyMessage(2);
@@ -303,12 +312,28 @@ public class UserFragment extends BaseFragment implements View.OnClickListener,R
         super.onResume();
     }
 
+
     @Override
-    public void onDetach() {
-        super.onDetach();
+    public void updateStatus(final int indexPath) {
     }
 
+    @Override
+    public void deleteStatus(int indexPath) {
+        list.remove(indexPath);
+        adapter.notifyDataSetChanged();
+    }
 
-
-
+    @Override
+    public void addStatus(Date createDate) {
+        BmobQuery<Status> query = new BmobQuery<>("Status");
+        query.include("author");
+        query.addWhereGreaterThan("createdAt",new BmobDate(createDate));
+        query.findObjects(new FindListener<Status>() {
+            @Override
+            public void done(List<Status> resList, BmobException e) {
+                list.addAll(0,resList);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
 }

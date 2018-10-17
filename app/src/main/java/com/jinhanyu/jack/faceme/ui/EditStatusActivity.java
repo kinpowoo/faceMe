@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.ScreenUtils;
 import com.jinhanyu.jack.faceme.entity.Status;
+import com.sun.mail.imap.protocol.INTERNALDATE;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.exception.BmobException;
@@ -81,18 +84,30 @@ public class EditStatusActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tv_edit_status_cancel:
+                setResult(RESULT_CANCELED);
                 finish();
                 break;
             case R.id.tv_edit_status_commit:
-                String afterEdit=statusText.getText().toString();
+                final String afterEdit=statusText.getText().toString();
+                if(TextUtils.isEmpty(afterEdit)){
+                    Toast.makeText(EditStatusActivity.this,"内容不能为空",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 final Status st=new Status();
                 st.setText(afterEdit);
                 st.update(status.getObjectId(),new UpdateListener() {
                     @Override
                     public void done(BmobException e) {
-                        startActivity(new Intent(EditStatusActivity.this,
-                                SingleStatusActivity.class).putExtra("statusId",status.getObjectId()));
-                        finish();
+                        if(e==null){
+                            Intent intent = new Intent(EditStatusActivity.this, SingleStatusActivity.class);
+                            intent.putExtra("content",afterEdit);
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }else{
+                            Toast.makeText(EditStatusActivity.this,"更新失败",
+                                    Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 break;

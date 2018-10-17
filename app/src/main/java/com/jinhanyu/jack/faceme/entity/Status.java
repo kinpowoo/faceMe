@@ -19,7 +19,7 @@ public class Status extends BmobObject implements Comparable<Status>{
     private BmobRelation likes;
     private List<String> tags;
     private BmobGeoPoint location;
-    private boolean favoritedByMe2=false;
+    private boolean favoritedByMe2;
     private Integer favoriteNum;
     private Integer commentNum;
 

@@ -56,7 +56,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
     }
 
     @Override
-    public View getView(int position, View view, final ViewGroup parent) {
+    public View getView(final int position, View view, final ViewGroup parent) {
         final ViewHolder viewHolder;
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.main_fragment_list_item, null);
@@ -94,49 +94,52 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             public void onClick(View v) {
                 viewHolder.favoriteIcon.setEnabled(false);
 
-                BmobRelation relation1 = new BmobRelation();
-                if(status.isFavoritedByMe2()) {
-                    relation1.remove(me);
-                    status.setFavoritedByMe2(false);
-                    status.increment("favoriteNum",-1);
-                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
-                    status.setFavoriteNum(status.getFavoriteNum()-1);
-                }else {
-                    relation1.add(me);
-                    status.setFavoritedByMe2(true);
-                    status.increment("favoriteNum");
-                    viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
-                    status.setFavoriteNum(status.getFavoriteNum()+1);
-                }
-
-                status.setLikes(relation1);
-                status.update(new UpdateListener() {
-                    @Override
-                    public void done(BmobException e) {
-                        if(e == null) {
+                Status updateStatus = new Status();
+                BmobRelation relation = new BmobRelation();
+                if (status.isFavoritedByMe2()) {
+                    //取消收藏
+                    relation.remove(me);
+                    updateStatus.setLikes(relation);
+                    updateStatus.setFavoritedByMe2(new Boolean(false));
+                    updateStatus.increment("favoriteNum",new Integer(-1));
+                    updateStatus.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            status.setFavoritedByMe2(false);
+                            status.setFavoriteNum(status.getFavoriteNum()-1);
+                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
+                            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_light);
                             viewHolder.favoriteIcon.setEnabled(true);
-                            viewHolder.favoriteNum.setText(status.getFavoriteNum() + "个赞");
                         }
-                    }
-                });
-
+                    });
+                } else {
+                    //添加收藏
+                    relation.add(me);
+                    updateStatus.setLikes(relation);
+                    updateStatus.setFavoritedByMe2(new Boolean(true));
+                    updateStatus.increment("favoriteNum");
+                    updateStatus.update(new UpdateListener() {
+                        @Override
+                        public void done(BmobException e) {
+                            status.setFavoritedByMe2(true);
+                            status.setFavoriteNum(status.getFavoriteNum()+1);
+                            viewHolder.favoriteNum.setText(status.getFavoriteNum()+"个赞");
+                            viewHolder.favoriteIcon.setImageResource(R.drawable.favorite_red);
+                            viewHolder.favoriteIcon.setEnabled(true);
+                        }
+                    });
+                }
             }
         });
 
         if(status.getFavoriteNum() == null){
             status.setFavoriteNum(0);
         }
+        if(status.getCommentNum() == null){
+            status.setCommentNum(0);
+        }
         viewHolder.favoriteNum.setText(status.getFavoriteNum() + " 个赞");
-
-        BmobQuery<Comment> commentBmobQuery = new BmobQuery<>();
-        commentBmobQuery.addWhereEqualTo("toStatus", new BmobPointer(status));
-        commentBmobQuery.count(Comment.class, new CountListener() {
-            @Override
-            public void done(Integer integer, BmobException e) {
-                status.setCommentNum(integer);
-                viewHolder.commentNum.setText(integer + " 条评论");
-            }
-        });
+        viewHolder.commentNum.setText(status.getCommentNum() + " 条评论");
 
 
         viewHolder.postPhoto.setLayoutParams(params);
@@ -148,7 +151,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
         if (status.getLocName() != null) {
             viewHolder.location.setText(status.getLocName());
         } else {
-            viewHolder.location.setVisibility(View.GONE);
+            viewHolder.location.setText("没有定位到地址");
         }
 
         if (status.getTags() != null) {
@@ -166,8 +169,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
                 viewHolder.tag_three.setText(status.getTags().get(2));
             }
         }else {
-            viewHolder.tag_one.setVisibility(View.VISIBLE);
-            viewHolder.tag_one.setText("无");
+            viewHolder.tag_one.setVisibility(View.INVISIBLE);
             viewHolder.tag_two.setVisibility(View.INVISIBLE);
             viewHolder.tag_three.setVisibility(View.INVISIBLE);
         }
@@ -184,6 +186,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, CommentActivity.class);
                 intent.putExtra("statusId", status.getObjectId());
+                intent.putExtra("statusIndex",position);
                 context.startActivity(intent);
             }
         });
@@ -192,6 +195,7 @@ public class MainFragmentAdapter extends CommonAdapter<Status> {
             public void onClick(View v) {
                 Intent intent = new Intent(context, CommentActivity.class);
                 intent.putExtra("statusId", status.getObjectId());
+                intent.putExtra("statusIndex",position);
                 context.startActivity(intent);
             }
         });

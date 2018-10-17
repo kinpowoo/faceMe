@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -74,6 +75,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
     private LinearLayout statusInfo;
     private String lastFetchDate;
 
+    int itemIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +90,6 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         statusText= (TextView) findViewById(R.id.tv_comment_text);
         listView= (ListView) findViewById(R.id.lv_comment);
         statusInfo= (LinearLayout) findViewById(R.id.ll_status_info);
-        list=new ArrayList<>();
-        adapter=new CommentAdapter(this,list);
-        listView.setAdapter(adapter);
 
         getFollowingList();
         atPeopleList=new ArrayList<>();
@@ -107,7 +106,9 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         listView.setOnItemLongClickListener(this);
         listView.setOnScrollListener(this);
 
-        statusId=getIntent().getStringExtra("statusId");
+        Intent comeIntent = getIntent();
+        statusId = comeIntent.getStringExtra("statusId");
+        itemIndex = comeIntent.getIntExtra("statusIndex",-1);
         if(statusId!=null) {
             BmobQuery<Status> query = new BmobQuery<>();
             query.include("author");
@@ -115,6 +116,11 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void done(Status st, BmobException e) {
                     status = st;
+
+                    list=new ArrayList<>();
+                    adapter=new CommentAdapter(CommentActivity.this,list,status,itemIndex);
+                    listView.setAdapter(adapter);
+
                     loadComment(st);
                     nickname.setText(status.getAuthor().getNickname());
                     userPortrait.setImageURI(status.getAuthor().getPortrait().getUrl());
@@ -180,7 +186,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         final Matcher matcher=pattern.matcher(comment);
         if(matcher.find()){
             commentOther=true;
-                  Comment com=new Comment();
+                  final Comment com=new Comment();
                   com.setCommentor(Utils.getCurrentUser());
                   com.setText(comment);
                   com.setReplyToUser(toWho);
@@ -189,12 +195,19 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                       @Override
                       public void done(String s, BmobException e) {
                           if(e==null){
-                              loadComment(status);
-                              status.increment("commentNum");
-                              status.update(status.getObjectId(), new UpdateListener() {
+                              list.add(0,com);
+                              //loadComment(status);
+                              adapter.notifyDataSetChanged();
+
+                              Status updateStatus = new Status();
+                              updateStatus.increment("commentNum");
+                              updateStatus.update(status.getObjectId(), new UpdateListener() {
                                   @Override
                                   public void done(BmobException e) {
-                                      refreshComment(status);
+                                      Log.i("tag","发出条目更新广播");
+                                      Intent updateIntent = new Intent("updateStatus");
+                                      updateIntent.putExtra("updateIndex",itemIndex);
+                                      sendBroadcast(updateIntent);
                                   }
                               });
                           }
@@ -203,7 +216,7 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
         }
         if(commentOther==false){
             if(comment!=null&&comment.length()>0&&commentOther==false){
-                Comment com=new Comment();
+                final Comment com=new Comment();
                 com.setCommentor(Utils.getCurrentUser());
                 com.setText(comment);
                 com.setReplyToUser(status.getAuthor());
@@ -212,12 +225,19 @@ public class CommentActivity extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void done(String s, BmobException e) {
                         if(e==null){
-                            loadComment(status);
-                            status.increment("commentNum");
-                            status.update(status.getObjectId(), new UpdateListener() {
+                            list.add(0,com);
+                            adapter.notifyDataSetChanged();
+
+                            Status updateStatus = new Status();
+                            updateStatus.increment("commentNum");
+                            updateStatus.update(status.getObjectId(), new UpdateListener() {
                                 @Override
                                 public void done(BmobException e) {
-                                    refreshComment(status);
+                                    Log.i("tag","发出条目更新广播");
+                                    Intent updateIntent = new Intent("updateStatus");
+                                    updateIntent.putExtra("updateIndex",itemIndex);
+                                    sendBroadcast(updateIntent);
+
                                 }
                             });
                         }

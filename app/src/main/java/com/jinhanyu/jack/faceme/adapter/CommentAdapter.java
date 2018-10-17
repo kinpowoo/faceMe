@@ -14,6 +14,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.jinhanyu.jack.faceme.R;
 import com.jinhanyu.jack.faceme.Utils;
 import com.jinhanyu.jack.faceme.entity.Comment;
+import com.jinhanyu.jack.faceme.entity.Status;
 import com.jinhanyu.jack.faceme.ui.UserProfileActivity;
 
 import java.text.ParseException;
@@ -31,10 +32,14 @@ import cn.bmob.v3.listener.UpdateListener;
 public class CommentAdapter extends BaseSwipeAdapter{
     private Context context;
     private List<Comment> data;
+    private Status status;
+    private int itemIndex;
 
-    public CommentAdapter(Context context,List<Comment> list){
+    public CommentAdapter(Context context,List<Comment> list,Status sta,int itemIndex){
         this.context=context;
         this.data=list;
+        this.status = sta;
+        this.itemIndex = itemIndex;
     }
 
     @Override
@@ -168,6 +173,18 @@ public class CommentAdapter extends BaseSwipeAdapter{
                     @Override
                     public void done(BmobException e) {
                         data.remove(position);  //把数据源里面相应数据删除
+
+                        Status updateStatus = new Status();
+                        updateStatus.increment("commentNum",new Integer(-1));
+                        updateStatus.update(status.getObjectId(),new UpdateListener() {
+                            @Override
+                            public void done(BmobException e) {
+                                Intent updateIntent = new Intent("updateStatus");
+                                updateIntent.putExtra("updateIndex",itemIndex);
+                                context.sendBroadcast(updateIntent);
+                            }
+                        });
+
                         notifyDataSetChanged();
                     }
                 });

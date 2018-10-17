@@ -23,7 +23,7 @@ public class GridViewAdapter extends CommonAdapter<Status>{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder4 viewHold;
         if(convertView==null){
             convertView= LayoutInflater.from(context).inflate(R.layout.user_fragment_gridview_item,null);
@@ -40,6 +40,7 @@ public class GridViewAdapter extends CommonAdapter<Status>{
             public void onClick(View v) {
                 Intent intent=new Intent(context, SingleStatusActivity.class);
                 intent.putExtra("statusId",status.getObjectId());
+                intent.putExtra("statusIndex",position);
                 context.startActivity(intent);
             }
         });

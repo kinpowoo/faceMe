@@ -2,11 +2,13 @@ package com.jinhanyu.jack.faceme.ui;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -105,6 +107,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView camera, photo;
 
 
+    //监听器
+    EventListener statusEventListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +133,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rb_mainActivity_userFragment.setOnClickListener(this);
         camera.setOnClickListener(this);
         photo.setOnClickListener(this);
+
+
+        //注册监听
+        statusEventListener = new EventListener();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("updateStatus");
+        intentFilter.addAction("deleteStatus");
+        intentFilter.addAction("addStatus");
+        registerReceiver(statusEventListener,intentFilter);
 
 
         initFragments(savedInstanceState);
@@ -592,6 +606,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
+        unregisterReceiver(statusEventListener);
         super.onDestroy();
     }
+
+
+
+    public class EventListener extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            switch(action){
+                case "updateStatus":
+                    Log.i("tag","截获到了条目更新广播");
+                    int updateIndex = intent.getIntExtra("updateIndex",-1);
+                    if(mainFragment!=null){
+                        if(updateIndex!=-1) {
+                            mainFragment.updateStatus(updateIndex);
+                        }
+                    }
+                    if(userFragment!=null){
+                        if(updateIndex!=-1) {
+                            userFragment.updateStatus(updateIndex);
+                        }
+                    }
+                    break;
+                case "deleteStatus":
+                    Log.i("tag","截获到了条目删除广播");
+                    int deleteIndex = intent.getIntExtra("deleteIndex",-1);
+                    if(mainFragment!=null){
+                        if(deleteIndex!=-1) {
+                            mainFragment.deleteStatus(deleteIndex);
+                        }
+                    }
+                    if(userFragment!=null){
+                        if(deleteIndex!=-1) {
+                            userFragment.deleteStatus(deleteIndex);
+                        }
+                    }
+                    break;
+                case "addStatus":
+                    Log.i("tag","截获到了条目添加广播");
+                    Bundle data= intent.getBundleExtra("bundle");
+                    Date date = (Date) data.getSerializable("createDate");
+                    if(date == null){
+                        Log.i("tag","创建日期为空！");
+                        return;
+                    }
+                    if(mainFragment!=null){
+                        if(date!=null) {
+                            mainFragment.addStatus(date);
+                        }
+                    }
+                    if(userFragment!=null){
+                        if(date!=null) {
+                            userFragment.addStatus(date);
+                        }
+                    }
+                    break;
+            }
+        }
+    }
+
 }
